@@ -1,0 +1,5 @@
+dist/
+.DS_Store
+tools/*.json
+.netlify/
+node_modules/
