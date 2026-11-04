@@ -4,7 +4,7 @@
   const ML = window.ML;
   const {
     esc, shuffle, pick, uniqBy, dayStr, hasKanji, DAY, hashStr, rng, toHira, normKana, particleNorm, romajiToKana, typedMatches,
-    VOCAB, VBY, KANA, KANJI, KBY, GRAMMAR, GBY, EXAMPLES, EBY, quizzable, posGroup, vKey, exampleFor, STATIONS, SBY,
+    VOCAB, VBY, KANA, KANJI, KBY, GRAMMAR, GBY, EXAMPLES, EBY, quizzable, posGroup, vKey, exampleFor, STATIONS, SBY, LEVELS, levelOfL, lessonName,
     verbForms, adjForms, FORMS, CONJ_BY_LESSON, conjVerbs, conjAdjs, conjAnswer, canForm, READING, RBY, GUIDE, STROKES, rubyToKana, rubyToKanji, LESSON_GUIDE, GROUPS, groupOf, numKana, timeKana, HOURS, MONTHS, dayKana, COUNTERS, ageKana, D1,
     save, stage, grade, mastery, dueKeys, weakKeys, level, lvlFloor, rank, liveStreak, record, bonus, todaysQuests, claimQuest,
     SHOP, SHOP_BY, buy, STICKERS, GACHA_PRICE, spin, TROPHIES, checkTrophies, speech, sfx,
@@ -27,100 +27,21 @@
     train: `<svg class="train-here" viewBox="0 0 44 28" aria-hidden="true"><path d="M3 20c0-9 8-14 18-14h12c5 0 8 3 9 8v6z" fill="var(--panel)" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/><path d="M10 11h22v5H8c.4-2 1-3.5 2-5z" fill="var(--express)"/><path d="M3 20h39" stroke="var(--line)" stroke-width="3"/><circle cx="13" cy="24" r="3" fill="${INK}"/><circle cx="31" cy="24" r="3" fill="${INK}"/></svg>`,
   };
 
-  // Mochi, the cat conductor. Hats/accessories come from the shop.
-  function mascotSVG(mood = 'calm', o = {}) {
-    const hat = o.hat ?? S.equip.hat, acc = o.acc ?? S.equip.acc;
-    const st = `stroke="${INK}" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"`;
-    const eyes = {
-      calm: `<circle cx="47" cy="66" r="4.6" fill="${INK}"/><circle cx="73" cy="66" r="4.6" fill="${INK}"/><circle cx="48.6" cy="64.4" r="1.5" fill="#fff"/><circle cx="74.6" cy="64.4" r="1.5" fill="#fff"/>`,
-      happy: `<path d="M41 68q6-8 12 0M67 68q6-8 12 0" fill="none" ${st}/>`,
-      wow: `<circle cx="47" cy="65" r="6.2" fill="${INK}"/><circle cx="73" cy="65" r="6.2" fill="${INK}"/><circle cx="49.2" cy="62.8" r="2.2" fill="#fff"/><circle cx="75.2" cy="62.8" r="2.2" fill="#fff"/>`,
-      cheer: `<path d="M41 60l10 6-10 6M79 60l-10 6 10 6" fill="none" ${st}/>`,
-      sad: `<path d="M41 66q6 5 12 0M67 66q6 5 12 0" fill="none" ${st}/><path d="M80 72q-3 5 0 7q3-2 0-7z" fill="#8fd3ff" stroke="${INK}" stroke-width="1.3"/>`,
-    }[mood] || '';
-    const mouth = mood === 'wow' ? `<ellipse cx="60" cy="79" rx="3.5" ry="4.5" fill="#e8607a" stroke="${INK}" stroke-width="2.4"/>`
-      : mood === 'cheer' || mood === 'happy' ? `<path d="M53 75q7 11 14 0z" fill="#e8607a" ${st} stroke-width="2.6"/>`
-        : `<path d="M53 76q3.5 4.5 7 0q3.5 4.5 7 0" fill="none" ${st} stroke-width="3"/>`;
-    const HATS = {
-      cap: `<path d="M38 37c1-17 43-17 44 0z" fill="#41538c" ${st} stroke-width="3"/><path d="M32 37h56a4 4 0 0 1 0 8H32a4 4 0 0 1 0-8z" fill="#2c3a68" ${st} stroke-width="3"/><circle cx="60" cy="29" r="4.6" fill="var(--coin)" stroke="${INK}" stroke-width="2"/>`,
-      sakura: `<g transform="translate(92 40)">${[0, 72, 144, 216, 288].map((a) => `<ellipse rx="5" ry="7" transform="rotate(${a}) translate(0 -7)" fill="#ffc2d4" stroke="${INK}" stroke-width="1.6"/>`).join('')}<circle r="3.2" fill="#ffd25c" stroke="${INK}" stroke-width="1.4"/></g>`,
-      hachimaki: `<path d="M13 55q47-17 94 0l-1 10q-46-16-92 0z" fill="#fff" ${st} stroke-width="2.6"/><circle cx="60" cy="51" r="5.5" fill="#ec4b5d"/><path d="M105 58l14-7-3 12z" fill="#fff" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/>`,
-      straw: `<ellipse cx="60" cy="35" rx="48" ry="10" fill="#f5d77e" ${st} stroke-width="3"/><path d="M37 34c0-20 46-20 46 0z" fill="#f5d77e" ${st} stroke-width="3"/><path d="M38 30h44" stroke="#ec4b5d" stroke-width="5"/>`,
-      kitsune: `<g transform="rotate(-18 28 36)"><path d="M12 44l3-22 9 9 9-9 3 22q-12 11-24 0z" fill="#fff" ${st} stroke-width="2.6"/><path d="M18 39l5 2M30 39l-5 2M24 47v2" stroke="#ec4b5d" stroke-width="2.6" stroke-linecap="round"/><path d="M15 25l4 5M33 25l-4 5" stroke="#ec4b5d" stroke-width="2.4"/></g>`,
-      crown: `<path d="M38 36l3-20 10 10 9-15 9 15 10-10 3 20z" fill="var(--coin)" ${st} stroke-width="3"/><circle cx="60" cy="27" r="3" fill="#ff6b81"/><circle cx="46" cy="30" r="2.4" fill="#7cc7f0"/><circle cx="74" cy="30" r="2.4" fill="#8fcf7a"/>`,
-    };
-    const ACCS = {
-      bell: `<path d="M42 98q18 9 36 0" stroke="#ec4b5d" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="60" cy="106" r="7" fill="var(--coin)" stroke="${INK}" stroke-width="2.5"/><path d="M56 108h8" stroke="${INK}" stroke-width="2"/>`,
-      bow: `<path d="M60 102l-15-8v16zM60 102l15-8v16z" fill="#ff8fb1" ${st} stroke-width="2.4"/><circle cx="60" cy="102" r="4.5" fill="#ff6b98" stroke="${INK}" stroke-width="2.2"/>`,
-      scarf: `<path d="M27 95q33 15 66 0l2 10q-35 15-70 0z" fill="#ec4b5d" ${st} stroke-width="2.6"/><path d="M78 104l9 15-11 1-4-13z" fill="#ec4b5d" ${st} stroke-width="2.4"/>`,
-    };
-    const behindHat = hat === 'straw' ? HATS.straw : '';
-    return `<svg class="mascot ${o.cls || ''}" viewBox="-6 -6 132 132" role="img" aria-label="Mochi the cat conductor">
-      <path d="M22 52 26 16l24 18z" fill="var(--mochi)" ${st}/><path d="M28 43 30 26l11 9z" fill="var(--blush)"/>
-      <path d="M98 52 94 16 70 34z" fill="var(--mochi)" ${st}/><path d="M92 43 90 26l-11 9z" fill="var(--blush)"/>
-      <path d="M60 26c30 0 50 22 50 50 0 24-22 38-50 38S10 100 10 76c0-28 20-50 50-50z" fill="var(--mochi)" ${st}/>
-      <path d="M8 70l12 2M8 80l12-2M112 70l-12 2M112 80l-12-2" stroke="${INK}" stroke-width="2" stroke-linecap="round" opacity=".55"/>
-      <ellipse cx="35" cy="80" rx="7.5" ry="4.5" fill="var(--blush)" opacity=".85"/><ellipse cx="85" cy="80" rx="7.5" ry="4.5" fill="var(--blush)" opacity=".85"/>
-      ${eyes}${mouth}
-      <ellipse cx="44" cy="112" rx="8" ry="5" fill="var(--mochi)" ${st} stroke-width="2.6"/><ellipse cx="76" cy="112" rx="8" ry="5" fill="var(--mochi)" ${st} stroke-width="2.6"/>
-      ${ACCS[acc] || ''}${behindHat || HATS[hat] || ''}
-    </svg>`;
-  }
-  const YOKAI = [
-    { id: 'obake', jp: 'おばけ', name: 'Obake', color: '#ece6ff' },
-    { id: 'oni', jp: 'おに', name: 'Oni', color: '#ff9f9f' },
-    { id: 'kappa', jp: 'かっぱ', name: 'Kappa', color: '#9fdc9a' },
-    { id: 'tanuki', jp: 'たぬき', name: 'Tanuki', color: '#d8ae86' },
-    { id: 'kitsune', jp: 'きつね', name: 'Kitsune', color: '#ffe0bf' },
-    { id: 'karakasa', jp: 'からかさ', name: 'Karakasa', color: '#bfaef5' },
-  ];
+  // Artwork lives in art.js; these wrappers add the player's shop items and station codes.
+  const ART = window.ART;
+  const mascotSVG = (mood = 'calm', o = {}) => ART.mascot(mood, { hat: S.equip.hat, acc: S.equip.acc, ...o });
+  const YOKAI = ART.YOKAI, yokaiSVG = ART.yokai;
   const yokaiFor = (st) => YOKAI[(hashStr(st.id) >>> 3) % YOKAI.length];
-  function yokaiSVG(y, mood = 'idle', cls = '') {
-    const ink = '#3b2f4d', st = `stroke="${ink}" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"`;
-    const ey = y.id === 'karakasa' ? 44 : 60;
-    let back = '', body, extra = '';
-    if (y.id === 'obake') body = `<path d="M60 14c27 0 41 21 41 47v45l-10-8-10 8-11-8-10 8-11-8-10 8-10-8V61c0-26 14-47 41-47z" fill="${y.color}" ${st}/>`;
-    else if (y.id === 'karakasa') {
-      body = `<path d="M60 8 106 70q-46-12-92 0z" fill="${y.color}" ${st}/><path d="M37 66 60 8M83 66 60 8" stroke="${ink}" stroke-width="2" opacity=".4"/><path d="M60 66v34" ${st}/><path d="M60 100q-8 0-8 8h16q0-8-8-8z" fill="#ffd25c" ${st} stroke-width="2.4"/>`;
-    } else body = `<path d="M60 22c27 0 45 18 45 45s-19 40-45 40-45-14-45-40 18-45 45-45z" fill="${y.color}" ${st}/>`;
-    if (y.id === 'oni') extra = `<path d="M38 32 31 10l17 15zM82 32l7-22-17 15z" fill="#ffe27a" ${st} stroke-width="2.6"/>`;
-    if (y.id === 'kappa') extra = `<path d="M38 28l-4-8 8 4 2-8 6 7 4-8 6 8 6-8 4 8 6-7 2 8 8-4-4 8" fill="#5fae62" ${st} stroke-width="2.2"/><ellipse cx="60" cy="27" rx="20" ry="7" fill="#fff8c9" ${st} stroke-width="2.6"/>`;
-    if (y.id === 'tanuki') { back = `<circle cx="31" cy="32" r="11" fill="${y.color}" ${st}/><circle cx="89" cy="32" r="11" fill="${y.color}" ${st}/>`; extra = `<path d="M30 58q12-9 23 2-6 12-23 4zM90 58q-12-9-23 2 6 12 23 4z" fill="#6b4c3b" opacity=".85"/><path d="M58 22q8-12 16-4-8 6-16 4z" fill="#8fcf7a" ${st} stroke-width="2.2"/>`; }
-    if (y.id === 'kitsune') { back = `<path d="M26 44 30 6l24 22zM94 44 90 6 66 28z" fill="${y.color}" ${st}/><path d="M30 14l2 12 8-4zM90 14l-2 12-8-4z" fill="#ff9a6b"/>`; extra = `<path d="M34 76l10 2M86 76l-10 2M57 36q3-6 6 0" stroke="#ec4b5d" stroke-width="3" stroke-linecap="round" fill="none"/>`; }
-    const eyes = {
-      idle: y.id === 'karakasa' ? `<circle cx="60" cy="${ey}" r="9" fill="#fff" ${st} stroke-width="2.6"/><circle cx="61" cy="${ey + 1}" r="4.5" fill="${ink}"/>` : `<circle cx="47" cy="${ey}" r="5" fill="${ink}"/><circle cx="73" cy="${ey}" r="5" fill="${ink}"/><circle cx="48.5" cy="${ey - 1.6}" r="1.6" fill="#fff"/><circle cx="74.5" cy="${ey - 1.6}" r="1.6" fill="#fff"/>`,
-      hit: y.id === 'karakasa' ? `<path d="M54 ${ey - 6}l12 12M66 ${ey - 6}l-12 12" ${st}/>` : `<path d="M42 ${ey - 5}l10 10M52 ${ey - 5}l-10 10M68 ${ey - 5}l10 10M78 ${ey - 5}l-10 10" ${st}/>`,
-      laugh: y.id === 'karakasa' ? `<path d="M52 ${ey + 2}q8-10 16 0" fill="none" ${st}/>` : `<path d="M41 ${ey + 2}q6-8 12 0M67 ${ey + 2}q6-8 12 0" fill="none" ${st}/>`,
-      gone: `<circle cx="${y.id === 'karakasa' ? 60 : 47}" cy="${ey}" r="5" fill="none" ${st} stroke-width="2.2"/>${y.id === 'karakasa' ? '' : `<circle cx="73" cy="${ey}" r="5" fill="none" ${st} stroke-width="2.2"/>`}`,
-    }[mood];
-    const my = y.id === 'karakasa' ? 56 : 78;
-    const mouth = mood === 'laugh' ? `<path d="M52 ${my}q8 12 16 0z" fill="#e8607a" ${st} stroke-width="2.4"/>`
-      : mood === 'hit' || mood === 'gone' ? `<path d="M53 ${my + 2}q7-5 14 0" fill="none" ${st} stroke-width="2.6"/>`
-        : y.id === 'oni' ? `<path d="M52 ${my}q8 5 16 0" fill="none" ${st} stroke-width="2.6"/><path d="M55 ${my + 1}l2 5 2-4" fill="#fff" stroke="${ink}" stroke-width="1.6"/>`
-          : y.id === 'obake' || y.id === 'karakasa' ? `<path d="M54 ${my}q6 4 12 0" fill="none" ${st} stroke-width="2.6"/><path d="M58 ${my + 2}q2 9 6 0" fill="#ff8fa3" stroke="${ink}" stroke-width="2"/>`
-            : y.id === 'kappa' ? `<path d="M50 ${my - 2}q10 9 20 0q-10-4-20 0z" fill="#ffc35c" ${st} stroke-width="2.4"/>`
-              : `<path d="M54 ${my}q6 5 12 0" fill="none" ${st} stroke-width="2.6"/>`;
-    const blush = `<ellipse cx="36" cy="${ey + 12}" rx="6" ry="3.5" fill="#ff8fa3" opacity=".5"/><ellipse cx="84" cy="${ey + 12}" rx="6" ry="3.5" fill="#ff8fa3" opacity=".5"/>`;
-    return `<svg class="yokai ${cls}" viewBox="0 0 120 120" role="img" aria-label="${esc(y.name)}">${back}${body}${extra}${y.id === 'karakasa' ? '' : blush}${eyes}${mouth}</svg>`;
-  }
   const isLine = (st) => st.kind === 'lesson' || st.kind === 'kana';
-  const lineColor = (st) => (st.line === 'X' ? 'var(--express)' : 'var(--line)');
-  const lineLetter = (st) => (st.line === 'X' ? 'X' : 'M');
+  const LINE_C = { M: 'var(--line)', X: 'var(--express)', S: 'var(--n4)', SX: 'var(--n4)', K: 'var(--n3)', KX: 'var(--n3)' };
+  const lineColor = (st) => LINE_C[st.line];
+  const lineLetter = (st) => ({ M: 'M', X: 'X', S: 'S', SX: 'S', K: 'A', KX: 'A' }[st.line]);
+  const curLevel = () => S.settings.level || 'N5';
+  const levelRange = (l = curLevel()) => (l === 'N5' ? [1, 26] : l === 'N4' ? [126, 150] : [201, 224]);
+  const inLevel = (L, l = curLevel()) => { const [a, b] = levelRange(l); return L >= a && L <= b; };
   const codeOf = (st) => (isLine(st) ? lineLetter(st) + st.code : st.code);
   const badgeHTML = (st) => (isLine(st) ? `<span class="badge"><small>${lineLetter(st)}</small><b>${st.code}</b></span>` : `<span class="badge"><b>${st.code}</b></span>`);
-  function stampSVG(st, date) {
-    const ink = 'var(--stamp)';
-    const code = codeOf(st);
-    const jp = st.jp.length > 9 ? st.jp.slice(0, 9) : st.jp;
-    return `<svg viewBox="0 0 120 120" role="img" aria-label="Stamp: ${esc(st.name)}">
-      <circle cx="60" cy="60" r="55" fill="none" style="stroke:${ink}" stroke-width="4"/>
-      <circle cx="60" cy="60" r="47" fill="none" style="stroke:${ink}" stroke-width="1.4" stroke-dasharray="3 2.4"/>
-      <text x="60" y="33" text-anchor="middle" style="fill:${ink};font:9.5px var(--f-pop);letter-spacing:1px">${st.line === 'X' ? 'N5 EXPRESS' : 'MINNA LINE'}</text>
-      <text x="60" y="71" text-anchor="middle" style="fill:${ink};font:${code.length > 2 ? 27 : 34}px var(--f-pop)">${esc(code)}</text>
-      <text x="60" y="88" text-anchor="middle" style="fill:${ink};font:700 10.5px var(--f-ui)">${esc(jp)}</text>
-      <text x="60" y="101" text-anchor="middle" style="fill:${ink};font:8px var(--f-pop)">${esc(date || '')}</text>
-    </svg>`;
-  }
+  const stampSVG = (st, date) => ART.stamp(st, codeOf(st), date);
   function clockSVG(h, m) {
     const ha = ((h % 12) + m / 60) * 30, ma = m * 6;
     const ticks = Array.from({ length: 12 }, (_, i) => `<line x1="50" y1="12" x2="50" y2="${i % 3 ? 16 : 19}" transform="rotate(${i * 30} 50 54)" stroke="${INK}" stroke-width="${i % 3 ? 2 : 3}" stroke-linecap="round"/>`).join('');
@@ -132,15 +53,7 @@
       <circle cx="50" cy="54" r="4" fill="${INK}"/></svg>`;
   }
   const OMAMORI = `<svg viewBox="0 0 60 84" width="52" height="72" aria-hidden="true"><path d="M14 24 30 10l16 14v50a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4z" fill="#ff8fb1" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><path d="M22 6q8 8 16 0" fill="none" stroke="var(--coin)" stroke-width="3.5" stroke-linecap="round"/><circle cx="30" cy="12" r="4" fill="var(--coin)" stroke="${INK}" stroke-width="2"/><rect x="21" y="34" width="18" height="30" rx="3" fill="#fff" stroke="${INK}" stroke-width="2"/><text x="30" y="55" text-anchor="middle" style="fill:#c2334a;font:15px var(--f-pop)">守</text></svg>`;
-  const machineSVG = () => `<svg viewBox="0 0 200 240" aria-hidden="true">
-      <rect x="40" y="200" width="120" height="30" rx="10" fill="var(--line)" stroke="${INK}" stroke-width="3"/>
-      <rect x="30" y="110" width="140" height="100" rx="18" fill="var(--line)" stroke="${INK}" stroke-width="3.5"/>
-      <circle cx="100" cy="72" r="64" fill="color-mix(in srgb, var(--express) 22%, var(--panel))" stroke="${INK}" stroke-width="3.5"/>
-      ${[[70, 70, '#ff8fb1'], [100, 50, '#ffc845'], [128, 74, '#8fcf7a'], [84, 100, '#7cc7f0'], [116, 104, '#a99cf0'], [60, 100, '#ff9a6b'], [100, 86, '#fff']].map(([x, y, c]) => `<g><circle cx="${x}" cy="${y}" r="13" fill="${c}" stroke="${INK}" stroke-width="2.4"/><path d="M${x - 13} ${y}h26" stroke="${INK}" stroke-width="2"/></g>`).join('')}
-      <path d="M78 40q14-14 32-6" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".8"/>
-      <circle cx="100" cy="150" r="20" fill="var(--panel)" stroke="${INK}" stroke-width="3"/><rect x="96" y="134" width="8" height="32" rx="4" fill="var(--coin)" stroke="${INK}" stroke-width="2.4"/>
-      <rect x="64" y="182" width="44" height="22" rx="8" fill="var(--panel)" stroke="${INK}" stroke-width="3"/>
-      <text x="152" y="128" text-anchor="middle" style="fill:${INK};font:12px var(--f-pop)">ガチャ</text></svg>`;
+  const machineSVG = () => ART.machine();
 
   // ---------------------------------------------------------------- effects
   const reduced = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -233,7 +146,7 @@
   const vocabPool = (v) => VOCAB.filter((x) => quizzable(x) && Math.abs(x.L - v.L) <= 6 && x.L <= Math.max(v.L + 2, 4));
   function vocabAfter(v) {
     const ex = exampleFor(v);
-    return `<div class="ans jp">${jpHTML(v, 'kanji')}</div><div>${esc(v.kana)} · <i>${esc(v.ro)}</i> · ${esc(v.en)}${v.note ? ` <span class="muted">(${esc(v.note)})</span>` : ''}</div>${v.use ? `<div class="wuse">${esc(v.use)}${v.useEn ? ` <span class="muted">${esc(v.useEn)}</span>` : ''}</div>` : ''}${ex ? `<div class="exs"><span class="jp">${esc(ex.jp)}</span><br><span class="muted">${esc(ex.en)}</span></div>` : ''}`;
+    return `<div class="ans jp">${jpHTML(v, 'kanji')}</div><div>${esc(v.kana)} · <i>${esc(v.ro)}</i> · ${esc(v.en)}${v.note ? ` <span class="muted">(${esc(v.note)})</span>` : ''}</div>${v.use ? `<div class="wuse">${rubyLine(v.use)}${v.useEn ? ` <span class="muted">${esc(v.useEn)}</span>` : ''}</div>` : ''}${ex ? `<div class="exs"><span class="jp">${rubyLine(ex.jp)}</span><br><span class="muted">${esc(ex.en)}</span></div>` : ''}`;
   }
   function vocabQ(v, mode) {
     const s = stage(vKey(v));
@@ -305,21 +218,21 @@
   }
   const drillKeys = (g) => g.drills.map((_, i) => `g|${g.id}|${i}`);
   function grammarQ(g, i) {
-    const d = g.drills[i];
+    const d = g.drills[i], r = rubyLine;
     const key = `g|${g.id}|${i}`;
     const after = `<div class="small"><b>${esc(g.title)}</b> · ${esc(g.meaning)}</div>`;
     if (d.type === 'order') {
       const ans = d.tiles.join(' ');
-      return { key, cat: 'grammar', kind: 'order', label: 'Put the sentence in order', prompt: `<div class="en-q">${esc(d.en)}</div>`, tiles: d.tiles, answer: ans, say: ans, sayAfter: true, after: `<div class="ans">${esc(ans)}。</div>${after}` };
+      return { key, cat: 'grammar', kind: 'order', label: 'Put the sentence in order', prompt: `<div class="en-q">${esc(d.en)}</div>`, tiles: d.tiles, answer: ans, say: ans, sayAfter: true, after: `<div class="ans">${r(ans)}。</div>${after}` };
     }
     if (d.type === 'fill') {
       const full = d.jp.replace('＿＿', d.answer);
       return { key, cat: 'grammar', kind: 'mc', label: 'Fill the blank', say: full, sayAfter: true,
-        prompt: `<div class="glyph sentence">${esc(d.jp).replace('＿＿', '<span style="display:inline-block;border-bottom:3px solid var(--c,var(--line));width:2.4em"></span>')}</div>${d.en ? `<div class="sub">${esc(d.en)}</div>` : ''}`,
-        options: shuffle(d.options).map((o) => ({ html: `<span class="jpo">${esc(o)}</span>`, val: o })), answer: d.answer, after: `<div class="ans">${esc(full)}</div>${after}` };
+        prompt: `<div class="glyph sentence">${r(d.jp).replace('＿＿', '<span style="display:inline-block;border-bottom:3px solid var(--c,var(--line));width:2.4em"></span>')}</div>${d.en ? `<div class="sub">${esc(d.en)}</div>` : ''}`,
+        options: shuffle(d.options).map((o) => ({ html: `<span class="jpo">${r(o)}</span>`, val: o })), answer: d.answer, after: `<div class="ans">${r(full)}</div>${after}` };
     }
-    const isJp = /[぀-ヿ]/.test(d.answer);
-    return { key, cat: 'grammar', kind: 'mc', label: 'Choose', prompt: `<div class="en-q" style="font-size:19px">${esc(d.q)}</div>`, options: shuffle(d.options).map((o) => ({ html: isJp ? `<span style="font-size:17px">${esc(o)}</span>` : esc(o), val: o })), answer: d.answer, say: isJp ? d.answer : '', sayAfter: isJp, after: `<div class="ans">${esc(d.answer)}</div>${after}` };
+    const isJp = /[\u3040-\u30ff\u4e00-\u9fff]/.test(d.answer);
+    return { key, cat: 'grammar', kind: 'mc', label: 'Choose', prompt: `<div class="en-q" style="font-size:19px">${esc(d.q)}</div>`, options: shuffle(d.options).map((o) => ({ html: isJp ? `<span style="font-size:17px">${r(o)}</span>` : esc(o), val: o })), answer: d.answer, say: isJp ? d.answer : '', sayAfter: isJp, after: `<div class="ans">${r(d.answer)}</div>${after}` };
   }
   // Japanese word order is flexible: phrases marked with を, に, で or へ can swap places, so those
   // reorderings count. Anything else (the topic, the verb, の phrases, adverbs) has to stay put.
@@ -334,8 +247,8 @@
     const pool = EXAMPLES.filter((x) => x !== e && x.en !== e.en && Math.abs(x.L - e.L) <= 3);
     const opts = shuffle([e, ...uniqBy(shuffle(pool), (x) => x.en).slice(0, 3)]);
     return { key: 'e|' + e.id, cat: 'sentence', mode: 'listen', kind: 'mc', label: 'Listen to the sentence. What does it mean?', autoplay: true, say: e.jp, sayAfter: false,
-      prompt: `<button class="btn primary" data-act="say" data-arg="${esc(e.jp)}">${ICON.say.replace('<svg', '<svg width="20" height="20"')} Play again</button><button class="btn sm ghost" data-act="reveal">Show the Japanese</button><div id="rv" class="glyph sentence" hidden>${esc(e.jp)}</div>`,
-      options: opts.map((x) => ({ html: esc(x.en.replace(/\s*\([^)]*\)\s*$/, '')), val: x.id })), answer: e.id, after: `<div class="ans">${esc(e.jp)}</div><div><i>${esc(e.ro)}</i></div><div>${esc(e.en)}</div><div class="small muted">${esc(e.g.title)} · Lesson ${e.L}</div>` };
+      prompt: `<button class="btn primary" data-act="say" data-arg="${esc(e.jp)}">${ICON.say.replace('<svg', '<svg width="20" height="20"')} Play again</button><button class="btn sm ghost" data-act="reveal">Show the Japanese</button><div id="rv" class="glyph sentence" hidden>${rubyLine(e.jp)}</div>`,
+      options: opts.map((x) => ({ html: esc(x.en.replace(/\s*\([^)]*\)\s*$/, '')), val: x.id })), answer: e.id, after: `<div class="ans">${rubyLine(e.jp)}</div><div><i>${esc(e.ro)}</i></div><div>${esc(e.en)}</div><div class="small muted">${esc(e.g.title)} · ${lessonName(e.L)}</div>` };
   }
   const conjKey = (form, v) => `c|${form}|${v.id}`;
   function wrongBases(base, v, ans) {
@@ -343,7 +256,8 @@
     for (const g of [1, 2, 3]) { try { const f = verbForms(v, g); if (f[base]) wrong.add(f[base]); } catch (e) { /* skip */ } }
     for (const [a, b] of [['って', 'んで'], ['んで', 'いて'], ['いて', 'って'], ['して', 'しって'], ['った', 'んだ'], ['ない', 'らない']]) if (ans.includes(a)) wrong.add(ans.replace(a, b));
     const masu = v.kana.replace(/\s/g, ''), s = masu.slice(0, -2), p = s.slice(0, -1);
-    wrong.add(s + { te: 'て', nai: 'ない', dict: 'る', ta: 'た', nakatta: 'なかった' }[base]);
+    const plainEnd = { te: 'て', nai: 'ない', dict: 'る', ta: 'た', nakatta: 'なかった' }[base];
+    if (plainEnd) wrong.add(s + plainEnd);
     const misrules = {
       te: ['って', 'んで', 'いて', 'して'].map((e) => p + e), ta: ['った', 'んだ', 'いた', 'した'].map((e) => p + e),
       nai: [p + 'らない', p + 'わない', s + 'らない', p + 'かない'], dict: [p + 'る', p + 'う', s + 'るう', p + 'く'],
@@ -360,7 +274,7 @@
     const wrong = new Set();
     if (F.verb && F.base === 'stem') {
       const f = verbForms(v);
-      for (const k of ['mneg', 'mpast', 'mpastneg', 'mshou', 'mseni', 'mtai']) if (k !== form) wrong.add(f[k]);
+      for (const k of ['mneg', 'mpast', 'mpastneg', 'mshou', 'mseni', 'mtai', 'nagara', 'sugiru', 'yasui', 'nikui', 'soukan']) if (k !== form) wrong.add(f[k]);
       wrong.add(f.stem + 'ますでした'); wrong.add(f.stem + 'ませんました');
     } else if (F.verb && F.base) {
       const f = verbForms(v), base = f[F.base];
@@ -369,6 +283,7 @@
       wrong.add(f.stem + F.suf.replace(/^ /, ''));
     } else if (F.verb) {
       for (const w of wrongBases(form, v, ans)) wrong.add(w);
+      if (F.fam === 'n4') { const f = verbForms(v); for (const k of ['pot', 'vol', 'pass', 'caus', 'ba', 'imper', 'causpass']) if (k !== form) wrong.add(f[k]); }
     } else {
       wrong.add(adjForms(v, true)[form]);
       for (const f of ['aneg', 'apast', 'apastneg', 'ate']) if (f !== form) wrong.add(adjForms(v)[f]);
@@ -494,18 +409,24 @@
     let keys = [];
     if (st.kind === 'kana') keys = [...KANA.map(kanaKey), ...stationVocab(st).map(vKey)];
     else if (st.kind === 'lesson') keys = [...stationVocab(st).map(vKey), ...stationGrammar(st).flatMap(drillKeys), ...stationKanji(st).map(kanjiKey), ...stationReading(st).flatMap(readingKeys)];
-    else if (st.kind === 'kanji') keys = KANJI.map(kanjiKey);
-    else if (st.kind === 'verbs') keys = conjVerbs(20).flatMap((v) => ['mneg', 'mpast', 'mpastneg', 'te', 'nai', 'dict', 'ta'].map((f) => conjKey(f, v)));
+    else if (st.kind === 'kanji') keys = KANJI.filter((k) => k.level === st.level).map(kanjiKey);
+    else if (st.kind === 'academy') keys = READING.filter((r) => r.lesson === 225).flatMap(readingKeys);
+    else if (st.kind === 'verbs') {
+      const fs = st.level === 'N5' ? ['mneg', 'mpast', 'mpastneg', 'te', 'nai', 'dict', 'ta'] : ['pot', 'vol', 'ba', 'pass', 'caus', 'imper'];
+      keys = conjVerbs(st.level === 'N5' ? 20 : 150).flatMap((v) => fs.filter((f) => canForm(f, v)).map((f) => conjKey(f, v)));
+    }
     keyCache.set(st.id, keys);
     return keys;
   }
   const numMastery = () => Math.min(1, S.numStats.ok / 120);
   const stationMastery = (st) => (st.kind === 'exam' ? (S.stamps.exam ? 1 : 0) : st.kind === 'numbers' ? numMastery() : mastery(stationKeys(st)));
+  // The furthest lesson touched at the current level, so practice modes stay on what you've met.
   function myMaxL() {
+    const [lo, hi] = levelRange();
     let m = 0;
-    for (const k of Object.keys(S.items)) if (k.startsWith('v|')) { const L = parseInt(k.slice(2), 10); if (L > m && L <= 25) m = L; }
-    for (const id of Object.keys(S.stamps)) { const st = SBY.get(id); if (st && st.L > m && st.L <= 25) m = st.L; }
-    return Math.max(m, 4);
+    for (const k of Object.keys(S.items)) if (k.startsWith('v|')) { const L = parseInt(k.slice(2), 10); if (L > m && L >= lo && L <= hi) m = L; }
+    for (const id of Object.keys(S.stamps)) { const st = SBY.get(id); if (st && st.L > m && st.L >= lo && st.L <= hi) m = st.L; }
+    return Math.min(hi, Math.max(m, lo + 3));
   }
 
   // ---------------------------------------------------------------- shell
@@ -536,7 +457,7 @@
   function topbar() {
     const l = level(), lo = lvlFloor(l), hi = lvlFloor(l + 1), streak = liveStreak();
     return `<header class="topbar"><div class="wrap">
-      <button class="brand" data-act="home" aria-label="Home">${mascotSVG('calm', { cls: 'face' })}<span><b>Minna Line</b><span class="brand-sub">みんなの せん · N5</span></span></button>
+      <button class="brand" data-act="home" aria-label="Home">${mascotSVG('calm', { cls: 'face', face: true })}<span><b>Minna Line</b><span class="brand-sub">みんなの せん · N5</span></span></button>
       <div class="topstats">
         <span class="chipstat" title="Day streak${S.omamori ? ` · ${S.omamori} omamori` : ''}">${ICON.lantern(streak > 0)}${streak}</span>
         <span class="chipstat" title="Yen">${ICON.coin}<span id="coinct">${S.coins.toLocaleString('en-US')}</span></span>
@@ -562,14 +483,18 @@
   function refresh() { if (view.name !== 'session') go(view); }
 
   // ---------------------------------------------------------------- home
-  function nextStation() { return STATIONS.find((s) => isLine(s) && !S.stamps[s.id]) || SBY.get('exam'); }
-  function readiness() {
-    const rows = [
-      ['Kana', mastery(KANA.map(kanaKey))], ['Words', mastery(VOCAB.filter(quizzable).map(vKey))], ['Grammar', mastery(GRAMMAR.flatMap(drillKeys))],
-      ['Kanji', mastery(KANJI.map(kanjiKey))], ['Verbs', mastery(stationKeys(SBY.get('verbs')))], ['Reading', mastery(READING.flatMap(readingKeys))], ['Numbers', numMastery()],
-    ];
+  function nextStation(l = curLevel()) { return STATIONS.find((s) => s.level === l && isLine(s) && !S.stamps[s.id]) || STATIONS.filter((s) => s.level === l).pop(); }
+  function readiness(l = curLevel()) {
+    const n5 = l === 'N5';
+    const vk = VOCAB.filter((v) => quizzable(v) && levelOfL(v.L) === l).map(vKey);
+    const gk = GRAMMAR.filter((g) => levelOfL(g.lesson) === l).flatMap(drillKeys);
+    const kk = KANJI.filter((k) => k.level === l).map(kanjiKey);
+    const rk = READING.filter((r) => levelOfL(r.lesson) === l).flatMap(readingKeys);
+    const forms = STATIONS.find((s) => s.kind === 'verbs' && s.level === l);
+    const rows = [...(n5 ? [['Kana', mastery(KANA.map(kanaKey))]] : []), ['Words', mastery(vk)], ['Grammar', mastery(gk)], ['Kanji', mastery(kk)], ...(forms ? [['Verbs', mastery(stationKeys(forms))]] : []), ['Reading', mastery(rk)], ...(n5 ? [['Numbers', numMastery()]] : [])];
     const w = { Kana: 0.08, Words: 0.3, Grammar: 0.25, Kanji: 0.12, Verbs: 0.1, Reading: 0.1, Numbers: 0.05 };
-    return { rows, total: rows.reduce((a, [k, m]) => a + m * w[k], 0) };
+    const tot = rows.reduce((a, [k]) => a + w[k], 0);
+    return { rows, total: rows.reduce((a, [k, m]) => a + m * w[k], 0) / tot };
   }
   function greeting() {
     const h = new Date().getHours();
@@ -589,7 +514,7 @@
       const m = stationMastery(s), stp = S.stamps[s.id];
       return `<li class="stop" style="--c:${lineColor(s)}">${s === nx ? ICON.train : ''}<button data-act="station" data-arg="${s.id}">
         ${badgeHTML(s)}
-        <span class="stopname"><b>${esc(s.name)}${s === nx ? ' <span class="pill">next stop</span>' : ''}</b><span class="jp">${esc(s.jp)}${s.kind === 'lesson' && s.L <= 25 ? ` · Lesson ${s.L}` : ''}</span>${s.kind !== 'exam' ? meter(m) : ''}</span>
+        <span class="stopname"><b>${esc(s.name)}${s === nx ? ' <span class="pill">next stop</span>' : ''}</b><span class="jp">${esc(s.jp)}${lessonName(s.L) ? ` · ${lessonName(s.L)}` : ''}</span>${s.kind !== 'exam' ? meter(m) : ''}</span>
         ${stp ? `<span class="stamp-mini">${stampSVG(s, '')}</span>` : '<span class="stamp-empty" aria-hidden="true"></span>'}
       </button></li>`;
     }).join('')}</ol>`;
@@ -603,24 +528,21 @@
     return `<div class="week" aria-label="This week">${out.join('')}</div>`;
   }
   function wordOfDay() {
-    const pool = VOCAB.filter((v) => quizzable(v) && v.L >= 1 && v.L <= 20 && v.pos !== 'exp' && v.kanji && hasKanji(v.kanji));
-    return pool[Math.floor(rng(hashStr('wotd' + dayStr()))() * pool.length)];
+    const pool = VOCAB.filter((v) => quizzable(v) && inLevel(v.L) && v.pos !== 'exp' && v.kanji && hasKanji(v.kanji));
+    return pool[Math.floor(rng(hashStr('wotd' + curLevel() + dayStr()))() * pool.length)] || VOCAB.find((v) => v.kanji);
   }
   function hubBtn(act, title, jp, sub, arg) { return `<button class="hubbtn" data-act="${act}"${arg ? ` data-arg="${arg}"` : ''}><span class="jp">${jp}</span><b>${title}</b><span>${sub}</span></button>`; }
   function renderHome() {
     const due = dueKeys().length, nx = nextStation(), r = readiness(), l = level(), rk = rank();
     const lo = lvlFloor(l), hi = lvlFloor(l + 1);
     const quests = todaysQuests(), weak = weakKeys().length, w = wordOfDay();
-    const M = STATIONS.filter((s) => s.line === 'M'), X = STATIONS.filter((s) => s.line === 'X');
+    const lv = LEVELS.find((x) => x.id === curLevel());
+    const lines = { N5: [['Minna Line', 'M', 'M00–M20', ''], ['N5 Express', 'X', 'beyond Lesson 20', 'express']], N4: [['Summer Line', 'S', 'Lessons 26–50', 'summer'], ['N4 Terminal', 'SX', 'kanji, verbs, exam', 'summer']], N3: [['Autumn Line', 'K', 'Units 1–24', 'autumn'], ['N3 Terminal', 'KX', 'reading, kanji, exam', 'autumn']] }[lv.id];
     render(`
+      <div class="leveltabs" role="tablist" aria-label="JLPT level">${LEVELS.map((x) => `<button role="tab" class="lvtab ${x.season}" aria-selected="${x.id === lv.id}" data-act="level" data-arg="${x.id}"><i class="lvico">${ART.seasonIcon(x.season)}</i><b>${x.name}</b><span>${x.title}</span><small>${Math.round(readiness(x.id).total * 100)}%</small></button>`).join('')}</div>
       <div class="home"><div>
-        <section class="hero">
-          ${mascotSVG(due ? 'calm' : 'happy', { cls: 'bob' })}
-          <div class="stack">${greeting()}
-            <div class="rankline"><span class="pill">${rk[1]} ${rk[3]}</span><b class="pop">Lv ${l}</b>${meter((S.xp - lo) / (hi - lo))}<span class="muted small num">${S.xp - lo}/${hi - lo} XP</span></div>
-            ${weekHTML()}
-          </div>
-        </section>
+        <section class="vista">${ART.scene(lv.season)}<div class="vista-over">${mascotSVG(due ? 'calm' : 'happy', { cls: 'bob' })}${greeting()}</div></section>
+        <div class="herostats"><div class="rankline"><span class="pill">${rk[1]} ${rk[3]}</span><b class="pop">Lv ${l}</b>${meter((S.xp - lo) / (hi - lo))}<span class="muted small num">${S.xp - lo}/${hi - lo} XP</span></div>${weekHTML()}</div>
         <div class="cards">
           <div class="card cta"><div class="eyebrow">Daily review · ふくしゅう</div><div class="big">${due}</div><div class="muted small">${due ? (due === 1 ? 'card due now' : 'cards due now') : 'Nothing due. Time to meet new words.'}</div>
             <button class="btn primary" data-act="review">${due ? 'Start review' : 'Learn new words'}</button></div>
@@ -642,18 +564,16 @@
           ${hubBtn('dict', 'Dictionary', 'じしょ', `Search all ${VOCAB.length.toLocaleString('en-US')} words`)}
           ${hubBtn('gacha', 'Capsule machine', 'ガチャ', S.tickets ? `${S.tickets} free ticket${S.tickets > 1 ? 's' : ''}!` : `${GACHA_PRICE} yen a spin`)}
         </div>
-        <h2 class="section-h">Minna Line <span class="pill">M00–M20</span></h2>
-        ${railHTML(M, '')}
-        <h2 class="section-h">N5 Express <span class="pill express">beyond Lesson 20</span></h2>
-        ${railHTML(X, 'express')}
+        <div class="muted small" style="margin-top:22px">${esc(lv.blurb)}</div>
+        ${lines.map(([t, id, sub, cls]) => `<h2 class="section-h" style="margin-top:12px">${t} <span class="pill ${cls === 'express' ? 'express' : ''}">${sub}</span></h2>${railHTML(STATIONS.filter((s) => s.line === id), cls)}`).join('')}
       </div>
       <aside class="side">
         <div class="card" style="--c:${lineColor(nx)}"><div class="eyebrow">Next stop</div>
           <div style="display:flex;gap:12px;align-items:center">${badgeHTML(nx)}<div><h3>${esc(nx.name)}</h3><div class="muted small">${esc(nx.jp)}</div></div></div>
           <button class="btn primary" data-act="station" data-arg="${nx.id}">Go to ${codeOf(nx)}</button></div>
         <div class="card wotd"><div class="row-between"><div class="eyebrow">Word of the day</div>${sayBtn(w.kana)}</div>
-          <div class="w">${rubyHTML(w.kanji, w.kana)}</div><div><b>${esc(w.en)}</b> <span class="muted small">· ${esc(w.ro)} · Lesson ${w.L}</span></div></div>
-        <div class="card readiness"><div class="eyebrow">N5 readiness</div>
+          <div class="w">${rubyHTML(w.kanji, w.kana)}</div><div><b>${esc(w.en)}</b> <span class="muted small">· ${esc(w.ro)}${lessonName(w.L) ? ' · ' + lessonName(w.L) : ''}</span></div></div>
+        <div class="card readiness"><div class="eyebrow">${lv.id} readiness</div>
           <div class="big">${Math.round(r.total * 100)}<span style="font-size:18px">%</span></div>
           ${r.rows.map(([k, m]) => `<div class="row"><span>${k}</span>${meter(m)}<span>${Math.round(m * 100)}</span></div>`).join('')}
           <div class="muted small">Counts what's in long-term memory (reviewed out to a 7-day interval or more).</div></div>
@@ -664,6 +584,7 @@
           <button class="btn" data-act="collection">Open the collection</button></div>
       </aside></div>`, {
       review: startReview,
+      level: (l) => { S.settings = { ...S.settings, level: l }; save(); sfx.play('tap'); renderHome(); },
       claim: (id, el) => {
         const r = claimQuest(id);
         if (!r) return;
@@ -671,14 +592,14 @@
         if (r.allDone) { petals(); toast('All tickets punched! +50 yen and a free capsule ticket'); }
         setTimeout(() => { renderHome(); celebrate(r.levelUp); }, 350);
       },
-      sprint: () => sprintSession({ id: 'global', title: 'Shinkansen Sprint', make: () => vocabQ(pick(VOCAB.filter((v) => quizzable(v) && v.L >= 1 && v.L <= myMaxL() && v.kana.length < 14)), pick(['jp2en', 'en2jp'])), back: { name: 'home' } }),
+      sprint: () => sprintSession({ id: 'global', title: 'Shinkansen Sprint', make: () => vocabQ(pick(VOCAB.filter((v) => quizzable(v) && inLevel(v.L) && v.L <= myMaxL() && v.kana.length < 14)), pick(['jp2en', 'en2jp'])), back: { name: 'home' } }),
       weak: () => quizSession({ title: 'Weak spots', keys: weakKeys().slice(0, 15), back: { name: 'home' } }),
       particles: () => {
         const P = new Set(['は', 'が', 'を', 'に', 'で', 'へ', 'と', 'も', 'の', 'か', 'や', 'から', 'まで', 'より', 'ね', 'よ', 'だけ', 'など', 'ごろ', 'ぐらい', 'くらい']);
-        const keys = GRAMMAR.filter((g) => g.lesson <= myMaxL() + 1).flatMap((g) => g.drills.map((d, i) => [g, d, i])).filter(([, d]) => d.type === 'fill' && P.has(d.answer)).map(([g, , i]) => `g|${g.id}|${i}`);
+        const keys = GRAMMAR.filter((g) => inLevel(g.lesson) && g.lesson <= myMaxL() + 1).flatMap((g) => g.drills.map((d, i) => [g, d, i])).filter(([, d]) => d.type === 'fill' && P.has(d.answer)).map(([g, , i]) => `g|${g.id}|${i}`);
         quizSession({ title: 'Particle dojo', keys: prioritize(keys).slice(0, 15), back: { name: 'home' } });
       },
-      sentences: () => quizSession({ title: 'Sentence listening', keys: prioritize(EXAMPLES.filter((e) => e.L <= myMaxL() + 1).map((e) => 'e|' + e.id)).slice(0, 12), back: { name: 'home' } }),
+      sentences: () => quizSession({ title: 'Sentence listening', keys: prioritize(EXAMPLES.filter((e) => inLevel(e.L) && e.L <= myMaxL() + 1).map((e) => 'e|' + e.id)).slice(0, 12), back: { name: 'home' } }),
     });
   }
   function startReview() {
@@ -687,7 +608,7 @@
     if (qs.length < 10) {
       const fresh = [];
       for (const s of STATIONS) {
-        if (!isLine(s)) continue;
+        if (!isLine(s) || s.level !== curLevel()) continue;
         for (const k of stationKeys(s)) if (stage(k) < 0 && !k.startsWith('k|')) fresh.push(k);
         if (fresh.length >= 12) break;
       }
@@ -701,11 +622,11 @@
 
   // ---------------------------------------------------------------- station
   function signHTML(st) {
-    const i = STATIONS.indexOf(st), prev = STATIONS[i - 1], next = STATIONS[i + 1];
+    const same = STATIONS.filter((x) => x.level === st.level), i = same.indexOf(st), prev = same[i - 1], next = same[i + 1];
     return `<button class="back" data-act="home">${ICON.back} Route map</button>
       <div class="sign" style="--c:${lineColor(st)}">
         <div class="sign-main">${badgeHTML(st)}
-          <div class="sign-title"><div class="jp">${esc(st.jp)}</div><div class="en">${esc(st.name)}${st.L >= 1 && st.L <= 25 ? ` · Lesson ${st.L}` : ''}</div></div>
+          <div class="sign-title"><div class="jp">${esc(st.jp)}</div><div class="en">${esc(st.name)}${lessonName(st.L) ? ` · ${lessonName(st.L)}` : ''}</div></div>
           ${S.stamps[st.id] ? `<span class="stamp-mini" style="width:64px;height:64px">${stampSVG(st, S.stamps[st.id].date)}</span>` : ''}
         </div>
         <div class="sign-band"></div>
@@ -724,6 +645,7 @@
     if (st.kind === 'verbs') return renderVerbs(st);
     if (st.kind === 'exam') return renderExam(st);
     if (st.kind === 'numbers') return renderNumbers(st);
+    if (st.kind === 'academy') return renderAcademy(st);
     const back = { name: 'station', id: st.id, tab };
     const c = lineColor(st);
     const voc = stationVocab(st), gr = stationGrammar(st), kj = stationKanji(st), cj = stationConj(st), exs = stationExamples(st);
@@ -819,7 +741,7 @@
   const tableHTML = (t) => `<div class="stable">${t.title ? `<div class="stitle">${esc(t.title)}</div>` : ''}<div class="tblwrap"><table class="vocab">${t.headers ? `<thead><tr>${t.headers.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : ''}<tbody>${t.rows.map((r) => `<tr>${r.map((c, i) => `<td>${cellHTML(c, t.headers && t.headers[i])}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
   const dotHTML = (k) => { const s = stage(k); return `<span class="dot ${s >= 4 ? 'm' : s >= 0 ? 'l' : ''}" title="${s >= 4 ? 'In long-term memory' : s >= 0 ? 'Learning' : 'New'}"></span>`; };
   const wordRow = (v) => `<div class="wrow">${dotHTML(vKey(v))}<div class="wjp"><span class="wk">${esc(v.kana)}</span>${v.kanji ? `<span class="wkj">${esc(v.kanji)}</span>` : ''}</div>
-    <div class="wen"><b>${esc(v.en)}</b>${/^v[123]$/.test(v.pos) ? ` <span class="pill">Group ${v.pos[1]}</span>` : ''}<span class="muted small">${esc(v.ro)}</span>${v.use ? `<span class="wuse">${esc(v.use)}${v.useEn ? ` <span class="muted">${esc(v.useEn)}</span>` : ''}</span>` : ''}${v.note ? `<span class="muted small">${esc(v.note)}</span>` : ''}</div>${sayBtn(v.kana)}</div>`;
+    <div class="wen"><b>${esc(v.en)}</b>${/^v[123]$/.test(v.pos) ? ` <span class="pill">Group ${v.pos[1]}</span>` : ''}<span class="muted small">${esc(v.ro)}</span>${v.use ? `<span class="wuse">${rubyLine(v.use)}${v.useEn ? ` <span class="muted">${esc(v.useEn)}</span>` : ''}</span>` : ''}${v.note ? `<span class="muted small">${esc(v.note)}</span>` : ''}</div>${sayBtn(v.kana)}</div>`;
   function vocabTable(list) {
     const sections = GROUPS.map(([id, en, jp]) => [en, jp, list.filter((v) => groupOf(v) === id)]).filter(([, , l]) => l.length);
     return `<div class="chooser">${sections.map(([en, , l], i) => `<button class="chip" data-act="jump" data-arg="wg${i}">${esc(en)} <span class="muted">${l.length}</span></button>`).join('')}</div>
@@ -829,7 +751,7 @@
   function grammarCard(g) {
     const s = g.study;
     const head = `<div class="row-between"><h3>${esc(g.title)}</h3><button class="btn sm" data-act="gpoint" data-arg="${g.id}">Drill this (${g.drills.length})</button></div><div class="meaning">${esc(g.meaning)}</div>`;
-    const ex = `<div class="stitle">Examples</div><div>${g.examples.map((x) => `<div class="ex">${sayBtn(x.jp)}<div><div class="jp">${esc(x.jp)}</div><div class="ro">${esc(x.ro)}</div><div class="en">${esc(x.en)}</div></div></div>`).join('')}</div>`;
+    const ex = `<div class="stitle">Examples</div><div>${g.examples.map((x) => `<div class="ex">${sayBtn(rubyToKana(x.jp))}<div><div class="jp">${rubyLine(x.jp)}</div><div class="ro">${esc(x.ro)}</div><div class="en">${esc(x.en)}</div></div></div>`).join('')}</div>`;
     if (!s) return `<article class="gpoint" id="g-${g.id}">${head}<p>${esc(g.explain)}</p>${ex}</article>`;
     return `<article class="gpoint" id="g-${g.id}">${head}
       ${s.formula && s.formula.length ? `<div class="formula">${s.formula.map((f) => `<code>${esc(f)}</code>`).join('')}</div>` : ''}
@@ -859,7 +781,7 @@
   function kanjiModal(k) {
     const m = modal(`<div class="row-between"><div class="glyph">${esc(k.k)}</div><button class="btn" data-x>Close</button></div>
       ${STROKES[k.k] ? `<div class="strokebox">${strokeSVG(k.k)}<div class="stack"><button class="btn sm" data-replay>Replay stroke order</button><button class="btn sm primary" data-write>Write it</button></div></div>` : ''}
-      <div><b>${esc(k.m)}</b> · ${k.strokes || '?'} strokes · first useful in Lesson ${k.lesson}</div>
+      <div><b>${esc(k.m)}</b> · ${k.strokes || '?'} strokes · ${k.level}${lessonName(k.lesson) ? ` · ${lessonName(k.lesson)}` : ''}</div>
       <div class="small">音読み on: ${esc((k.on || []).join('、') || '—')}<br>訓読み kun: ${esc((k.kun || []).join('、') || '—')}</div>
       <div>${(k.words || []).map((w) => `<div class="ex">${sayBtn(w.r)}<div><div style="font-size:20px">${esc(w.w)} <span class="muted" style="font-size:15px">${esc(w.r)}</span></div><div class="en">${esc(w.m)}</div></div></div>`).join('')}</div>`, (e) => {
       if (e.target.closest('[data-replay]')) animateStrokes(m.querySelector('.strokes'));
@@ -871,37 +793,38 @@
   // ---------------------------------------------------------------- special stations
   function renderKanjiHall(st) {
     const back = { name: 'station', id: st.id };
-    const bands = [[1, 5], [6, 10], [11, 15], [16, 20], [21, 26]];
-    const sel = view.band ?? 0;
-    const list = sel === 'all' ? KANJI : KANJI.filter((k) => k.lesson >= bands[sel][0] && k.lesson <= bands[sel][1]);
-    const c = lineColor(st);
+    const bands = { N5: [[1, 5], [6, 10], [11, 15], [16, 20], [21, 26]], N4: [[126, 130], [131, 135], [136, 140], [141, 145], [146, 150]], N3: [[201, 204], [205, 208], [209, 212], [213, 216], [217, 220], [221, 224]] }[st.level];
+    const sel = view.band ?? 0, mine = KANJI.filter((k) => k.level === st.level);
+    const list = sel === 'all' ? mine : mine.filter((k) => k.lesson >= bands[sel][0] && k.lesson <= bands[sel][1]);
+    const c = lineColor(st), bname = (b) => (st.level === 'N3' ? `Units ${b[0] - 200}–${b[1] - 200}` : st.level === 'N4' ? `Lessons ${b[0] - 100}–${b[1] - 100}` : `Lessons ${b[0]}–${b[1] > 25 ? '25+' : b[1]}`);
     render(`<div class="station" style="--c:${c}">${signHTML(st)}
-      <p class="muted" style="margin:0">All ${KANJI.length} JLPT N5 kanji, grouped by the Minna no Nihongo lesson where you first need them. Tap one for readings and words.</p>
-      <div class="chooser">${bands.map((b, i) => `<button class="chip" data-act="band" data-arg="${i}" aria-pressed="${sel === i}">Lessons ${b[0]}–${b[1] > 25 ? '25+' : b[1]}</button>`).join('')}<button class="chip" data-act="band" data-arg="all" aria-pressed="${sel === 'all'}">All</button></div>
+      <p class="muted" style="margin:0">All ${mine.length} ${st.level} kanji, grouped by where you first need them. Tap one for its stroke order, readings and words.</p>
+      <div class="chooser">${bands.map((b, i) => `<button class="chip" data-act="band" data-arg="${i}" aria-pressed="${sel === i}">${bname(b)}</button>`).join('')}<button class="chip" data-act="band" data-arg="all" aria-pressed="${sel === 'all'}">All</button></div>
       ${group('Practise this group', 'れんしゅう', [act('km', 'Meanings', 'Kanji → meaning'), act('kr', 'Readings', 'Word → reading'), act('kw', 'Words', 'Meaning → kanji word'), act('kwr', 'Write them', 'Stroke order, by hand'), act('ksp', 'Kanji sprint', '60-second rush')])}
-      ${bossCard(st, '20 kanji from all of N5. Win to take the Kanji Hall stamp.')}
+      ${bossCard(st, `20 kanji from all of ${st.level}. Win to take the Kanji Hall stamp.`)}
       ${kanjiGrid(list)}</div>`, {
       band: (b) => { view.band = b === 'all' ? 'all' : +b; renderKanjiHall(st); },
       km: () => quizSession({ title: 'Kanji meanings', keys: prioritize(list.map(kanjiKey)).slice(0, 15), mode: 'meaning', back, color: c }),
       kr: () => quizSession({ title: 'Kanji readings', keys: prioritize(list.map(kanjiKey)).slice(0, 15), mode: 'reading', back, color: c }),
       kw: () => quizSession({ title: 'Kanji words', keys: prioritize(list.map(kanjiKey)).slice(0, 15), mode: 'word', back, color: c }),
       kwr: () => writeSession({ title: 'Write the kanji', items: prioritize(list.map(kanjiKey)).slice(0, 10).map((key) => kanjiWriteItem(KBY.get(key.slice(2)))), back, color: c }),
-      ksp: () => sprintSession({ id: 'kanji', title: 'Kanji sprint', make: () => kanjiQ(pick(list), pick(['meaning', 'reading'])), back }),
-      boss: () => quizSession({ title: 'Kanji Hall: battle', keys: shuffle(KANJI.map(kanjiKey)).slice(0, 20), back, battle: st, color: 'var(--stamp)' }),
+      ksp: () => sprintSession({ id: st.id, title: 'Kanji sprint', make: () => kanjiQ(pick(list), pick(['meaning', 'reading'])), back }),
+      boss: () => quizSession({ title: `${st.name}: battle`, keys: shuffle(mine.map(kanjiKey)).slice(0, 20), back, battle: st, color: 'var(--stamp)' }),
       kdetail: (k) => kanjiModal(KBY.get(k)),
     });
   }
   function renderVerbs(st) {
     const back = { name: 'station', id: st.id };
-    const forms = view.forms || ['mneg', 'mpast', 'mpastneg'], maxL = view.maxL || 20, c = lineColor(st);
+    const n5 = st.level === 'N5';
+    const forms = view.forms || (n5 ? ['mneg', 'mpast', 'mpastneg'] : ['pot', 'vol']), maxL = view.maxL || (n5 ? 20 : 150), c = lineColor(st);
     const keysFor = () => forms.flatMap((f) => (FORMS[f].verb ? conjVerbs(maxL) : conjAdjs(maxL)).filter((v) => canForm(f, v)).map((v) => conjKey(f, v)));
     const verbs = conjVerbs(maxL);
     const fam = (id, label) => `<div class="field"><label>${label}</label><div class="chooser">${Object.entries(FORMS).filter(([, F]) => F.fam === id).map(([f, F]) => `<button class="chip" data-act="form" data-arg="${f}" aria-pressed="${forms.includes(f)}" title="Lesson ${F.L}">${esc(F.label)}</button>`).join('')}</div></div>`;
     render(`<div class="station" style="--c:${c}">${signHTML(st)}
-      ${fam('polite', 'Polite ます forms · Lessons 4–6')}${fam('plain', 'Plain forms · Lessons 14–20')}${fam('pattern', 'Patterns built on them · Lessons 13–25')}${fam('adj', 'Adjectives · Lessons 8–16')}
-      <div class="field"><label>Words up to</label><div class="chooser">${[5, 10, 15, 20, 26].map((l) => `<button class="chip" data-act="maxl" data-arg="${l}" aria-pressed="${maxL === l}">${l > 25 ? 'All N5' : 'Lesson ' + l}</button>`).join('')}</div></div>
+      ${n5 ? `${fam('polite', 'Polite ます forms · Lessons 4–6')}${fam('plain', 'Plain forms · Lessons 14–20')}${fam('pattern', 'Patterns built on them · Lessons 13–25')}${fam('adj', 'Adjectives · Lessons 8–16')}` : `${fam('n4', 'New verb forms · Lessons 27–48')}${fam('n4p', 'Patterns · Lessons 28–44')}${fam('plain', 'Review: plain forms')}`}
+      <div class="field"><label>Words up to</label><div class="chooser">${(n5 ? [5, 10, 15, 20, 26] : [130, 140, 150]).map((l) => `<button class="chip" data-act="maxl" data-arg="${l}" aria-pressed="${maxL === l}">${l === 26 ? 'All N5' : lessonName(l)}</button>`).join('')}</div></div>
       ${group('Practise', 'れんしゅう', [act('vq', 'Pick the form', 'Multiple choice'), act('vt', 'Type the form', 'Romaji or kana'), act('vsp', 'Forms sprint', '60-second rush'), `<button class="act" data-act="guide" data-arg="verbs"><b>Verb cheat sheet</b><span>Every form on one page</span></button>`])}
-      ${bossCard(st, 'ます・て・ない・dictionary・た forms mixed, 20 questions.')}
+      ${bossCard(st, n5 ? 'ます・て・ない・dictionary・た forms mixed, 20 questions.' : 'Potential, volitional, ば, passive, causative and imperative mixed, 20 questions.')}
       <article class="gpoint"><h3>How to find a verb's group</h3>
         ${tableHTML({ headers: ['Group', 'How to spot it', 'Example', 'て-form'], rows: [['Group 1', 'い-sound before ます', 'かきます', 'かいて'], ['Group 2', 'え-sound before ます', 'たべます', 'たべて'], ['Group 2', 'Exceptions to learn', 'みます', 'みて'], ['Group 3', 'します and きます only', 'します', 'して'], ['Group 3', 'します and きます only', 'きます', 'きて']] })}
         ${tableHTML({ title: 'Group 1 て-form: look at the sound before ます', headers: ['Sound', 'Change', 'ます-form', 'て-form'], rows: [['い', 'って', 'かいます', 'かって'], ['ち', 'って', 'まちます', 'まって'], ['り', 'って', 'かえります', 'かえって'], ['み', 'んで', 'のみます', 'のんで'], ['び', 'んで', 'よびます', 'よんで'], ['に', 'んで', 'しにます', 'しんで'], ['き', 'いて', 'かきます', 'かいて'], ['ぎ', 'いで', 'およぎます', 'およいで'], ['し', 'して', 'はなします', 'はなして']] })}
@@ -913,7 +836,7 @@
       maxl: (l) => { view.maxL = +l; renderVerbs(st); },
       vq: () => quizSession({ title: 'Verb forms', keys: prioritize(keysFor()).slice(0, 15), mode: 'mc', back, color: c }),
       vt: () => quizSession({ title: 'Verb forms: typing', keys: prioritize(keysFor()).slice(0, 15), mode: 'type', back, color: c }),
-      vsp: () => sprintSession({ id: 'verbs', title: 'Forms sprint', make: () => keyToQ(pick(keysFor()), 'mc'), back }),
+      vsp: () => sprintSession({ id: st.id, title: 'Forms sprint', make: () => keyToQ(pick(keysFor()), 'mc'), back }),
       boss: () => quizSession({ title: 'Verb Forge: battle', keys: shuffle(stationKeys(st)).slice(0, 20), mode: 'mc', back, battle: st, color: 'var(--stamp)' }),
     });
   }
@@ -945,12 +868,13 @@
     const back = { name: 'station', id: st.id };
     render(`<div class="station" style="--c:${lineColor(st)}">${signHTML(st)}
       <article class="gpoint"><h3>Practice test, N5 style</h3>
-        <p>About 33 questions in the order of the real exam sections: kanji reading (漢字読み), writing (表記), vocabulary (語彙), grammar (文法), reading (読解) and listening (聴解). It draws on Lessons 1–25, the N5 word bank, numbers and all N5 kanji. Score 70% to collect the stamp.</p>
+        <p>About 33 questions in the order of the real exam sections: kanji reading (漢字読み), writing (表記), vocabulary (語彙), grammar (文法), reading (読解) and listening (聴解), all from ${st.level} material. Score 70% to collect the stamp.</p>
         <p class="muted small">Use this to find weak spots, then drill them at their station. The Guidebook explains how the real exam works.</p>
         <div><button class="btn primary" data-act="start">Start the mock exam</button></div></article>
-      ${S.stamps.exam ? `<div class="muted">Best score: ${S.stamps.exam.score}%</div>` : ''}</div>`, {
+      ${S.stamps[st.id] ? `<div class="muted">Best score: ${S.stamps[st.id].score}%</div>` : ''}</div>`, {
       start: () => {
-        const vk = VOCAB.filter((v) => quizzable(v) && v.L > 0 && v.pos !== 'exp');
+        const lvl = st.level, inL = (L) => levelOfL(L) === lvl;
+        const vk = VOCAB.filter((v) => quizzable(v) && v.L > 0 && inL(v.L) && v.pos !== 'exp');
         const withK = shuffle(vk.filter((v) => v.kanji && hasKanji(v.kanji) && v.kanji.length <= 4));
         const qs = [];
         withK.slice(0, 7).forEach((v) => qs.push({ ...vocabQ(v, 'kanji'), section: '漢字読み Kanji reading' }));
@@ -959,15 +883,16 @@
           const opts = shuffle([v, ...distractors(v, pool, 3, (x) => x.kanji)]);
           qs.push({ key: vKey(v), cat: 'vocab', kind: 'mc', section: '表記 Writing', label: 'Which is the correct kanji?', prompt: `<div class="glyph mid">${esc(v.kana)}</div>`, options: opts.map((x) => ({ html: `<span class="jpo">${esc(x.kanji)}</span>`, val: x.id })), answer: v.id, after: `<div class="ans">${esc(v.kanji)}</div><div>${esc(v.en)}</div>` });
         });
-        shuffle(vk).slice(0, 6).forEach((v) => qs.push({ ...vocabQ(v, pick(['en2jp', 'jp2en'])), section: '語彙 Vocabulary' }));
-        qs.push({ ...numQ('date'), section: '語彙 Vocabulary' }, { ...numQ('counter'), section: '語彙 Vocabulary' });
-        const drills = shuffle(GRAMMAR.flatMap((g) => g.drills.map((d, i) => [g, i]).filter(([, i]) => g.drills[i].type !== 'order')));
+        shuffle(vk).slice(0, lvl === 'N5' ? 6 : 8).forEach((v) => qs.push({ ...vocabQ(v, pick(['en2jp', 'jp2en'])), section: '語彙 Vocabulary' }));
+        if (lvl === 'N5') qs.push({ ...numQ('date'), section: '語彙 Vocabulary' }, { ...numQ('counter'), section: '語彙 Vocabulary' });
+        const drills = shuffle(GRAMMAR.filter((g) => inL(g.lesson)).flatMap((g) => g.drills.map((d, i) => [g, i]).filter(([, i]) => g.drills[i].type !== 'order')));
         drills.slice(0, 7).forEach(([g, i]) => qs.push({ ...grammarQ(g, i), section: '文法 Grammar' }));
-        const psg = shuffle(READING.filter((r) => r.type === 'passage'))[0], cv = shuffle(READING.filter((r) => r.type === 'conversation'))[0];
+        const texts = READING.filter((r) => inL(r.lesson));
+        const psg = shuffle(texts.filter((r) => r.type === 'passage' && (lvl !== 'N3' || r.skill === 'exam' || !r.skill)))[0], cv = shuffle(texts.filter((r) => r.type === 'conversation'))[0];
         if (psg) psg.questions.forEach((_, i) => qs.push({ ...readingQ(psg, i), section: '読解 Reading' }));
-        shuffle(EXAMPLES).slice(0, cv ? 2 : 3).forEach((e) => qs.push({ ...sentenceQ(e), section: '聴解 Listening' }));
+        shuffle(EXAMPLES.filter((e) => inL(e.L))).slice(0, cv ? 2 : 3).forEach((e) => qs.push({ ...sentenceQ(e), section: '聴解 Listening' }));
         if (cv) qs.push({ ...readingQ(cv, 0, 'listen'), section: '聴解 Listening' });
-        quizSession({ title: 'N5 mock exam', questions: qs, back, exam: st, pass: 70, color: 'var(--stamp)', noRequeue: true });
+        quizSession({ title: `${lvl} mock exam`, questions: qs, back, exam: st, pass: 70, color: 'var(--stamp)', noRequeue: true });
       },
     });
   }
@@ -994,14 +919,14 @@
   function dictResults(list, q) {
     if (!q.trim()) return '<p class="muted">Start typing to search.</p>';
     if (!list.length) return '<p class="muted">No words found. Try the English meaning or a different spelling.</p>';
-    return `<div class="tblwrap"><table class="vocab"><tbody>${list.map((v) => `<tr><td class="kana"><button class="back" style="color:var(--ink);font-size:17px" data-act="word" data-arg="${esc(v.id)}">${esc(v.kana)}</button></td><td>${esc(v.kanji)}</td><td>${esc(v.en)}</td><td><span class="pill ${v.L > 20 ? 'express' : ''}">${v.L === 0 ? 'Kana' : v.L > 25 ? 'N5' : 'L' + v.L}</span></td><td>${sayBtn(v.kana)}</td></tr>`).join('')}</tbody></table></div>`;
+    return `<div class="tblwrap"><table class="vocab"><tbody>${list.map((v) => `<tr><td class="kana"><button class="back" style="color:var(--ink);font-size:17px" data-act="word" data-arg="${esc(v.id)}">${esc(v.kana)}</button></td><td>${esc(v.kanji)}</td><td>${esc(v.en)}</td><td><span class="pill ${v.L > 20 ? 'express' : ''}">${v.L === 0 ? 'Kana' : lessonName(v.L) || 'N5'}</span></td><td>${sayBtn(v.kana)}</td></tr>`).join('')}</tbody></table></div>`;
   }
   function wordModal(v) {
     const ex = exampleFor(v), s = stage(vKey(v));
     const st = SBY.get('L' + v.L);
     const m = modal(`<div class="row-between"><div class="glyph mid">${jpHTML(v, 'kanji')}</div><button class="btn" data-x>Close</button></div>
-      <div style="display:flex;gap:10px;align-items:center">${sayBtn(v.kana)}<div><b>${esc(v.en)}</b><div class="muted small">${esc(v.kana)} · ${esc(v.ro)}${v.note ? ' · ' + esc(v.note) : ''}</div>${v.use ? `<div class="wuse">${esc(v.use)}${v.useEn ? ` <span class="muted">${esc(v.useEn)}</span>` : ''}</div>` : ''}</div></div>
-      ${ex ? `<div class="ex">${sayBtn(ex.jp)}<div><div class="jp">${esc(ex.jp)}</div><div class="ro">${esc(ex.ro)}</div><div class="en">${esc(ex.en)}</div></div></div>` : ''}
+      <div style="display:flex;gap:10px;align-items:center">${sayBtn(v.kana)}<div><b>${esc(v.en)}</b><div class="muted small">${esc(v.kana)} · ${esc(v.ro)}${v.note ? ' · ' + esc(v.note) : ''}</div>${v.use ? `<div class="wuse">${rubyLine(v.use)}${v.useEn ? ` <span class="muted">${esc(v.useEn)}</span>` : ''}</div>` : ''}</div></div>
+      ${ex ? `<div class="ex">${sayBtn(rubyToKana(ex.jp))}<div><div class="jp">${rubyLine(ex.jp)}</div><div class="ro">${esc(ex.ro)}</div><div class="en">${esc(ex.en)}</div></div></div>` : ''}
       <div class="row-between"><span class="pill">${s >= 4 ? 'In long-term memory' : s >= 0 ? 'Learning' : 'New'}</span>${st ? `<button class="btn sm primary" data-go="${st.id}">Go to ${codeOf(st)}</button>` : ''}</div>`, (e) => {
       const g = e.target.closest('[data-go]'); if (g) { m.remove(); go({ name: 'station', id: g.dataset.go }); }
     });
@@ -1023,18 +948,19 @@
     };
   }
   function renderMix() {
-    const mx = view.mx || (view.mx = { from: 1, to: Math.min(myMaxL(), 20), types: ['words', 'grammar', 'forms'], n: 20 });
+    const [lo, hi] = levelRange();
+    const mx = view.mx && inLevel(view.mx.from) ? view.mx : (view.mx = { from: lo, to: Math.min(myMaxL(), hi === 26 ? 25 : hi), types: ['words', 'grammar', 'forms'], n: 20 });
     const types = [['words', 'Words'], ['listen', 'Listening'], ['typing', 'Typing'], ['grammar', 'Grammar'], ['sentences', 'Sentences'], ['reading', 'Reading'], ['kanji', 'Kanji'], ['forms', 'Verb forms'], ['numbers', 'Numbers']];
-    const Ls = Array.from({ length: 25 }, (_, i) => i + 1);
+    const Ls = STATIONS.filter((s) => s.level === curLevel() && s.kind === 'lesson' && lessonName(s.L)).map((s) => s.L);
     const a = Math.min(mx.from, mx.to), b = Math.max(mx.from, mx.to), pools = mixPools(a, b);
     const count = (k) => (k === 'numbers' ? Infinity : pools[k].length);
     const empty = types.filter(([k]) => !count(k));
     const live = mx.types.filter((k) => count(k));
     render(`<div class="station"><button class="back" data-act="home">${ICON.back} Route map</button>
-      <h1>ミックス · Custom mix</h1>
+      <h1>ミックス · Custom mix <span class="pill">${curLevel()}</span></h1>
       <div class="card"><div class="field"><label for="mfrom">Lessons</label><div class="row-between" style="justify-content:flex-start">
-        <select id="mfrom" class="chip">${Ls.map((l) => `<option value="${l}" ${l === mx.from ? 'selected' : ''}>Lesson ${l}</option>`).join('')}</select> to
-        <select id="mto" class="chip">${Ls.map((l) => `<option value="${l}" ${l === mx.to ? 'selected' : ''}>Lesson ${l}</option>`).join('')}</select></div></div>
+        <select id="mfrom" class="chip">${Ls.map((l) => `<option value="${l}" ${l === mx.from ? 'selected' : ''}>${lessonName(l)}</option>`).join('')}</select> to
+        <select id="mto" class="chip">${Ls.map((l) => `<option value="${l}" ${l === mx.to ? 'selected' : ''}>${lessonName(l)}</option>`).join('')}</select></div></div>
       <div class="field"><label>Question types</label><div class="chooser">${types.map(([k, l]) => { const n = count(k); return `<button class="chip" data-act="mt" data-arg="${k}" aria-pressed="${live.includes(k)}" ${n ? '' : 'disabled'}>${l}${n === Infinity ? '' : ` <span class="muted">${n}</span>`}</button>`; }).join('')}</div>
         ${empty.length ? `<div class="muted small">Not in these lessons: ${empty.map(([, l]) => l).join(', ')}. Verb forms start at Lesson 4, when the first verbs appear.</div>` : ''}</div>
       <div class="field"><label>How many</label><div class="chooser">${[10, 20, 30, 50].map((n) => `<button class="chip" data-act="mn" data-arg="${n}" aria-pressed="${mx.n === n}">${n}</button>`).join('')}</div></div>
@@ -1047,7 +973,7 @@
           if (t === 'numbers') { for (let i = 0; i < per; i++) qs.push(numQ()); continue; }
           for (const [k, m] of shuffle(pools[t].map((x) => ({ x, s: stage(x[0]) + Math.random() * 2 })).sort((u, v) => u.s - v.s).map((o) => o.x).slice(0, per))) { const q = keyToQ(k, m); if (q) qs.push(q); }
         }
-        quizSession({ title: `Mix · Lessons ${a}–${b}`, questions: shuffle(qs).slice(0, mx.n), back: { name: 'mix', mx } });
+        quizSession({ title: `Mix · ${lessonName(a)} to ${lessonName(b)}`, questions: shuffle(qs).slice(0, mx.n), back: { name: 'mix', mx } });
       },
     }, () => {
       document.getElementById('mfrom').addEventListener('change', (e) => { mx.from = +e.target.value; renderMix(); });
@@ -1056,25 +982,38 @@
   }
 
   // ---------------------------------------------------------------- reading room
+  const readingRow = (r) => { const m = mastery(readingKeys(r)); return `<button class="hubbtn" data-act="read" data-arg="${r.id}"><span class="jp">${esc(rubyToKana(r.titleJp || ''))}</span><b>${esc(r.title)}</b><span>${[lessonName(r.lesson), r.type === 'conversation' ? 'Conversation' : r.form].filter(Boolean).map(esc).join(' · ')}</span>${meter(m)}</button>`; };
   function renderReadingRoom() {
     const f = view.f || 'all';
-    const list = READING.filter((r) => f === 'all' || r.type === f);
-    const row = (r) => { const m = mastery(readingKeys(r)); return `<button class="hubbtn" data-act="read" data-arg="${r.id}"><span class="jp">${esc(r.titleJp || '')}</span><b>${esc(r.title)}</b><span>Lesson ${r.lesson} · ${r.type === 'conversation' ? 'Conversation' : esc(r.form || 'Reading')}</span>${meter(m)}</button>`; };
+    const list = READING.filter((r) => inLevel(r.lesson) && (f === 'all' || r.type === f));
     render(`<div class="station"><button class="back" data-act="home">${ICON.back} Route map</button>
-      <h1>よむ・はなす · Reading room</h1>
-      <p class="muted" style="margin:0">Short conversations and N5-style texts for every lesson. Each one has audio and three questions.</p>
-      <div class="chooser">${[['all', 'All'], ['conversation', 'Conversations'], ['passage', 'Reading texts']].map(([k, l]) => `<button class="chip" data-act="rf" data-arg="${k}" aria-pressed="${f === k}">${l}</button>`).join('')}</div>
-      ${list.length ? `<div class="hub">${list.map(row).join('')}</div>` : '<p class="muted">Nothing here yet.</p>'}</div>`, { rf: (k) => { view.f = k; renderReadingRoom(); } });
+      <h1>よむ・はなす · Reading room <span class="pill">${curLevel()}</span></h1>
+      <p class="muted" style="margin:0">Short conversations and exam-style texts for every lesson. Each one has audio and questions.</p>
+      <div class="chooser">${[['all', 'All'], ['conversation', 'Conversations'], ['passage', 'Reading texts']].map(([k, l]) => `<button class="chip" data-act="rf" data-arg="${k}" aria-pressed="${f === k}">${l}</button>`).join('')}${curLevel() === 'N3' ? '<button class="chip" data-act="station" data-arg="read3">Reading Academy →</button>' : ''}</div>
+      ${list.length ? `<div class="hub">${list.map(readingRow).join('')}</div>` : '<p class="muted">Nothing here yet.</p>'}</div>`, { rf: (k) => { view.f = k; renderReadingRoom(); } });
+  }
+  function renderAcademy(st) {
+    const skills = [['basics', 'Reading basics', 'きほん', 'Written style, finding the subject, guessing words, following the structure'], ['formats', 'Types of text', 'いろいろな ぶんしょう', 'Emails, letters, memos, instructions, opinions, essays'], ['info', 'Finding information', 'じょうほうけんさく', 'Adverts, notices, pamphlets, charts'], ['exam', 'Exam practice', 'じっせんもんだい', 'Short, medium and long texts in N3 exam style']];
+    const all = READING.filter((r) => r.lesson === 225);
+    const back = { name: 'station', id: st.id };
+    render(`<div class="station" style="--c:${lineColor(st)}">${signHTML(st)}
+      <p class="muted" style="margin:0">A step-by-step course in N3 reading, from understanding written style to exam-length texts.</p>
+      <div><button class="btn" data-act="guide" data-arg="n3-reading">Reading skills guide</button></div>
+      ${skills.map(([k, en, jp, sub]) => { const l = all.filter((r) => r.skill === k); return l.length ? `<section class="stack"><div><h3>${en} <span class="muted small">${jp}</span></h3><div class="muted small">${sub}</div></div><div class="hub">${l.map(readingRow).join('')}</div></section>` : ''; }).join('')}
+      ${all.length ? bossCard(st, '15 questions from exam-style texts.') : '<p class="muted">The course is being added.</p>'}</div>`, {
+      boss: () => quizSession({ title: 'Reading Academy: battle', questions: shuffle(all.filter((r) => r.skill === 'exam').flatMap((r) => r.questions.map((_, i) => readingQ(r, i)))).slice(0, 15), back, battle: st, color: 'var(--stamp)' }),
+    });
   }
   function renderReader(r) {
     if (!r) return go({ name: 'reading' });
-    const i = READING.indexOf(r), prev = READING[i - 1], next = READING[i + 1];
+    const sib = READING.filter((x) => levelOfL(x.lesson) === levelOfL(r.lesson)), i = sib.indexOf(r), prev = sib[i - 1], next = sib[i + 1];
     const back = { name: 'read', id: r.id };
     const showRo = !!view.ro, showEn = !!view.en;
-    const st = SBY.get('L' + r.lesson);
+    const st = SBY.get('L' + r.lesson) || (r.lesson === 225 ? SBY.get('read3') : null);
     render(`<div class="station" style="--c:var(--line)"><button class="back" data-act="reading">${ICON.back} Reading room</button>
-      <div class="row-between"><div><div class="eyebrow">Lesson ${r.lesson} · ${r.type === 'conversation' ? 'Conversation' : esc(r.form || 'Reading')}</div><h1 style="font-size:24px">${esc(r.titleJp || r.title)}</h1><div class="muted">${esc(r.title)}</div></div>
+      <div class="row-between"><div><div class="eyebrow">${[lessonName(r.lesson), r.type === 'conversation' ? 'Conversation' : r.form || 'Reading'].filter(Boolean).map(esc).join(' · ')}</div><h1 style="font-size:24px">${esc(rubyToKana(r.titleJp || r.title))}</h1><div class="muted">${esc(r.title)}</div></div>
         ${st ? `<button class="btn sm" data-act="station" data-arg="${st.id}">Go to ${codeOf(st)}</button>` : ''}</div>
+      ${r.tip ? `<div class="tip">${esc(r.tip)}</div>` : ''}
       <div class="chooser">${speech.ok ? `<button class="chip" data-act="playall">Play all</button>` : ''}<button class="chip" data-act="tro" aria-pressed="${showRo}">Romaji</button><button class="chip" data-act="ten" aria-pressed="${showEn}">English</button></div>
       <div class="card reader">${r.lines.map((l, n) => `<div class="rline" data-line="${n}">${sayBtn(rubyToKana(l.jp))}<div>${l.s ? `<b class="small muted">${esc(l.s)}</b>` : ''}<div class="rjp">${rubyLine(l.jp)}</div>${showRo ? `<div class="ro small muted">${esc(l.ro)}</div>` : ''}${showEn ? `<div class="small">${esc(l.en)}</div>` : ''}</div></div>`).join('')}</div>
       <div class="row-between" style="justify-content:flex-start"><button class="btn primary" data-act="ans">Answer the questions</button>${r.type === 'conversation' && speech.ok ? '<button class="btn" data-act="ansl">Listening test</button>' : ''}</div>
@@ -1346,7 +1285,7 @@
       if (q.kind === 'mc') return `<div class="opts">${q.options.map((o, i) => `<button class="opt" data-act="opt" data-arg="${esc(o.val)}"><kbd>${i + 1}</kbd><span>${o.html}</span></button>`).join('')}</div>`;
       if (q.kind === 'type') return `<div class="typebox"><input id="typein" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type here…" aria-label="Your answer"><div class="live" id="live"></div>
         <div class="row-between"><button class="btn ghost" data-act="skip">I don't know</button><button class="btn primary" data-act="check">Check</button></div></div>`;
-      if (q.kind === 'order') return `<div class="tiles answer" id="tans" aria-label="Your sentence"></div><div class="tiles" id="tbank">${shuffle(q.tiles.map((t, i) => [t, i])).map(([t, i]) => `<button class="tile" data-act="tile" data-arg="${i}">${esc(t)}</button>`).join('')}</div>
+      if (q.kind === 'order') return `<div class="tiles answer" id="tans" aria-label="Your sentence"></div><div class="tiles" id="tbank">${shuffle(q.tiles.map((t, i) => [t, i])).map(([t, i]) => `<button class="tile" data-act="tile" data-arg="${i}" data-raw="${esc(t)}">${rubyLine(t)}</button>`).join('')}</div>
         <div class="row-between"><button class="btn ghost" data-act="skip">I don't know</button><button class="btn primary" data-act="checkorder">Check</button></div>`;
       return '';
     }
@@ -1372,7 +1311,7 @@
       answer(q, q.check(inp.value));
     }
     function checkOrder(q) {
-      const got = [...document.querySelectorAll('#tans .tile')].map((t) => t.textContent);
+      const got = [...document.querySelectorAll('#tans .tile')].map((t) => t.dataset.raw);
       if (!got.length) return;
       document.querySelectorAll('.tile').forEach((t) => (t.disabled = true));
       answer(q, orderOK(got, q.tiles));
@@ -1553,23 +1492,31 @@
         setTimeout(() => celebrate(lvl), 300);
         return;
       }
-      const front = enFirst ? `<div class="en-q">${esc(v.en)}</div>` : `<div class="glyph ${v.kana.length > 6 ? 'mid' : ''}">${jpHTML(v)}</div>`;
-      const backSide = enFirst ? `<div class="glyph ${v.kana.length > 6 ? 'mid' : ''}">${jpHTML(v, 'kanji')}</div><div class="sub">${esc(v.ro)}${v.note ? ' · ' + esc(v.note) : ''}</div>` : `<div class="en-q">${esc(v.en)}</div><div class="sub">${esc(v.ro)}${v.kanji ? ' · ' + esc(v.kanji) : ''}${v.note ? ' · ' + esc(v.note) : ''}</div>`;
-      const ex = flipped ? exampleFor(v) : null;
+      const big = `<div class="glyph ${v.kana.length > 6 ? 'mid' : ''}">${jpHTML(v, enFirst ? 'kanji' : undefined)}</div>`;
+      const meaning = `<div class="en-q">${esc(v.en)}</div>`;
+      const extra = `<div class="sub">${esc(v.ro)}${v.kanji ? ' · ' + esc(v.kanji) : ''}${v.note ? ' · ' + esc(v.note) : ''}</div>${v.use ? `<div class="wuse">${rubyLine(v.use)}${v.useEn ? ` <span class="muted">${esc(v.useEn)}</span>` : ''}</div>` : ''}`;
+      const ex = exampleFor(v);
+      const tag = `<div class="fc-tag"><span>${esc(lessonName(v.L) || (v.L === 0 ? 'Greetings' : 'N5'))}</span><span class="fc-seal">${/^v[123]$/.test(v.pos) ? '動' : v.pos === 'i-adj' || v.pos === 'na-adj' ? '形' : v.pos === 'exp' ? '句' : '語'}</span></div>`;
       render(`<div class="session" style="--c:${cfg.color || 'var(--line)'}">
         <div class="sess-head"><button class="back" data-act="quit">${ICON.back} Quit</button><div class="progress"><i style="width:${(done / total) * 100}%"></i></div><div class="combo">${done}/${total}</div></div>
-        <div class="qcard flash" data-act="flip">
-          <div class="prompt">${front}${flipped ? backSide : '<div class="sub">tap or press space to flip</div>'}${flipped && v.use ? `<div class="wuse">${esc(v.use)}${v.useEn ? ` <span class="muted">${esc(v.useEn)}</span>` : ''}</div>` : ''}${ex ? `<div class="sub" style="max-width:46ch">${esc(ex.jp)}<br>${esc(ex.en)}</div>` : ''}</div>
-          <div style="text-align:center">${sayBtn(v.kana)}</div>
-        </div>
-        ${flipped ? `<div class="flash-btns">
-          <button class="btn" data-act="g" data-arg="0">Again<small>1</small></button><button class="btn" data-act="g" data-arg="1">Hard<small>2</small></button>
-          <button class="btn primary" data-act="g" data-arg="2">Good<small>3</small></button><button class="btn" data-act="g" data-arg="3">Easy<small>4</small></button></div>` : `<button class="btn primary block" data-act="flip">Show ${enFirst ? 'Japanese' : 'meaning'}</button>`}
+        <div class="flipper" data-act="flip" role="button" aria-label="Flip card"><div class="flip-in" id="fin">
+          <div class="fcard">${tag}<div class="prompt">${enFirst ? meaning : big}</div><div class="fc-hint">tap or press space to flip</div></div>
+          <div class="fcard back">${tag}<div class="prompt">${enFirst ? big : meaning}${extra}${ex ? `<div class="sub fc-ex">${rubyLine(ex.jp)}<br>${esc(ex.en)}</div>` : ''}</div><div style="text-align:center">${sayBtn(v.kana)}</div></div>
+        </div></div>
+        <div id="fbtn"><button class="btn primary block" data-act="flip">Show ${enFirst ? 'Japanese' : 'meaning'}</button></div>
       </div>`, {
         quit: () => go(cfg.back),
-        flip: (a, el, e) => { if (e && e.target.closest('.say')) return; if (!flipped) { flipped = true; show(); if (enFirst && S.settings.audio) speech.say(v.kana); } },
+        flip: (a, el, e) => {
+          if (e && e.target.closest('.say')) return;
+          if (flipped) return;
+          flipped = true;
+          document.getElementById('fin').classList.add('on');
+          document.getElementById('fbtn').innerHTML = `<div class="flash-btns"><button class="btn" data-act="g" data-arg="0">Again<small>1</small></button><button class="btn" data-act="g" data-arg="1">Hard<small>2</small></button><button class="btn primary" data-act="g" data-arg="2">Good<small>3</small></button><button class="btn" data-act="g" data-arg="3">Easy<small>4</small></button></div>`;
+          sfx.play('tap');
+          if (enFirst && S.settings.audio) speech.say(v.kana);
+        },
         g: (q) => rate(+q),
-      }, () => { if (!flipped && !enFirst && S.settings.audio) setTimeout(() => speech.say(v.kana), 120); });
+      }, () => { if (!enFirst && S.settings.audio) setTimeout(() => speech.say(v.kana), 120); });
       keyHandler = (e) => {
         if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!flipped) A.flip(); else rate(2); }
         else if (flipped && /^[1-4]$/.test(e.key)) rate(+e.key - 1);
@@ -1658,7 +1605,7 @@
         <div class="field"><label for="bk">Backup</label><div class="muted small">Progress saves automatically${ML.isRemote() ? ' to your account' : ' in this browser'}. Copy this text to move it somewhere else, or paste a backup and press Restore.</div>
           <textarea id="bk" rows="3"></textarea>
           <div class="seg"><button class="chip" data-op="copy">Copy backup</button><button class="chip" data-op="restore">Restore from text</button><button class="chip" data-op="reset" style="color:var(--bad)">${armed ? 'Press again to erase everything' : 'Reset all progress'}</button></div></div>
-        <div class="muted small">Stroke order data from <a href="https://kanjivg.tagaini.net" target="_blank" rel="noopener">KanjiVG</a> by Ulrich Apel, CC BY-SA 3.0.</div>`;
+        <div class="muted small">Stroke order data from <a href="https://kanjivg.tagaini.net" target="_blank" rel="noopener">KanjiVG</a> by Ulrich Apel, CC BY-SA 3.0. Kanji readings and meanings from <a href="https://www.edrdg.org/wiki/index.php/KANJIDIC_Project" target="_blank" rel="noopener">KANJIDIC</a> (EDRDG), CC BY-SA 4.0.</div>`;
       box.querySelector('#bk').value = JSON.stringify(ML.S);
     };
     draw();
@@ -1683,6 +1630,7 @@
   }
 
   // ---------------------------------------------------------------- boot
+  ART.install();
   applySkin();
   const hash = (location.hash || '').slice(1);
   go(SBY.has(hash) ? { name: 'station', id: hash } : { name: 'home' });

@@ -65,13 +65,26 @@ window.ML = (() => {
   // ---------------------------------------------------------------- data
   // vocab.js comes from the lesson notes; the overlay holds the cleaned wording, grouping and usage on top of it.
   const OVERLAY = window.VOCAB_OVERLAY || {};
-  const CORE = [...(window.VOCAB || []).map((v) => ({ ...v, ...OVERLAY[`${v.L}:${v.kana}`] })), ...(window.VOCAB_ADD || []).map((v) => ({ ...v, id: `${v.L}:${v.kana}` }))].filter((v) => v.kana && v.en);
+  const CORE = [...(window.VOCAB || []).map((v) => ({ ...v, ...OVERLAY[`${v.L}:${v.kana}`] })), ...(window.VOCAB_ADD || []).map((v) => ({ ...v, id: v.L > 100 ? `${v.L}:${v.kana}:${v.kanji || ''}` : `${v.L}:${v.kana}` }))].filter((v) => v.kana && v.en);
   const coreKey = new Set(CORE.map((v) => v.kana + '|' + (v.kanji || '')));
   const EXTRA = (window.VOCAB_EXTRA || []).filter((v) => v.kana && v.en && !coreKey.has(v.kana + '|' + (v.kanji || ''))).map((v) => ({ ...v, ...OVERLAY[`${v.L}:${v.kana}`], id: `${v.L}:${v.kana}${v.kanji ? ':' + v.kanji : ''}` }));
   const VOCAB = uniqBy([...CORE, ...EXTRA], (v) => v.id);
   const VBY = new Map(VOCAB.map((v) => [v.id, v]));
   const KANA = window.KANA || [];
-  const KANJI = window.KANJI || [];
+  const levelOfL = (L) => (L < 100 ? 'N5' : L < 200 ? 'N4' : 'N3');
+  // Each N4/N3 kanji sits at the first lesson of its level whose words use it, so it turns up alongside them.
+  const KANJI = (() => {
+    const first = {};
+    for (const v of VOCAB) if (v.L > 100) for (const c of v.kanji || '') if (hasKanji(c) && !(first[c] <= v.L)) first[c] = v.L;
+    const place = (k, i) => {
+      const [lo, hi] = k.level === 'N4' ? [126, 150] : [201, 224];
+      const f = first[k.k];
+      return f >= lo && f <= hi ? f : lo + (i % (hi - lo + 1));
+    };
+    const W = window.KANJI_WORDS || {};
+    return [...(window.KANJI || []).map((k) => ({ ...k, level: 'N5' })),
+      ...(window.KANJI_MORE || []).map((k, i) => ({ ...k, ...W[k.k], lesson: place(k, i) }))];
+  })();
   const KBY = new Map(KANJI.map((k) => [k.k, k]));
   const STUDY = window.GRAMMAR_STUDY || {};
   const GRAMMAR = (window.GRAMMAR || []).map((g) => {
@@ -80,7 +93,7 @@ window.ML = (() => {
   }).sort((a, b) => a.lesson - b.lesson);
   const LESSON_GUIDE = window.LESSON_GUIDE || {};
   const GBY = new Map(GRAMMAR.map((g) => [g.id, g]));
-  const EXAMPLES = GRAMMAR.flatMap((g) => g.examples.map((x, i) => ({ ...x, id: `${g.id}|${i}`, L: g.lesson, g })));
+  const EXAMPLES = GRAMMAR.flatMap((g) => g.examples.map((x, i) => ({ ...x, id: `${g.id}|${i}`, L: g.lesson, g, kana: String(x.jp).replace(/\{[^|}]+\|([^}]+)\}/g, '$1') })));
   const EBY = new Map(EXAMPLES.map((e) => [e.id, e]));
   const READING = (window.READING || []).slice().sort((a, b) => a.lesson - b.lesson || (a.type < b.type ? -1 : 1));
   const RBY = new Map(READING.map((r) => [r.id, r]));
@@ -101,7 +114,7 @@ window.ML = (() => {
     const k = speakable(v.kana).replace(/ます$/, '');
     let ex = null;
     if (k.length >= 2 && !hasKanji(k) && v.pos !== 'exp') {
-      const hits = EXAMPLES.filter((e) => e.jp.includes(k));
+      const hits = EXAMPLES.filter((e) => e.kana.includes(k));
       ex = hits.sort((a, b) => Math.abs(a.L - v.L) - Math.abs(b.L - v.L))[0] || null;
     }
     exCache.set(v.id, ex);
@@ -119,6 +132,14 @@ window.ML = (() => {
     21: ['Thoughts and Quotes', '～と おもいます'], 22: ['Describing Nouns', 'わたしが すんで いる まち'], 23: ['When and If', '～とき・～と'],
     24: ['Favours', '～て くれます'], 25: ['Conditionals', '～たら・～ても'], 26: ['N5 Word Bank', 'ことばの くら'],
   };
+  const N4_TITLES = { 126: ['Explaining Why', '～んです'], 127: ['Can Do', 'できます・かのうけい'], 128: ['Doing Two Things', '～ながら'], 129: ['Finished and Sorry', '～て しまいました'], 130: ['Getting Ready', '～て おきます'], 131: ['Plans and Intentions', '～ようと おもいます'], 132: ['Advice and Guessing', '～ほうが いいです'], 133: ['Commands and Signs', 'めいれいけい'], 134: ['Following Instructions', '～とおりに'], 135: ['If, the ば Way', '～ば'], 136: ['So That', '～ように'], 137: ['The Passive', 'うけみ'], 138: ['Nominalising', '～のは・～のが'], 139: ['Because, Softly', '～ので'], 140: ['Whether or Not', '～か どうか'], 141: ['Favours with Respect', '～て いただきます'], 142: ['In Order To', '～ために'], 143: ['Looks Like', '～そうです'], 144: ['Too Much, Easy, Hard', '～すぎます'], 145: ['In Case Of', '～ばあいは'], 146: ['Just About To', '～ところです'], 147: ['I Heard', '～そうです・～ようです'], 148: ['Making Someone Do', 'しえき'], 149: ['Honorific Speech', 'そんけいご'], 150: ['Humble Speech', 'けんじょうご'] };
+  const N3_TITLES = { 201: ['Time and Schedules', 'じかん・よてい'], 202: ['Family and Relationships', 'かぞく・にんげんかんけい'], 203: ['Food and Cooking', 'しょく・りょうり'], 204: ['Daily Life and Home', 'くらし・すまい'], 205: ['Transport and Travel', 'こうつう・りょこう'], 206: ['Town and Directions', 'まち・みちあんない'], 207: ['Money and Shopping', 'おかね・かいもの'], 208: ['Clothes, Colours, Shapes', 'ふく・いろ・かたち'], 209: ['Numbers and Quantity', 'かず・りょう'], 210: ['Hobbies and Events', 'しゅみ・ぎょうじ'], 211: ['Post, Phone, Services', 'ゆうびん・でんわ'], 212: ['Life Stages', 'じんせい'], 213: ['Society and News', 'しゃかい・ニュース'], 214: ['Industry and Materials', 'さんぎょう・ざいりょう'], 215: ['Nature and Weather', 'しぜん・てんき'], 216: ['Body and Health', 'からだ・けんこう'], 217: ['Feelings and Personality', 'きもち・せいかく'], 218: ['School and University', 'がっこう・だいがく'], 219: ['Work and Careers', 'しごと・キャリア'], 220: ['Computers and Internet', 'パソコン・ネット'], 221: ['Sound and Manner Words', 'ぎおんご・ぎたいご'], 222: ['Compound Verbs', 'ふくごうどうし'], 223: ['Core Verbs', 'きほんどうし'], 224: ['Katakana and Idioms', 'カタカナご・かんようく'] };
+  const LEVELS = [
+    { id: 'N5', name: 'N5', title: 'Spring Line', jp: 'はるの せん', season: 'spring', blurb: 'Minna no Nihongo I · Lessons 1–25' },
+    { id: 'N4', name: 'N4', title: 'Summer Line', jp: 'なつの せん', season: 'summer', blurb: 'Minna no Nihongo II · Lessons 26–50' },
+    { id: 'N3', name: 'N3', title: 'Autumn Line', jp: 'あきの せん', season: 'autumn', blurb: '24 themed units and the Reading Academy' },
+  ];
+  const lessonName = (L) => (L >= 1 && L <= 25 ? `Lesson ${L}` : L >= 126 && L <= 150 ? `Lesson ${L - 100}` : L >= 201 && L <= 224 ? `Unit ${L - 200}` : '');
   const STATIONS = [];
   for (let L = 0; L <= 20; L++) STATIONS.push({ id: 'L' + L, L, line: 'M', code: String(L).padStart(2, '0'), name: TITLES[L][0], jp: TITLES[L][1], kind: L === 0 ? 'kana' : 'lesson' });
   STATIONS.push({ id: 'numbers', line: 'X', code: '数', name: 'Numbers Depot', jp: 'かずと じかん', kind: 'numbers' });
@@ -126,14 +147,25 @@ window.ML = (() => {
   STATIONS.push({ id: 'kanji', line: 'X', code: '漢', name: 'Kanji Hall', jp: 'かんじの ひろば', kind: 'kanji' });
   STATIONS.push({ id: 'verbs', line: 'X', code: '活', name: 'Verb Forge', jp: 'どうしの かたち', kind: 'verbs' });
   STATIONS.push({ id: 'exam', line: 'X', code: '試', name: 'N5 Mock Exam', jp: 'もぎしけん', kind: 'exam' });
+  for (let L = 126; L <= 150; L++) STATIONS.push({ id: 'L' + L, L, line: 'S', code: String(L - 100), name: N4_TITLES[L][0], jp: N4_TITLES[L][1], kind: 'lesson' });
+  STATIONS.push({ id: 'kanji4', line: 'SX', code: '漢', name: 'N4 Kanji Hall', jp: 'かんじの ひろば', kind: 'kanji' });
+  STATIONS.push({ id: 'verbs4', line: 'SX', code: '活', name: 'N4 Verb Forge', jp: 'どうしの かたち', kind: 'verbs' });
+  STATIONS.push({ id: 'exam4', line: 'SX', code: '試', name: 'N4 Mock Exam', jp: 'もぎしけん', kind: 'exam' });
+  for (let L = 201; L <= 224; L++) STATIONS.push({ id: 'L' + L, L, line: 'K', code: String(L - 200).padStart(2, '0'), name: N3_TITLES[L][0], jp: N3_TITLES[L][1], kind: 'lesson' });
+  STATIONS.push({ id: 'read3', line: 'KX', code: '読', name: 'Reading Academy', jp: 'どっかい アカデミー', kind: 'academy' });
+  STATIONS.push({ id: 'kanji3', line: 'KX', code: '漢', name: 'N3 Kanji Hall', jp: 'かんじの ひろば', kind: 'kanji' });
+  STATIONS.push({ id: 'exam3', line: 'KX', code: '試', name: 'N3 Mock Exam', jp: 'もぎしけん', kind: 'exam' });
+  for (const st of STATIONS) st.level = { M: 'N5', X: 'N5', S: 'N4', SX: 'N4', K: 'N3', KX: 'N3' }[st.line];
   const SBY = new Map(STATIONS.map((s) => [s.id, s]));
 
   // ---------------------------------------------------------------- conjugation
   const I2A = { い: 'わ', き: 'か', ぎ: 'が', し: 'さ', ち: 'た', に: 'な', び: 'ば', み: 'ま', り: 'ら' };
   const I2U = { い: 'う', き: 'く', ぎ: 'ぐ', し: 'す', ち: 'つ', に: 'ぬ', び: 'ぶ', み: 'む', り: 'る' };
-  const NO_CONJ = new Set(['いらっしゃいます', 'しつれいします', 'いただきます']);
+  const I2E = { い: 'え', き: 'け', ぎ: 'げ', し: 'せ', ち: 'て', に: 'ね', び: 'べ', み: 'め', り: 'れ' };
+  const I2O = { い: 'お', き: 'こ', ぎ: 'ご', し: 'そ', ち: 'と', に: 'の', び: 'ぼ', み: 'も', り: 'ろ' };
+  const NO_CONJ = new Set(['いらっしゃいます', 'しつれいします', 'いただきます', 'くださいます', 'おっしゃいます', 'なさいます', 'ございます', 'まいります', 'おります|', 'ごらんに なります']);
   // Verbs you can't do on purpose: no "let's", "please" or "want to" forms.
-  const NON_VOL = new Set(['あります', 'わかります', 'できます', 'かかります', 'ふります', 'つかれます', 'いります', 'なります']);
+  const NON_VOL = new Set(['あります', 'わかります', 'できます', 'かかります', 'ふります', 'つかれます', 'いります', 'なります', 'くれます', 'みえます', 'きこえます', 'たります', 'うまれます']);
   // Every N5 pattern built on a base form. L = the MnN lesson that teaches it. vol = needs a verb you can choose to do.
   const VERB_PATTERNS = {
     mneg: { label: 'polite negative (ません)', base: 'stem', suf: 'ません', L: 4, fam: 'polite' },
@@ -156,6 +188,15 @@ window.ML = (() => {
     tari: { label: 'do things like (たり)', base: 'ta', suf: 'り', L: 19, vol: 1, fam: 'pattern' },
     tara: { label: 'if / when (たら)', base: 'ta', suf: 'ら', L: 25, fam: 'pattern' },
     temo: { label: 'even if (ても)', base: 'te', suf: 'も', L: 25, fam: 'pattern' },
+    nagara: { label: 'while doing (ながら)', base: 'stem', suf: 'ながら', L: 128, vol: 1, fam: 'n4p' },
+    teshimau: { label: 'finished, sadly (て しまいました)', base: 'te', suf: ' しまいました', L: 129, fam: 'n4p' },
+    teoku: { label: 'do in advance (て おきます)', base: 'te', suf: ' おきます', L: 130, vol: 1, fam: 'n4p' },
+    tahouga: { label: 'should (た ほうが いいです)', base: 'ta', suf: ' ほうが いいです', L: 132, vol: 1, fam: 'n4p' },
+    temiru: { label: 'try doing (て みます)', base: 'te', suf: ' みます', L: 140, vol: 1, fam: 'n4p' },
+    soukan: { label: 'looks like (そうです)', base: 'stem', suf: 'そうです', L: 143, fam: 'n4p' },
+    sugiru: { label: 'too much (すぎます)', base: 'stem', suf: 'すぎます', L: 144, fam: 'n4p' },
+    yasui: { label: 'easy to (やすいです)', base: 'stem', suf: 'やすいです', L: 144, vol: 1, fam: 'n4p' },
+    nikui: { label: 'hard to (にくいです)', base: 'stem', suf: 'にくいです', L: 144, vol: 1, fam: 'n4p' },
   };
   function verbForms(v, gForce) {
     const masu = v.kana.replace(/\s/g, '');
@@ -174,6 +215,18 @@ window.ML = (() => {
     f.ta = f.te.replace(/て$/, 'た').replace(/で$/, 'だ');
     f.nakatta = f.nai.replace(/い$/, 'かった');
     f.stem = stem;
+    if (g === 3) {
+      const suru = last === 'し';
+      Object.assign(f, suru
+        ? { pot: p + 'できる', vol: p + 'しよう', pass: p + 'される', caus: p + 'させる', causpass: p + 'させられる', imper: p + 'しろ', ba: p + 'すれば' }
+        : { pot: p + 'こられる', vol: p + 'こよう', pass: p + 'こられる', caus: p + 'こさせる', causpass: p + 'こさせられる', imper: p + 'こい', ba: p + 'くれば' });
+    } else if (g === 2) {
+      Object.assign(f, { pot: stem + 'られる', vol: stem + 'よう', pass: stem + 'られる', caus: stem + 'させる', causpass: stem + 'させられる', imper: stem + 'ろ', ba: stem + 'れば' });
+    } else {
+      const a = p + (I2A[last] || 'わ'), e = p + (I2E[last] || 'え');
+      Object.assign(f, { pot: e + 'る', vol: p + (I2O[last] || 'お') + 'う', pass: a + 'れる', caus: a + 'せる', causpass: a + 'せられる', imper: e, ba: e + 'ば' });
+    }
+    f.prohib = f.dict + 'な';
     for (const [k, P] of Object.entries(VERB_PATTERNS)) f[k] = applyPattern(P, f[P.base]);
     return f;
   }
@@ -193,6 +246,10 @@ window.ML = (() => {
   const FORMS = {
     te: { label: 'て-form', verb: true, L: 14, fam: 'plain' }, nai: { label: 'ない-form', verb: true, L: 17, fam: 'plain' }, dict: { label: 'dictionary form', verb: true, L: 18, fam: 'plain' },
     ta: { label: 'た-form', verb: true, L: 19, fam: 'plain' }, nakatta: { label: 'plain past negative', verb: true, L: 20, fam: 'plain' },
+    pot: { label: 'potential (can do)', verb: true, L: 127, vol: 1, fam: 'n4' }, vol: { label: "volitional (let's, plain)", verb: true, L: 131, vol: 1, fam: 'n4' },
+    imper: { label: 'imperative (command)', verb: true, L: 133, vol: 1, fam: 'n4' }, prohib: { label: "prohibitive (don't!)", verb: true, L: 133, vol: 1, fam: 'n4' },
+    ba: { label: 'ば conditional', verb: true, L: 135, fam: 'n4' }, pass: { label: 'passive', verb: true, L: 137, vol: 1, fam: 'n4' },
+    caus: { label: 'causative', verb: true, L: 148, vol: 1, fam: 'n4' }, causpass: { label: 'causative-passive', verb: true, L: 213, vol: 1, fam: 'n4' },
     ...Object.fromEntries(Object.entries(VERB_PATTERNS).map(([k, P]) => [k, { ...P, verb: true }])),
     aneg: { label: 'negative', adj: true, L: 8, fam: 'adj' }, apast: { label: 'past', adj: true, L: 12, fam: 'adj' }, apastneg: { label: 'past negative', adj: true, L: 12, fam: 'adj' }, ate: { label: 'て-form (joining)', adj: true, L: 16, fam: 'adj' },
   };
@@ -201,6 +258,7 @@ window.ML = (() => {
     4: MASU, 5: MASU, 6: [...MASU, 'mshou', 'mseni'], 7: [...MASU, 'mshou', 'mseni'], 8: ['aneg'], 9: MASU, 10: MASU, 11: MASU, 12: ['apast', 'apastneg'], 13: ['mtai', ...MASU],
     14: ['te', 'tekudasai', 'teimasu'], 15: ['te', 'temoii', 'tehaikenai'], 16: ['te', 'tekara', 'ate'], 17: ['nai', 'naidekudasai', 'nakereba', 'nakutemoii'], 18: ['dict', 'koto', 'maeni'], 19: ['ta', 'takoto', 'tari'],
     20: ['dict', 'nai', 'ta', 'nakatta'], 21: ['dict', 'nai', 'ta'], 22: ['dict', 'nai', 'ta'], 23: ['dict', 'ta'], 24: ['te', 'tekudasai'], 25: ['tara', 'temo'],
+    126: ['dict', 'nai', 'ta'], 127: ['pot'], 128: ['nagara'], 129: ['teshimau'], 130: ['teoku'], 131: ['vol'], 132: ['tahouga'], 133: ['imper', 'prohib'], 134: ['ta', 'te'], 135: ['ba'], 136: ['pot', 'nai'], 137: ['pass'], 138: ['dict'], 139: ['te'], 140: ['temiru'], 141: ['te'], 142: ['dict'], 143: ['soukan'], 144: ['sugiru', 'yasui', 'nikui'], 145: ['ta'], 146: ['ta', 'dict'], 147: ['dict'], 148: ['caus'],
   };
   const conjVerbs = (maxL) => VOCAB.filter((v) => /^v[123]$/.test(v.pos) && v.L <= maxL && !NO_CONJ.has(v.kana));
   const conjAdjs = (maxL) => VOCAB.filter((v) => (v.pos === 'i-adj' || v.pos === 'na-adj') && v.L <= maxL && v.L > 0);
@@ -268,7 +326,7 @@ window.ML = (() => {
     today: { date: '' }, quests: { date: '', claimed: [], bonus: false }, history: {}, flags: {},
     stats: { answers: 0, correct: 0, bestCombo: 0, perfects: 0, sprintBest: 0, yokai: 0, sessions: 0, written: 0, readDone: 0 },
     trophies: {}, stickers: {}, tickets: 1, omamori: 0, owned: ['cap', 'none', 'skin-sakura'], equip: { hat: 'cap', acc: 'none', skin: 'skin-sakura' }, best: {}, numStats: { ok: 0, n: 0 },
-    settings: { script: 'kanji', romaji: 'after', audio: true, sound: true, rate: 0.9, goal: 60, kanaSets: ['basic'], flashDir: 'jp' },
+    settings: { script: 'kanji', romaji: 'after', audio: true, sound: true, rate: 0.9, goal: 60, kanaSets: ['basic'], flashDir: 'jp', level: 'N5' },
   });
   let S = defaults();
   const NESTED = ['settings', 'streak', 'daily', 'stats', 'equip', 'quests', 'numStats', 'flags'];
@@ -526,6 +584,11 @@ window.ML = (() => {
     ['album', 'ぜんぶ あつめた', 'Complete the sticker album', () => STICKERS.every((s) => S.stickers[s.id])],
     ['shop', 'おかいもの', 'Buy something at the shop', () => !!S.flags.bought],
     ['exam', 'ごうかく', 'Pass the N5 mock exam', () => !!S.stamps.exam],
+    ['exam4', 'N4 ごうかく', 'Pass the N4 mock exam', () => !!S.stamps.exam4],
+    ['exam3', 'N3 ごうかく', 'Pass the N3 mock exam', () => !!S.stamps.exam3],
+    ['natsu', 'なつの せん', 'Collect every N4 lesson stamp', () => allStamped(STATIONS.filter((s) => s.line === 'S').map((s) => s.id))],
+    ['aki', 'あきの せん', 'Collect every N3 unit stamp', () => allStamped(STATIONS.filter((s) => s.line === 'K').map((s) => s.id))],
+    ['kanji300', 'かんじ さんびゃく', 'Move 300 kanji into long-term memory', () => stageCount('j|', 4) >= 300],
     ['reader', 'よみます', 'Get 50 reading questions right', () => S.stats.readDone >= 50],
     ['writer', 'かきます', 'Write 100 characters by hand', () => S.stats.written >= 100],
     ['owl', 'よふかし', 'Study after 11 pm', () => !!S.flags.owl],
@@ -600,7 +663,7 @@ window.ML = (() => {
 
   return {
     esc, shuffle, pick, uniqBy, dayStr, hasKanji, DAY, hashStr, rng, toHira, normKana, particleNorm, romajiToKana, answerVariants, typedMatches, speakable,
-    VOCAB, VBY, KANA, KANJI, KBY, GRAMMAR, GBY, EXAMPLES, EBY, quizzable, posGroup, vKey, exampleFor, TITLES, STATIONS, SBY,
+    VOCAB, VBY, KANA, KANJI, KBY, GRAMMAR, GBY, EXAMPLES, EBY, quizzable, posGroup, vKey, exampleFor, TITLES, STATIONS, SBY, LEVELS, levelOfL, lessonName,
     verbForms, adjForms, FORMS, CONJ_BY_LESSON, conjVerbs, conjAdjs, conjAnswer, canForm, I2A, READING, RBY, GUIDE, STROKES, rubyToKana, rubyToKanji, LESSON_GUIDE, GROUPS, groupOf,
     numKana, timeKana, HOURS, funKana, MONTHS, dayKana, COUNTERS, ageKana, D1,
     get S() { return S; }, defaults, adopt, save, connectRemote, isRemote: () => !!remote,

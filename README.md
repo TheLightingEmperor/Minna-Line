@@ -1,6 +1,6 @@
 # Minna Line
 
-A study game for Japanese up to JLPT N5, built around *Minna no Nihongo* Lessons 1–20. Each lesson is a station on a train line. Mochi, the cat conductor, rides along with you. Beat a station's yokai to collect its stamp.
+A study game for Japanese from JLPT N5 to N3: *Minna no Nihongo* Lessons 1–50, then 24 themed N3 units and a Reading Academy. Each lesson is a station on a train line. Mochi, the cat conductor, rides along with you. Beat a station's yokai to collect its stamp.
 
 ## What's inside
 
@@ -63,3 +63,7 @@ Rebuilding only replaces `data/vocab.js`. The cleaned wording lives in `data/voc
 ## Credits
 
 Stroke order data in `data/strokes.js` comes from [KanjiVG](https://kanjivg.tagaini.net), copyright Ulrich Apel, licensed under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). That file stays under the same licence.
+
+Kanji readings, meanings and stroke counts in `data/kanji_more.js` come from [KANJIDIC](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) (EDRDG), CC BY-SA 4.0, via the kanji-data project. JLPT kanji levels are the commonly used unofficial lists.
+
+All N4 and N3 words lists, sentences and passages are original to this project. No textbook content is reproduced.
