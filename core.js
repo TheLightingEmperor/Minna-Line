@@ -83,7 +83,7 @@ window.ML = (() => {
     };
     const W = window.KANJI_WORDS || {};
     return [...(window.KANJI || []).map((k) => ({ ...k, level: 'N5' })),
-      ...(window.KANJI_MORE || []).map((k, i) => ({ ...k, ...W[k.k], lesson: place(k, i) }))];
+      ...(window.KANJI_MORE || []).map((k, i) => ({ ...k, ...W[k.k], lesson: place(k, i) })), ...(window.KANJI_EXTRA || [])];
   })();
   const KBY = new Map(KANJI.map((k) => [k.k, k]));
   const STUDY = window.GRAMMAR_STUDY || {};
@@ -163,9 +163,9 @@ window.ML = (() => {
   const I2U = { い: 'う', き: 'く', ぎ: 'ぐ', し: 'す', ち: 'つ', に: 'ぬ', び: 'ぶ', み: 'む', り: 'る' };
   const I2E = { い: 'え', き: 'け', ぎ: 'げ', し: 'せ', ち: 'て', に: 'ね', び: 'べ', み: 'め', り: 'れ' };
   const I2O = { い: 'お', き: 'こ', ぎ: 'ご', し: 'そ', ち: 'と', に: 'の', び: 'ぼ', み: 'も', り: 'ろ' };
-  const NO_CONJ = new Set(['いらっしゃいます', 'しつれいします', 'いただきます', 'くださいます', 'おっしゃいます', 'なさいます', 'ございます', 'まいります', 'おります|', 'ごらんに なります']);
+  const NO_CONJ = new Set(['いらっしゃいます', 'しつれいします', 'いただきます', 'くださいます', 'おっしゃいます', 'なさいます', 'ございます', 'まいります', 'いたします', 'もうします', 'めしあがります', 'うかがいます', 'ごらんに なります']);
   // Verbs you can't do on purpose: no "let's", "please" or "want to" forms.
-  const NON_VOL = new Set(['あります', 'わかります', 'できます', 'かかります', 'ふります', 'つかれます', 'いります', 'なります', 'くれます', 'みえます', 'きこえます', 'たります', 'うまれます']);
+  const NON_VOL = new Set(['あります', 'わかります', 'できます', 'かかります', 'ふります', 'つかれます', 'いります', 'なります', 'くれます', 'みえます', 'きこえます', 'たります', 'うまれます', 'うれます', 'こわれます', 'われます', 'おれます', 'やぶれます', 'よごれます', 'はずれます', 'なおります', 'かたづきます', 'つづきます', 'のこります', 'やみます', 'ひえます', 'あたります', 'みつかります', 'にえます', 'かわります', 'くさります', 'おちます', 'ふえます', 'へります', 'あがります', 'さがります', 'きれます', 'とれます', 'なくなります', 'こみます', 'ひかります', 'まわります', 'かわきます', 'ぬれます', 'すべります', 'きまります', 'とどきます', 'やけます', 'すみます', 'もえます', 'わきます', 'ゆれます', 'たおれます', 'ぶつかります', 'おくれます', 'まにあいます']);
   // Every N5 pattern built on a base form. L = the MnN lesson that teaches it. vol = needs a verb you can choose to do.
   const VERB_PATTERNS = {
     mneg: { label: 'polite negative (ません)', base: 'stem', suf: 'ません', L: 4, fam: 'polite' },
@@ -260,7 +260,7 @@ window.ML = (() => {
     20: ['dict', 'nai', 'ta', 'nakatta'], 21: ['dict', 'nai', 'ta'], 22: ['dict', 'nai', 'ta'], 23: ['dict', 'ta'], 24: ['te', 'tekudasai'], 25: ['tara', 'temo'],
     126: ['dict', 'nai', 'ta'], 127: ['pot'], 128: ['nagara'], 129: ['teshimau'], 130: ['teoku'], 131: ['vol'], 132: ['tahouga'], 133: ['imper', 'prohib'], 134: ['ta', 'te'], 135: ['ba'], 136: ['pot', 'nai'], 137: ['pass'], 138: ['dict'], 139: ['te'], 140: ['temiru'], 141: ['te'], 142: ['dict'], 143: ['soukan'], 144: ['sugiru', 'yasui', 'nikui'], 145: ['ta'], 146: ['ta', 'dict'], 147: ['dict'], 148: ['caus'],
   };
-  const conjVerbs = (maxL) => VOCAB.filter((v) => /^v[123]$/.test(v.pos) && v.L <= maxL && !NO_CONJ.has(v.kana));
+  const conjVerbs = (maxL) => VOCAB.filter((v) => /^v[123]$/.test(v.pos) && v.L <= maxL && !NO_CONJ.has(v.kana) && !(v.kana === 'おります' && !/降/.test(v.kanji || '')));
   const conjAdjs = (maxL) => VOCAB.filter((v) => (v.pos === 'i-adj' || v.pos === 'na-adj') && v.L <= maxL && v.L > 0);
   const conjAnswer = (form, v) => (FORMS[form].verb ? verbForms(v)[form] : adjForms(v)[form]);
   const canForm = (form, v) => !(FORMS[form].vol && NON_VOL.has(v.kana.replace(/\s/g, '')));

@@ -395,7 +395,7 @@
   // ---------------------------------------------------------------- station content
   const stationVocab = (st) => VOCAB.filter((v) => v.L === st.L && quizzable(v));
   const stationGrammar = (st) => GRAMMAR.filter((g) => g.lesson === st.L);
-  const stationKanji = (st) => KANJI.filter((k) => k.lesson === st.L);
+  const stationKanji = (st) => KANJI.filter((k) => k.lesson === st.L && !k.extra);
   const stationExamples = (st) => EXAMPLES.filter((e) => e.L === st.L);
   const stationReading = (st) => READING.filter((r) => r.lesson === st.L);
   function stationConj(st) {
@@ -409,7 +409,7 @@
     let keys = [];
     if (st.kind === 'kana') keys = [...KANA.map(kanaKey), ...stationVocab(st).map(vKey)];
     else if (st.kind === 'lesson') keys = [...stationVocab(st).map(vKey), ...stationGrammar(st).flatMap(drillKeys), ...stationKanji(st).map(kanjiKey), ...stationReading(st).flatMap(readingKeys)];
-    else if (st.kind === 'kanji') keys = KANJI.filter((k) => k.level === st.level).map(kanjiKey);
+    else if (st.kind === 'kanji') keys = KANJI.filter((k) => k.level === st.level && !k.extra).map(kanjiKey);
     else if (st.kind === 'academy') keys = READING.filter((r) => r.lesson === 225).flatMap(readingKeys);
     else if (st.kind === 'verbs') {
       const fs = st.level === 'N5' ? ['mneg', 'mpast', 'mpastneg', 'te', 'nai', 'dict', 'ta'] : ['pot', 'vol', 'ba', 'pass', 'caus', 'imper'];
@@ -488,7 +488,7 @@
     const n5 = l === 'N5';
     const vk = VOCAB.filter((v) => quizzable(v) && levelOfL(v.L) === l).map(vKey);
     const gk = GRAMMAR.filter((g) => levelOfL(g.lesson) === l).flatMap(drillKeys);
-    const kk = KANJI.filter((k) => k.level === l).map(kanjiKey);
+    const kk = KANJI.filter((k) => k.level === l && !k.extra).map(kanjiKey);
     const rk = READING.filter((r) => levelOfL(r.lesson) === l).flatMap(readingKeys);
     const forms = STATIONS.find((s) => s.kind === 'verbs' && s.level === l);
     const rows = [...(n5 ? [['Kana', mastery(KANA.map(kanaKey))]] : []), ['Words', mastery(vk)], ['Grammar', mastery(gk)], ['Kanji', mastery(kk)], ...(forms ? [['Verbs', mastery(stationKeys(forms))]] : []), ['Reading', mastery(rk)], ...(n5 ? [['Numbers', numMastery()]] : [])];
@@ -794,16 +794,16 @@
   function renderKanjiHall(st) {
     const back = { name: 'station', id: st.id };
     const bands = { N5: [[1, 5], [6, 10], [11, 15], [16, 20], [21, 26]], N4: [[126, 130], [131, 135], [136, 140], [141, 145], [146, 150]], N3: [[201, 204], [205, 208], [209, 212], [213, 216], [217, 220], [221, 224]] }[st.level];
-    const sel = view.band ?? 0, mine = KANJI.filter((k) => k.level === st.level);
-    const list = sel === 'all' ? mine : mine.filter((k) => k.lesson >= bands[sel][0] && k.lesson <= bands[sel][1]);
+    const sel = view.band ?? 0, mine = KANJI.filter((k) => k.level === st.level && !k.extra), extras = KANJI.filter((k) => k.level === st.level && k.extra);
+    const list = sel === 'extra' ? extras : sel === 'all' ? mine : mine.filter((k) => k.lesson >= bands[sel][0] && k.lesson <= bands[sel][1]);
     const c = lineColor(st), bname = (b) => (st.level === 'N3' ? `Units ${b[0] - 200}–${b[1] - 200}` : st.level === 'N4' ? `Lessons ${b[0] - 100}–${b[1] - 100}` : `Lessons ${b[0]}–${b[1] > 25 ? '25+' : b[1]}`);
     render(`<div class="station" style="--c:${c}">${signHTML(st)}
       <p class="muted" style="margin:0">All ${mine.length} ${st.level} kanji, grouped by where you first need them. Tap one for its stroke order, readings and words.</p>
-      <div class="chooser">${bands.map((b, i) => `<button class="chip" data-act="band" data-arg="${i}" aria-pressed="${sel === i}">${bname(b)}</button>`).join('')}<button class="chip" data-act="band" data-arg="all" aria-pressed="${sel === 'all'}">All</button></div>
+      <div class="chooser">${bands.map((b, i) => `<button class="chip" data-act="band" data-arg="${i}" aria-pressed="${sel === i}">${bname(b)}</button>`).join('')}<button class="chip" data-act="band" data-arg="all" aria-pressed="${sel === 'all'}">All</button>${extras.length ? `<button class="chip" data-act="band" data-arg="extra" aria-pressed="${sel === 'extra'}">Also in your words (${extras.length})</button>` : ''}</div>
       ${group('Practise this group', 'れんしゅう', [act('km', 'Meanings', 'Kanji → meaning'), act('kr', 'Readings', 'Word → reading'), act('kw', 'Words', 'Meaning → kanji word'), act('kwr', 'Write them', 'Stroke order, by hand'), act('ksp', 'Kanji sprint', '60-second rush')])}
       ${bossCard(st, `20 kanji from all of ${st.level}. Win to take the Kanji Hall stamp.`)}
       ${kanjiGrid(list)}</div>`, {
-      band: (b) => { view.band = b === 'all' ? 'all' : +b; renderKanjiHall(st); },
+      band: (b) => { view.band = b === 'all' || b === 'extra' ? b : +b; renderKanjiHall(st); },
       km: () => quizSession({ title: 'Kanji meanings', keys: prioritize(list.map(kanjiKey)).slice(0, 15), mode: 'meaning', back, color: c }),
       kr: () => quizSession({ title: 'Kanji readings', keys: prioritize(list.map(kanjiKey)).slice(0, 15), mode: 'reading', back, color: c }),
       kw: () => quizSession({ title: 'Kanji words', keys: prioritize(list.map(kanjiKey)).slice(0, 15), mode: 'word', back, color: c }),
