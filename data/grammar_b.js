@@ -75,7 +75,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { jp: "いちにちに なんかい コーヒーを のみますか。", ro: "Ichinichi ni nankai kōhī o nomimasu ka.", en: "How many times a day do you drink coffee?" }
     ],
     drills: [
-      { type: "fill", jp: "いっしゅうかん＿＿ にかい プールへ いきます。", answer: "に", options: ["に", "で", "を", "が"], en: "I go to the pool twice a week." },
+      { type: "fill", jp: "いっしゅうかん＿＿ にかい プールへ いきます。", answer: "に", options: ["に", "へ", "を", "が"], en: "I go to the pool twice a week." },
       { type: "fill", jp: "いっかげつに ＿＿ えいがを みます。", answer: "いっかい", options: ["いっかい", "いちかい", "ひとつ", "いちまい"], en: "I watch a movie once a month." },
       { type: "choose", q: "What does いちにちに さんかい mean?", answer: "three times a day", options: ["three times a day", "for three days", "three days ago", "on the third day"] },
       { type: "choose", q: "How do you ask 'how many times'?", answer: "なんかい", options: ["なんかい", "なんじかん", "なんにん", "いくら"] },
@@ -178,7 +178,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "ひこうきは でんしゃ＿＿ はやいです。", answer: "より", options: ["より", "ほうが", "から", "まで"], en: "Planes are faster than trains." },
-      { type: "fill", jp: "ほっかいどうは おおさかより ＿＿です。", answer: "さむい", options: ["さむい", "さむいの", "さむく", "さむいな"], en: "Hokkaido is colder than Osaka." },
+      { type: "fill", jp: "ほっかいどうは おおさかより ＿＿です。", answer: "さむい", options: ["さむい", "さむいで", "さむく", "さむいな"], en: "Hokkaido is colder than Osaka." },
       { type: "choose", q: "ペキンは とうきょうより おおきいです。 Which is bigger?", answer: "ペキン", options: ["ペキン", "とうきょう", "They are the same size", "It doesn't say"] },
       { type: "choose", q: "Which says 'Today is hotter than yesterday'?", answer: "きょうは きのうより あついです。", options: ["きょうは きのうより あついです。", "きのうは きょうより あついです。", "きょうより きのうは あついです。", "きょうは きのうから あついです。"] },
       { type: "order", tiles: ["この", "かばんは", "あの", "かばんより", "かるいです"], en: "This bag is lighter than that bag." },
@@ -283,7 +283,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "デパートへ くつを ＿＿に いきます。", answer: "かい", options: ["かい", "かう", "かって", "かいます"], en: "I'm going to the department store to buy shoes." },
       { type: "fill", jp: "こうべへ かいもの＿＿ いきます。", answer: "に", options: ["に", "を", "で", "が"], en: "I'm going to Kobe to shop." },
       { type: "fill", jp: "としょかんへ ほんを ＿＿に いきます。", answer: "かり", options: ["かり", "かりる", "かりて", "かって"], en: "I'm going to the library to borrow books." },
-      { type: "choose", q: "Which says 'I'm going to Japan to study'?", answer: "にほんへ べんきょうに いきます。", options: ["にほんへ べんきょうに いきます。", "にほんへ べんきょうを いきます。", "にほんへ べんきょうで いきます。", "にほんへ べんきょうしたいに いきます。"] },
+      { type: "choose", q: "Which says 'I'm going to Japan to study'?", answer: "にほんへ べんきょうに いきます。", options: ["にほんへ べんきょうに いきます。", "にほんへ べんきょうを いきます。", "にほんへ べんきょうが いきます。", "にほんへ べんきょうしたいに いきます。"] },
       { type: "order", tiles: ["こうえんへ", "さんぽに", "いきます"], en: "I'm going to the park for a walk." },
       { type: "order", tiles: ["ともだちが", "うちへ", "あそびに", "きます"], en: "A friend is coming to my house to hang out." }
     ]
@@ -428,7 +428,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "ここに ＿＿も いいですか。", answer: "すわって", options: ["すわって", "すわりて", "すわんで", "すわいて"], en: "May I sit here?" },
       { type: "fill", jp: "この えんぴつを ＿＿も いいですか。", answer: "つかって", options: ["つかって", "つかいて", "つかんで", "つかて"], en: "May I use this pencil?" },
       { type: "choose", q: "What does まどを あけても いいですか mean?", answer: "May I open the window?", options: ["May I open the window?", "Please open the window.", "Shall I open the window?", "You must not open the window."] },
-      { type: "choose", q: "Which is a polite 'yes, go ahead'?", answer: "ええ、どうぞ。", options: ["ええ、どうぞ。", "いいえ、どうぞ。", "ええ、いけません。", "ええ、けっこうです。"] },
+      { type: "choose", q: "Which is a polite 'yes, go ahead'?", answer: "ええ、どうぞ。", options: ["ええ、どうぞ。", "いいえ、どうぞ。", "ええ、いけません。", "はい、まだです。"] },
       { type: "order", tiles: ["この", "カタログを", "もらっても", "いいですか"], en: "May I have this catalogue?" }
     ]
   },
@@ -525,7 +525,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "この へやは ＿＿、あかるいです。", answer: "ひろくて", options: ["ひろくて", "ひろいで", "ひろいくて", "ひろくで"], en: "This room is spacious and bright." },
-      { type: "fill", jp: "ならは ＿＿、きれいな まちです。", answer: "しずかで", options: ["しずかで", "しずかくて", "しずかな", "しずかって"], en: "Nara is a quiet, beautiful town." },
+      { type: "fill", jp: "ならは ＿＿、きれいな まちです。", answer: "しずかで", options: ["しずかで", "しずかくて", "しずかの", "しずかって"], en: "Nara is a quiet, beautiful town." },
       { type: "fill", jp: "カリナさんは ＿＿、だいがくの りゅうがくせいです。", answer: "インドネシアじんで", options: ["インドネシアじんで", "インドネシアじんくて", "インドネシアじんです", "インドネシアじんな"], en: "Karina is Indonesian and a university exchange student." },
       { type: "choose", q: "How do you join いい with another adjective?", answer: "よくて", options: ["よくて", "いくて", "いいで", "よいで"] },
       { type: "order", tiles: ["この", "カメラは", "かるくて", "べんりです"], en: "This camera is light and convenient." },
@@ -547,7 +547,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "しごとが ＿＿から、のみに いきましょう。", answer: "おわって", options: ["おわって", "おわりて", "おわる", "おわんで"], en: "Let's go for a drink after work finishes." },
       { type: "fill", jp: "おかねを いれて＿＿、ボタンを おして ください。", answer: "から", options: ["から", "まで", "より", "が"], en: "Please press the button after putting in the money." },
       { type: "choose", q: "てがみを かいてから、でかけます — what happens first?", answer: "Writing the letter", options: ["Writing the letter", "Going out", "Both at the same time", "It doesn't say"] },
-      { type: "choose", q: "Which is correct?", answer: "シャワーを あびてから、ねます。", options: ["シャワーを あびてから、ねます。", "シャワーを あびるから、ねます。", "シャワーを あびから、ねます。", "シャワーを あびったから、ねます。"] },
+      { type: "choose", q: "Which is correct?", answer: "シャワーを あびてから、ねます。", options: ["シャワーを あびてから、ねます。", "シャワーを あびるてから、ねます。", "シャワーを あびから、ねます。", "シャワーを あびったから、ねます。"] },
       { type: "order", tiles: ["うちへ", "かえってから", "ばんごはんを", "たべます"], en: "I eat dinner after I get home." },
       { type: "order", tiles: ["ごはんを", "たべてから", "コーヒーを", "のみませんか"], en: "Shall we have coffee after we eat?" }
     ]
@@ -666,8 +666,8 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { jp: "なまえを かかなければ なりませんか。…いいえ、かかなくても いいです。", ro: "Namae o kakanakereba narimasen ka. … Iie, kakanakute mo ii desu.", en: "Do I have to write my name? — No, you don't have to." }
     ],
     drills: [
-      { type: "fill", jp: "あした ＿＿ いいです。", answer: "こなくても", options: ["こなくても", "きなくても", "こないでも", "こなければ"], en: "You don't have to come tomorrow." },
-      { type: "fill", jp: "くつを ぬが＿＿ いいですか。", answer: "なくても", options: ["なくても", "なければ", "ないで", "なくて"], en: "Is it OK if I don't take off my shoes?" },
+      { type: "fill", jp: "あした ＿＿ いいです。", answer: "こなくても", options: ["こなくても", "きなくても", "くなくても", "こなければ"], en: "You don't have to come tomorrow." },
+      { type: "fill", jp: "くつを ぬが＿＿ いいですか。", answer: "なくても", options: ["なくても", "なくでも", "なくては", "なかった"], en: "Is it OK if I don't take off my shoes?" },
       { type: "fill", jp: "なまえを かかなければ なりませんか。…いいえ、＿＿。", answer: "かかなくても いいです", options: ["かかなくても いいです", "かかなければ なりません", "かかないで ください", "かきなくても いいです"], en: "Do I have to write my name? — No, you don't have to." },
       { type: "choose", q: "What does いそがなくても いいです mean?", answer: "You don't have to hurry.", options: ["You don't have to hurry.", "You must hurry.", "Please don't hurry.", "You may not hurry."] },
       { type: "choose", q: "はらわなくても いいです — do you need to pay?", answer: "No, it's not necessary.", options: ["No, it's not necessary.", "Yes, you must.", "You are not allowed to pay.", "Please pay later."] },
@@ -1098,8 +1098,8 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { jp: "これを まわすと、おとが おおきく なります。", ro: "Kore o mawasu to, oto ga ōkiku narimasu.", en: "If you turn this, the sound gets louder." }
     ],
     drills: [
-      { type: "fill", jp: "この ボタンを ＿＿と、きっぷが でます。", answer: "おす", options: ["おす", "おして", "おした", "おします"], en: "If you press this button, the ticket comes out." },
-      { type: "fill", jp: "あの かどを みぎへ ＿＿と、ぎんこうが あります。", answer: "まがる", options: ["まがる", "まがって", "まがります", "まがり"], en: "If you turn right at that corner, there's a bank." },
+      { type: "fill", jp: "この ボタンを ＿＿と、きっぷが でます。", answer: "おす", options: ["おす", "おして", "おした", "おし"], en: "If you press this button, the ticket comes out." },
+      { type: "fill", jp: "あの かどを みぎへ ＿＿と、ぎんこうが あります。", answer: "まがる", options: ["まがる", "まがって", "まがら", "まがり"], en: "If you turn right at that corner, there's a bank." },
       { type: "fill", jp: "はるに なる＿＿、あたたかく なります。", answer: "と", options: ["と", "を", "が", "で"], en: "When spring comes, it gets warm." },
       { type: "choose", q: "Which sentence is UNNATURAL?", answer: "ボタンを おすと、おつりを とって ください。", options: ["ボタンを おすと、おつりを とって ください。", "ボタンを おすと、ドアが あきます。", "みぎへ まがると、えきが あります。", "これを まわすと、おとが おおきく なります。"] },
       { type: "choose", q: "What does これを まわすと、おとが おおきく なります mean?", answer: "If you turn this, the sound gets louder.", options: ["If you turn this, the sound gets louder.", "Please turn this to make it louder.", "Turn this before it gets loud.", "Even if you turn this, it won't get louder."] },
@@ -1138,7 +1138,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     drills: [
       { type: "fill", jp: "わたしは たなかさんに ちずを かいて ＿＿。", answer: "もらいました", options: ["もらいました", "くれました", "あげました"], en: "Mr. Tanaka drew a map for me." },
       { type: "fill", jp: "ともだちが にもつを もって ＿＿。", answer: "くれました", options: ["くれました", "もらいました", "あげました"], en: "My friend carried my luggage for me." },
-      { type: "fill", jp: "わたしは おとうとに しゅくだいを てつだって ＿＿。", answer: "あげました", options: ["あげました", "くれました", "もらいました"], en: "I helped my younger brother with his homework." },
+      { type: "fill", jp: "わたしは おとうとの しゅくだいを てつだって ＿＿。", answer: "あげました", options: ["あげました", "くれました", "もらいました"], en: "I helped my younger brother with his homework." },
       { type: "choose", q: "What does やまださんに おしえて もらいました mean?", answer: "Mr. Yamada taught me (I received his help).", options: ["Mr. Yamada taught me (I received his help).", "I taught Mr. Yamada.", "Mr. Yamada taught someone else.", "I asked Mr. Yamada, but he didn't teach me."] },
       { type: "choose", q: "In ～て もらいます, which particle marks the person who does the favour?", answer: "に", options: ["に", "を", "で", "へ"] },
       { type: "order", tiles: ["ははが", "セーターを", "おくって", "くれました"], en: "My mother sent me a sweater." },

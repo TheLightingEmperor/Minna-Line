@@ -75,6 +75,12 @@ window.ML = (() => {
   const GBY = new Map(GRAMMAR.map((g) => [g.id, g]));
   const EXAMPLES = GRAMMAR.flatMap((g) => g.examples.map((x, i) => ({ ...x, id: `${g.id}|${i}`, L: g.lesson, g })));
   const EBY = new Map(EXAMPLES.map((e) => [e.id, e]));
+  const READING = (window.READING || []).slice().sort((a, b) => a.lesson - b.lesson || (a.type < b.type ? -1 : 1));
+  const RBY = new Map(READING.map((r) => [r.id, r]));
+  const GUIDE = window.GUIDE || [];
+  const STROKES = window.STROKES || {};
+  const rubyToKana = (s) => String(s).replace(/\{[^|}]+\|([^}]+)\}/g, '$1');
+  const rubyToKanji = (s) => String(s).replace(/\{([^|}]+)\|[^}]+\}/g, '$1');
   const quizzable = (v) => v.cat !== 'proper';
   const posGroup = (v) => ((v.pos || 'n').startsWith('v') ? 'v' : v.pos === 'i-adj' || v.pos === 'na-adj' ? 'adj' : v.pos === 'exp' ? 'exp' : 'n');
   const vKey = (v) => 'v|' + v.id;
@@ -115,6 +121,31 @@ window.ML = (() => {
   const I2A = { い: 'わ', き: 'か', ぎ: 'が', し: 'さ', ち: 'た', に: 'な', び: 'ば', み: 'ま', り: 'ら' };
   const I2U = { い: 'う', き: 'く', ぎ: 'ぐ', し: 'す', ち: 'つ', に: 'ぬ', び: 'ぶ', み: 'む', り: 'る' };
   const NO_CONJ = new Set(['いらっしゃいます', 'しつれいします', 'いただきます']);
+  // Verbs you can't do on purpose: no "let's", "please" or "want to" forms.
+  const NON_VOL = new Set(['あります', 'わかります', 'できます', 'かかります', 'ふります', 'つかれます', 'いります', 'なります']);
+  // Every N5 pattern built on a base form. L = the MnN lesson that teaches it. vol = needs a verb you can choose to do.
+  const VERB_PATTERNS = {
+    mneg: { label: 'polite negative (ません)', base: 'stem', suf: 'ません', L: 4, fam: 'polite' },
+    mpast: { label: 'polite past (ました)', base: 'stem', suf: 'ました', L: 4, fam: 'polite' },
+    mpastneg: { label: 'polite past negative (ませんでした)', base: 'stem', suf: 'ませんでした', L: 4, fam: 'polite' },
+    mshou: { label: "let's (ましょう)", base: 'stem', suf: 'ましょう', L: 6, vol: 1, fam: 'polite' },
+    mseni: { label: "won't you? (ませんか)", base: 'stem', suf: 'ませんか', L: 6, vol: 1, fam: 'polite' },
+    mtai: { label: 'want to (たいです)', base: 'stem', suf: 'たいです', L: 13, vol: 1, fam: 'pattern' },
+    tekudasai: { label: 'please do (て ください)', base: 'te', suf: ' ください', L: 14, vol: 1, fam: 'pattern' },
+    teimasu: { label: 'doing now (て います)', base: 'te', suf: ' います', L: 14, fam: 'pattern' },
+    temoii: { label: 'may (ても いいです)', base: 'te', suf: 'も いいです', L: 15, vol: 1, fam: 'pattern' },
+    tehaikenai: { label: 'must not (ては いけません)', base: 'te', suf: 'は いけません', L: 15, vol: 1, fam: 'pattern' },
+    tekara: { label: 'after doing (てから)', base: 'te', suf: 'から', L: 16, vol: 1, fam: 'pattern' },
+    naidekudasai: { label: "please don't (ないで ください)", base: 'nai', suf: 'で ください', L: 17, vol: 1, fam: 'pattern' },
+    nakereba: { label: 'must (なければ なりません)', base: 'nai', cut: 1, suf: 'ければ なりません', L: 17, vol: 1, fam: 'pattern' },
+    nakutemoii: { label: "don't have to (なくても いいです)", base: 'nai', cut: 1, suf: 'くても いいです', L: 17, vol: 1, fam: 'pattern' },
+    koto: { label: 'can do (ことが できます)', base: 'dict', suf: ' ことが できます', L: 18, vol: 1, fam: 'pattern' },
+    maeni: { label: 'before doing (まえに)', base: 'dict', suf: ' まえに', L: 18, vol: 1, fam: 'pattern' },
+    takoto: { label: 'have done (たことが あります)', base: 'ta', suf: ' ことが あります', L: 19, vol: 1, fam: 'pattern' },
+    tari: { label: 'do things like (たり)', base: 'ta', suf: 'り', L: 19, vol: 1, fam: 'pattern' },
+    tara: { label: 'if / when (たら)', base: 'ta', suf: 'ら', L: 25, fam: 'pattern' },
+    temo: { label: 'even if (ても)', base: 'te', suf: 'も', L: 25, fam: 'pattern' },
+  };
   function verbForms(v, gForce) {
     const masu = v.kana.replace(/\s/g, '');
     const g = gForce || +v.pos[1];
@@ -131,8 +162,11 @@ window.ML = (() => {
     }
     f.ta = f.te.replace(/て$/, 'た').replace(/で$/, 'だ');
     f.nakatta = f.nai.replace(/い$/, 'かった');
+    f.stem = stem;
+    for (const [k, P] of Object.entries(VERB_PATTERNS)) f[k] = applyPattern(P, f[P.base]);
     return f;
   }
+  const applyPattern = (P, base) => (P.cut ? base.slice(0, -P.cut) : base) + P.suf;
   function adjForms(a, flip) {
     const raw = a.kana.replace(/[（(].*?[）)]/g, '').trim();
     const parts = raw.split(/\s+/), base = parts.pop(), pre = parts.length ? parts.join(' ') + ' ' : '';
@@ -146,14 +180,21 @@ window.ML = (() => {
     return { aneg: pre + b + 'じゃ ありません', apast: pre + b + 'でした', apastneg: pre + b + 'じゃ ありませんでした', ate: pre + b + 'で' };
   }
   const FORMS = {
-    te: { label: 'て-form', verb: true, L: 14 }, nai: { label: 'ない-form', verb: true, L: 17 }, dict: { label: 'dictionary form', verb: true, L: 18 },
-    ta: { label: 'た-form', verb: true, L: 19 }, nakatta: { label: 'plain past negative', verb: true, L: 20 },
-    aneg: { label: 'negative', adj: true, L: 8 }, apast: { label: 'past', adj: true, L: 12 }, apastneg: { label: 'past negative', adj: true, L: 12 }, ate: { label: 'て-form (joining)', adj: true, L: 16 },
+    te: { label: 'て-form', verb: true, L: 14, fam: 'plain' }, nai: { label: 'ない-form', verb: true, L: 17, fam: 'plain' }, dict: { label: 'dictionary form', verb: true, L: 18, fam: 'plain' },
+    ta: { label: 'た-form', verb: true, L: 19, fam: 'plain' }, nakatta: { label: 'plain past negative', verb: true, L: 20, fam: 'plain' },
+    ...Object.fromEntries(Object.entries(VERB_PATTERNS).map(([k, P]) => [k, { ...P, verb: true }])),
+    aneg: { label: 'negative', adj: true, L: 8, fam: 'adj' }, apast: { label: 'past', adj: true, L: 12, fam: 'adj' }, apastneg: { label: 'past negative', adj: true, L: 12, fam: 'adj' }, ate: { label: 'て-form (joining)', adj: true, L: 16, fam: 'adj' },
   };
-  const CONJ_BY_LESSON = { 8: ['aneg'], 12: ['apast', 'apastneg'], 14: ['te'], 15: ['te'], 16: ['te', 'ate'], 17: ['nai'], 18: ['dict'], 19: ['ta'], 20: ['dict', 'nai', 'ta', 'nakatta'] };
+  const MASU = ['mneg', 'mpast', 'mpastneg'];
+  const CONJ_BY_LESSON = {
+    4: MASU, 5: MASU, 6: [...MASU, 'mshou', 'mseni'], 7: [...MASU, 'mshou', 'mseni'], 8: ['aneg'], 9: MASU, 10: MASU, 11: MASU, 12: ['apast', 'apastneg'], 13: ['mtai', ...MASU],
+    14: ['te', 'tekudasai', 'teimasu'], 15: ['te', 'temoii', 'tehaikenai'], 16: ['te', 'tekara', 'ate'], 17: ['nai', 'naidekudasai', 'nakereba', 'nakutemoii'], 18: ['dict', 'koto', 'maeni'], 19: ['ta', 'takoto', 'tari'],
+    20: ['dict', 'nai', 'ta', 'nakatta'], 21: ['dict', 'nai', 'ta'], 22: ['dict', 'nai', 'ta'], 23: ['dict', 'ta'], 24: ['te', 'tekudasai'], 25: ['tara', 'temo'],
+  };
   const conjVerbs = (maxL) => VOCAB.filter((v) => /^v[123]$/.test(v.pos) && v.L <= maxL && !NO_CONJ.has(v.kana));
   const conjAdjs = (maxL) => VOCAB.filter((v) => (v.pos === 'i-adj' || v.pos === 'na-adj') && v.L <= maxL && v.L > 0);
   const conjAnswer = (form, v) => (FORMS[form].verb ? verbForms(v)[form] : adjForms(v)[form]);
+  const canForm = (form, v) => !(FORMS[form].vol && NON_VOL.has(v.kana.replace(/\s/g, '')));
 
   // ---------------------------------------------------------------- number readings (MnN L3, L4, L5, L11)
   const D1 = ['', 'いち', 'に', 'さん', 'よん', 'ご', 'ろく', 'なな', 'はち', 'きゅう'];
@@ -214,7 +255,7 @@ window.ML = (() => {
   const defaults = () => ({
     v: 1, xp: 0, coins: 0, items: {}, stamps: {}, streak: { days: 0, last: '' }, daily: { date: '', n: 0 }, updatedAt: 0,
     today: { date: '' }, quests: { date: '', claimed: [], bonus: false }, history: {}, flags: {},
-    stats: { answers: 0, correct: 0, bestCombo: 0, perfects: 0, sprintBest: 0, yokai: 0, sessions: 0 },
+    stats: { answers: 0, correct: 0, bestCombo: 0, perfects: 0, sprintBest: 0, yokai: 0, sessions: 0, written: 0, readDone: 0 },
     trophies: {}, stickers: {}, tickets: 1, omamori: 0, owned: ['cap', 'none', 'skin-sakura'], equip: { hat: 'cap', acc: 'none', skin: 'skin-sakura' }, best: {}, numStats: { ok: 0, n: 0 },
     settings: { script: 'kanji', romaji: 'after', audio: true, sound: true, rate: 0.9, goal: 60, kanaSets: ['basic'], flashDir: 'jp' },
   });
@@ -276,6 +317,8 @@ window.ML = (() => {
     if (t === 'e') return EBY.has(a + '|' + b);
     if (t === 'c') return !!FORMS[a] && VBY.has(b);
     if (t === 'k') return true;
+    if (t === 'r') return RBY.has(a) && !!RBY.get(a).questions[+b];
+    if (t === 'w') return !!STROKES[a];
     return false;
   }
   const dueKeys = () => { const now = Date.now(); return Object.keys(S.items).filter((k) => S.items[k].due <= now && keyValid(k)).sort((a, b) => S.items[a].due - S.items[b].due); };
@@ -303,7 +346,7 @@ window.ML = (() => {
   const liveStreak = () => { if (!S.streak.last) return 0; const gap = daysBetween(S.streak.last, dayStr()); return gap <= 1 + S.omamori ? S.streak.days : 0; };
   function ensureToday() {
     const t = dayStr();
-    if (S.today.date !== t) S.today = { date: t, answers: 0, correct: 0, maxCombo: 0, newItems: 0, reviewOK: 0, listenOK: 0, typedOK: 0, grammarOK: 0, kanjiOK: 0, numOK: 0, sprintBest: 0, matchDone: 0 };
+    if (S.today.date !== t) S.today = { date: t, answers: 0, correct: 0, maxCombo: 0, newItems: 0, reviewOK: 0, listenOK: 0, typedOK: 0, grammarOK: 0, kanjiOK: 0, numOK: 0, sprintBest: 0, matchDone: 0, writeOK: 0, readOK: 0 };
     if (S.quests.date !== t) S.quests = { date: t, claimed: [], bonus: false };
     return S.today;
   }
@@ -323,6 +366,8 @@ window.ML = (() => {
       if (q.cat === 'grammar') T.grammarOK++;
       if (q.cat === 'kanji') T.kanjiOK++;
       if (q.cat === 'num') { T.numOK++; S.numStats.ok++; }
+      if (q.cat === 'reading') { T.readOK = (T.readOK || 0) + 1; S.stats.readDone++; }
+      if (q.cat === 'write') { T.writeOK = (T.writeOK || 0) + 1; S.stats.written++; }
       if (q.mode === 'listen' || q.mode === 'dictate' || q.cat === 'sentence') T.listenOK++;
       if (q.kind === 'type') T.typedOK++;
       if (opt.review) T.reviewOK++;
@@ -363,6 +408,8 @@ window.ML = (() => {
     { id: 'sprint', label: 'Score 12+ in a Shinkansen Sprint', m: 'sprintBest', n: 12, r: 80 },
     { id: 'num', label: 'Read 8 numbers, times or dates', m: 'numOK', n: 8, r: 60 },
     { id: 'match', label: 'Finish a match game', m: 'matchDone', n: 1, r: 40 },
+    { id: 'read', label: 'Answer 6 reading questions', m: 'readOK', n: 6, r: 70 },
+    { id: 'write', label: 'Write 6 characters by hand', m: 'writeOK', n: 6, r: 70 },
   ];
   function todaysQuests() {
     ensureToday();
@@ -468,6 +515,8 @@ window.ML = (() => {
     ['album', 'ぜんぶ あつめた', 'Complete the sticker album', () => STICKERS.every((s) => S.stickers[s.id])],
     ['shop', 'おかいもの', 'Buy something at the shop', () => !!S.flags.bought],
     ['exam', 'ごうかく', 'Pass the N5 mock exam', () => !!S.stamps.exam],
+    ['reader', 'よみます', 'Get 50 reading questions right', () => S.stats.readDone >= 50],
+    ['writer', 'かきます', 'Write 100 characters by hand', () => S.stats.written >= 100],
     ['owl', 'よふかし', 'Study after 11 pm', () => !!S.flags.owl],
     ['bird', 'はやおき', 'Study before 7 am', () => !!S.flags.bird],
   ].map(([id, jp, desc, test]) => ({ id, jp, desc, test }));
@@ -488,14 +537,23 @@ window.ML = (() => {
       choose();
       speechSynthesis.onvoiceschanged = choose;
     },
-    say(text) {
+    say(text, opt = {}) {
       if (!this.ok || !text) return;
       try {
-        speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(speakable(text));
+        if (!opt.queue) speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(speakable(rubyToKana(text)));
         u.lang = 'ja-JP'; if (this.voice) u.voice = this.voice; u.rate = S.settings.rate || 0.9;
+        if (opt.pitch) u.pitch = opt.pitch;
+        if (opt.onend) u.onend = opt.onend;
         speechSynthesis.speak(u);
       } catch (e) { /* no audio */ }
+    },
+    // Reads lines in order, giving each speaker their own pitch. onLine(i) fires as each line starts.
+    sayLines(lines, onLine) {
+      this.stop();
+      const who = [...new Set(lines.map((l) => l.s))];
+      lines.forEach((l, i) => this.say(l.jp, { queue: true, pitch: who.indexOf(l.s) % 2 ? 0.8 : 1.2, onend: () => onLine && onLine(i + 1) }));
+      if (onLine) onLine(0);
     },
     stop() { if (this.ok) try { speechSynthesis.cancel(); } catch (e) { /* ignore */ } },
   };
@@ -532,7 +590,7 @@ window.ML = (() => {
   return {
     esc, shuffle, pick, uniqBy, dayStr, hasKanji, DAY, hashStr, rng, toHira, normKana, particleNorm, romajiToKana, answerVariants, typedMatches, speakable,
     VOCAB, VBY, KANA, KANJI, KBY, GRAMMAR, GBY, EXAMPLES, EBY, quizzable, posGroup, vKey, exampleFor, TITLES, STATIONS, SBY,
-    verbForms, adjForms, FORMS, CONJ_BY_LESSON, conjVerbs, conjAdjs, conjAnswer, I2A,
+    verbForms, adjForms, FORMS, CONJ_BY_LESSON, conjVerbs, conjAdjs, conjAnswer, canForm, I2A, READING, RBY, GUIDE, STROKES, rubyToKana, rubyToKanji,
     numKana, timeKana, HOURS, funKana, MONTHS, dayKana, COUNTERS, ageKana, D1,
     get S() { return S; }, defaults, adopt, save, connectRemote, isRemote: () => !!remote,
     stage, grade, mastery, keyValid, dueKeys, weakKeys, level, lvlFloor, rank, RANKS, liveStreak, ensureToday, record, bonus,

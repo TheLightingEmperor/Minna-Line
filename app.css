@@ -111,6 +111,7 @@ main { padding-block: 20px 70px; }
 .row-between { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
 .chooser { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip { border: 2px solid var(--rule); background: var(--panel); border-radius: 99px; padding: 5px 13px; font-size: 13px; font-weight: 700; }
+.chip:disabled { opacity: .45; cursor: default; }
 .chip[aria-pressed="true"] { background: var(--c, var(--line)); border-color: var(--c, var(--line)); color: var(--on-accent); }
 .back { background: none; border: 0; color: var(--muted); font-weight: 700; padding: 4px 0; display: inline-flex; align-items: center; gap: 6px; }
 .coin-i { display: inline-block; width: 1.1em; height: 1.1em; vertical-align: -0.18em; }
@@ -353,6 +354,37 @@ table.vocab td.kana { font-size: 17px; white-space: nowrap; }
 .reveal { display: grid; justify-items: center; gap: 4px; animation: popin .5s cubic-bezier(.2, 1.6, .4, 1) both; }
 @keyframes popin { from { transform: scale(.3); opacity: 0; } to { transform: none; opacity: 1; } }
 .reveal .e { font-size: 84px; line-height: 1.15; }
+
+/* reading */
+.passage { width: 100%; max-height: 300px; overflow: auto; text-align: left; background: var(--bg); border-radius: 14px; padding: 10px 14px; display: grid; gap: 6px; }
+.pline { display: flex; gap: 10px; font-size: 16px; line-height: 1.9; }
+.pline b { flex: none; font-size: 12px; color: var(--muted); padding-top: 4px; }
+.pline ruby rt, .rjp ruby rt { font-size: .55em; color: var(--muted); }
+.reader { gap: 4px; }
+.rline { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; padding: 8px 6px; border-radius: 12px; }
+.rline.on { background: var(--line-soft); }
+.rjp { font-size: 19px; line-height: 2; }
+details summary { cursor: pointer; font-weight: 700; font-size: 13px; }
+
+/* guidebook */
+.cellsay { background: none; border: 0; padding: 0; text-align: left; font-size: 16px; cursor: pointer; border-bottom: 2px dotted var(--rule); }
+.cellsay:hover { border-color: var(--line); }
+.tip { background: var(--coin-soft); border-radius: 12px; padding: 8px 12px; font-size: 14px; }
+
+/* handwriting */
+.strokebox { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 14px; align-items: center; }
+.strokes { width: 150px; height: 150px; background: var(--bg); border-radius: 14px; border: 2px solid var(--rule); }
+.sk { fill: none; stroke: var(--ink); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+.sgrid { fill: none; stroke: var(--rule); stroke-width: .7; stroke-dasharray: 2 2; }
+.padwrap { display: grid; justify-items: center; }
+.pad { width: min(100%, 340px); aspect-ratio: 1; background: var(--bg); border: 2px solid var(--rule); border-radius: 18px; touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
+.pad.nope { animation: shake .3s; }
+.sguide { fill: none; stroke: color-mix(in srgb, var(--ink) 16%, transparent); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+.sguide.sk { stroke: var(--line); stroke-width: 4; }
+.snext { fill: none; stroke: var(--line); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; opacity: .75; }
+.sdot { fill: var(--stamp); }
+.sdone { fill: none; stroke: var(--ink); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.sink { fill: none; stroke: var(--stamp); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
 
 /* overlays */
 .modal { position: fixed; inset: 0; background: rgba(28, 18, 40, .45); display: grid; place-items: center; z-index: 20; padding: 16px; }

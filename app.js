@@ -5,7 +5,7 @@
   const {
     esc, shuffle, pick, uniqBy, dayStr, hasKanji, DAY, hashStr, rng, toHira, normKana, particleNorm, romajiToKana, typedMatches,
     VOCAB, VBY, KANA, KANJI, KBY, GRAMMAR, GBY, EXAMPLES, EBY, quizzable, posGroup, vKey, exampleFor, STATIONS, SBY,
-    verbForms, adjForms, FORMS, CONJ_BY_LESSON, conjVerbs, conjAdjs, conjAnswer, numKana, timeKana, HOURS, MONTHS, dayKana, COUNTERS, ageKana, D1,
+    verbForms, adjForms, FORMS, CONJ_BY_LESSON, conjVerbs, conjAdjs, conjAnswer, canForm, READING, RBY, GUIDE, STROKES, rubyToKana, rubyToKanji, numKana, timeKana, HOURS, MONTHS, dayKana, COUNTERS, ageKana, D1,
     save, stage, grade, mastery, dueKeys, weakKeys, level, lvlFloor, rank, liveStreak, record, bonus, todaysQuests, claimQuest,
     SHOP, SHOP_BY, buy, STICKERS, GACHA_PRICE, spin, TROPHIES, checkTrophies, speech, sfx,
   } = ML;
@@ -229,6 +229,7 @@
       .sort((a, b) => a.sc - b.sc).map((o) => o.x);
     return uniqBy(scored, show).slice(0, n);
   }
+  const isKataWord = (v) => quizzable(v) && /^[\u30a0-\u30ff]+$/.test(v.kana) && v.kana.length >= 3;
   const vocabPool = (v) => VOCAB.filter((x) => quizzable(x) && Math.abs(x.L - v.L) <= 6 && x.L <= Math.max(v.L + 2, 4));
   function vocabAfter(v) {
     const ex = exampleFor(v);
@@ -247,6 +248,10 @@
     if ((mode === 'listen' || mode === 'dictate') && !speech.ok) mode = mode === 'listen' ? 'jp2en' : 'type';
     const pool = vocabPool(v);
     const base = { key: vKey(v), cat: 'vocab', mode, say: v.kana, after: vocabAfter(v), sayAfter: true };
+    if (mode === 'kanaread') {
+      const opts = shuffle([v, ...distractors(v, VOCAB.filter(isKataWord), 3, (x) => x.ro)]);
+      return { ...base, kind: 'mc', label: 'How do you read this?', prompt: `<div class="glyph mid">${esc(v.kana)}</div>`, options: opts.map((x) => ({ html: `<span class="pop" style="font-size:16px">${esc(x.ro)}</span>`, val: x.id })), answer: v.id };
+    }
     const playBtn = `<button class="btn primary" data-act="say" data-arg="${esc(v.kana)}">${ICON.say.replace('<svg', '<svg width="20" height="20"')} Play again</button>`;
     if (mode === 'jp2en' || mode === 'listen') {
       const opts = shuffle([v, ...distractors(v, pool, 3, (x) => x.en)]);
@@ -316,6 +321,15 @@
     const isJp = /[぀-ヿ]/.test(d.answer);
     return { key, cat: 'grammar', kind: 'mc', label: 'Choose', prompt: `<div class="en-q" style="font-size:19px">${esc(d.q)}</div>`, options: shuffle(d.options).map((o) => ({ html: isJp ? `<span style="font-size:17px">${esc(o)}</span>` : esc(o), val: o })), answer: d.answer, say: isJp ? d.answer : '', sayAfter: isJp, after: `<div class="ans">${esc(d.answer)}</div>${after}` };
   }
+  // Japanese word order is flexible: phrases marked with を, に, で or へ can swap places, so those
+  // reorderings count. Anything else (the topic, the verb, の phrases, adverbs) has to stay put.
+  const NOUN_KANA = new Set(VOCAB.filter((v) => v.pos === 'n').map((v) => v.kana));
+  function orderOK(got, tiles) {
+    if (got.length !== tiles.length) return false;
+    const moved = tiles.filter((t, i) => got[i] !== t);
+    // で on a noun can move (しんかんせんで), but んで/いで may be a verb's て-form (のんで), which can't.
+    return moved.every((t) => /[をにへ]$/.test(t) || (/で$/.test(t) && (!/[んい]で$/.test(t) || NOUN_KANA.has(t.slice(0, -1)))));
+  }
   function sentenceQ(e) {
     const pool = EXAMPLES.filter((x) => x !== e && x.en !== e.en && Math.abs(x.L - e.L) <= 3);
     const opts = shuffle([e, ...uniqBy(shuffle(pool), (x) => x.en).slice(0, 3)]);
@@ -324,22 +338,37 @@
       options: opts.map((x) => ({ html: esc(x.en), val: x.id })), answer: e.id, after: `<div class="ans">${esc(e.jp)}</div><div><i>${esc(e.ro)}</i></div><div>${esc(e.en)}</div><div class="small muted">${esc(e.g.title)} · Lesson ${e.L}</div>` };
   }
   const conjKey = (form, v) => `c|${form}|${v.id}`;
+  function wrongBases(base, v, ans) {
+    const wrong = new Set();
+    for (const g of [1, 2, 3]) { try { const f = verbForms(v, g); if (f[base]) wrong.add(f[base]); } catch (e) { /* skip */ } }
+    for (const [a, b] of [['って', 'んで'], ['んで', 'いて'], ['いて', 'って'], ['して', 'しって'], ['った', 'んだ'], ['ない', 'らない']]) if (ans.includes(a)) wrong.add(ans.replace(a, b));
+    const masu = v.kana.replace(/\s/g, ''), s = masu.slice(0, -2), p = s.slice(0, -1);
+    wrong.add(s + { te: 'て', nai: 'ない', dict: 'る', ta: 'た', nakatta: 'なかった' }[base]);
+    const misrules = {
+      te: ['って', 'んで', 'いて', 'して'].map((e) => p + e), ta: ['った', 'んだ', 'いた', 'した'].map((e) => p + e),
+      nai: [p + 'らない', p + 'わない', s + 'らない', p + 'かない'], dict: [p + 'る', p + 'う', s + 'るう', p + 'く'],
+      nakatta: [p + 'らなかった', s + 'なかった', p + 'わなかった', s + 'ないかった'],
+    }[base] || [];
+    const extra = shuffle(misrules.filter((w) => w !== ans && w.length > 1));
+    while (wrong.size < 6 && extra.length) wrong.add(extra.pop());
+    wrong.delete(ans);
+    return [...wrong];
+  }
   function conjQ(form, v, mode) {
     const F = FORMS[form];
     const ans = conjAnswer(form, v);
     const wrong = new Set();
-    if (F.verb) {
-      for (const g of [1, 2, 3]) { try { const f = verbForms(v, g); if (f[form]) wrong.add(f[form]); } catch (e) { /* skip */ } }
-      for (const [a, b] of [['って', 'んで'], ['んで', 'いて'], ['いて', 'って'], ['して', 'しって'], ['った', 'んだ'], ['ない', 'らない']]) if (ans.includes(a)) wrong.add(ans.replace(a, b));
-      const masu = v.kana.replace(/\s/g, ''), s = masu.slice(0, -2), p = s.slice(0, -1);
-      wrong.add(s + { te: 'て', nai: 'ない', dict: 'る', ta: 'た', nakatta: 'なかった' }[form]);
-      const misrules = {
-        te: ['って', 'んで', 'いて', 'して'].map((e) => p + e), ta: ['った', 'んだ', 'いた', 'した'].map((e) => p + e),
-        nai: [p + 'らない', p + 'わない', s + 'らない', p + 'かない'], dict: [p + 'る', p + 'う', s + 'るう', p + 'く'],
-        nakatta: [p + 'らなかった', s + 'なかった', p + 'わなかった', s + 'ないかった'],
-      }[form] || [];
-      const extra = shuffle(misrules.filter((w) => w !== ans && w.length > 1));
-      while (wrong.size < 5 && extra.length) wrong.add(extra.pop());
+    if (F.verb && F.base === 'stem') {
+      const f = verbForms(v);
+      for (const k of ['mneg', 'mpast', 'mpastneg', 'mshou', 'mseni', 'mtai']) if (k !== form) wrong.add(f[k]);
+      wrong.add(f.stem + 'ますでした'); wrong.add(f.stem + 'ませんました');
+    } else if (F.verb && F.base) {
+      const f = verbForms(v), base = f[F.base];
+      const wrap = (w) => (F.cut ? w.slice(0, -F.cut) : w) + F.suf;
+      for (const w of wrongBases(F.base, v, base)) wrong.add(wrap(w));
+      wrong.add(f.stem + F.suf.replace(/^ /, ''));
+    } else if (F.verb) {
+      for (const w of wrongBases(form, v, ans)) wrong.add(w);
     } else {
       wrong.add(adjForms(v, true)[form]);
       for (const f of ['aneg', 'apast', 'apastneg', 'ate']) if (f !== form) wrong.add(adjForms(v)[f]);
@@ -350,11 +379,23 @@
     const opts = shuffle([ans, ...shuffle([...wrong]).slice(0, 3)]);
     const kind = F.verb ? `Group ${v.pos[1]} verb` : v.pos === 'i-adj' ? 'い-adjective' : 'な-adjective';
     const prompt = `<div class="glyph mid">${jpHTML(v)}</div><div class="sub">${esc(v.en)} · ${kind}</div><div class="pill express" style="justify-self:center">→ ${esc(F.label)}</div>`;
-    const base = { key: conjKey(form, v), cat: 'conj', say: ans, sayAfter: true, after: `<div class="ans">${esc(ans)}</div><div class="small">${esc(v.kana)} → ${esc(F.label)} · ${kind}</div>` };
+    const base = { key: conjKey(form, v), cat: 'conj', say: ans, sayAfter: true, after: `<div class="ans">${esc(ans)}</div><div class="small">${esc(v.kana)} → ${esc(F.label)} · ${kind} · taught in Lesson ${F.L}</div>` };
     if ((mode && mode !== 'auto' ? mode : pick(['mc', 'type'])) === 'type') return { ...base, kind: 'type', label: 'Type the form', prompt, check: (inp) => particleNorm(normKana(romajiToKana(inp.trim(), true))) === particleNorm(normKana(ans)) };
     return { ...base, kind: 'mc', label: 'Pick the correct form', prompt, options: opts.map((o) => ({ html: `<span class="jpo">${esc(o)}</span>`, val: o })), answer: ans };
   }
-
+  // Reading and conversations
+  const rubyLine = (jp) => esc(jp).replace(/\{([^|}]+)\|([^}]+)\}/g, (_, k, r) => (S.settings.script === 'kana' ? r : S.settings.script === 'kanji-only' ? k : `<ruby>${k}<rt>${r}</rt></ruby>`));
+  const readingKeys = (r) => r.questions.map((_, i) => `r|${r.id}|${i}`);
+  const linesHTML = (r, cls = '') => `<div class="passage ${cls}">${r.lines.map((l) => `<div class="pline">${l.s ? `<b>${esc(l.s)}</b>` : ''}<span>${rubyLine(l.jp)}</span></div>`).join('')}</div>`;
+  function readingQ(r, i, mode) {
+    const d = r.questions[i], listen = mode === 'listen';
+    const isJp = /[\u3040-\u30ff]/.test(d.answer);
+    const play = `<button class="btn primary" data-act="playlines">${ICON.say.replace('<svg', '<svg width="20" height="20"')} Play the conversation</button>`;
+    return { key: `r|${r.id}|${i}`, cat: 'reading', mode: listen ? 'listen' : undefined, kind: 'mc', label: listen ? 'Listen, then answer' : r.type === 'conversation' ? 'Read the conversation' : 'Read the text', lines: listen ? r.lines : null, autoplay: listen,
+      prompt: `${listen ? play : linesHTML(r)}<div class="en-q" style="font-size:18px">${esc(d.qjp || '')}</div><div class="sub">${esc(d.q)}</div>`,
+      options: shuffle(d.options).map((o) => ({ html: isJp ? `<span class="jpo">${esc(o)}</span>` : esc(o), val: o })), answer: d.answer,
+      after: `<div class="ans">${esc(d.answer)}</div><details><summary>Show the text and translation</summary>${r.lines.map((l) => `<div class="pline"><span>${rubyLine(l.jp)}<br><span class="muted small">${esc(l.en)}</span></span></div>`).join('')}</details>` };
+  }
   // Numbers, prices, times, dates, counters, ages: generated, so they never run out.
   const NUM_SWAPS = [['さんびゃく', 'さんひゃく'], ['ろっぴゃく', 'ろくひゃく'], ['はっぴゃく', 'はちひゃく'], ['さんぜん', 'さんせん'], ['はっせん', 'はちせん'], ['よん', 'し'], ['なな', 'しち'], ['きゅう', 'く'],
     ['よじ', 'よんじ'], ['しちじ', 'ななじ'], ['くじ', 'きゅうじ'], ['いっぷん', 'いちふん'], ['さんぷん', 'さんふん'], ['よんぷん', 'よんふん'], ['ろっぷん', 'ろくふん'], ['はっぷん', 'はちふん'], ['じゅっぷん', 'じゅうふん'], ['にふん', 'にぷん'], ['ごふん', 'ごぷん'], ['ななふん', 'ななぷん'], ['はん', 'さんじゅうふん'],
@@ -430,6 +471,7 @@
     if (t === 'g') return grammarQ(GBY.get(a), +b);
     if (t === 'e') return sentenceQ(EBY.get(a + '|' + b));
     if (t === 'c') return conjQ(a, VBY.get(b), mode);
+    if (t === 'r') return readingQ(RBY.get(a), +b, mode);
     if (t === 'k') return kanaQ(KANA.find((x) => x.set === a && x.c === b), mode);
     return null;
   }
@@ -440,9 +482,10 @@
   const stationGrammar = (st) => GRAMMAR.filter((g) => g.lesson === st.L);
   const stationKanji = (st) => KANJI.filter((k) => k.lesson === st.L);
   const stationExamples = (st) => EXAMPLES.filter((e) => e.L === st.L);
+  const stationReading = (st) => READING.filter((r) => r.lesson === st.L);
   function stationConj(st) {
     const out = [];
-    for (const f of CONJ_BY_LESSON[st.L] || []) for (const v of FORMS[f].verb ? conjVerbs(st.L) : conjAdjs(st.L)) out.push([f, v]);
+    for (const f of CONJ_BY_LESSON[st.L] || []) for (const v of FORMS[f].verb ? conjVerbs(st.L) : conjAdjs(st.L)) if (canForm(f, v)) out.push([f, v]);
     return out;
   }
   const keyCache = new Map();
@@ -450,9 +493,9 @@
     if (keyCache.has(st.id)) return keyCache.get(st.id);
     let keys = [];
     if (st.kind === 'kana') keys = [...KANA.map(kanaKey), ...stationVocab(st).map(vKey)];
-    else if (st.kind === 'lesson') keys = [...stationVocab(st).map(vKey), ...stationGrammar(st).flatMap(drillKeys), ...stationKanji(st).map(kanjiKey)];
+    else if (st.kind === 'lesson') keys = [...stationVocab(st).map(vKey), ...stationGrammar(st).flatMap(drillKeys), ...stationKanji(st).map(kanjiKey), ...stationReading(st).flatMap(readingKeys)];
     else if (st.kind === 'kanji') keys = KANJI.map(kanjiKey);
-    else if (st.kind === 'verbs') keys = conjVerbs(20).flatMap((v) => ['te', 'nai', 'dict', 'ta'].map((f) => conjKey(f, v)));
+    else if (st.kind === 'verbs') keys = conjVerbs(20).flatMap((v) => ['mneg', 'mpast', 'mpastneg', 'te', 'nai', 'dict', 'ta'].map((f) => conjKey(f, v)));
     keyCache.set(st.id, keys);
     return keys;
   }
@@ -485,6 +528,9 @@
     gacha: () => go({ name: 'gacha' }),
     dict: () => go({ name: 'dict' }),
     mix: () => go({ name: 'mix' }),
+    reading: () => go({ name: 'reading' }),
+    read: (id) => go({ name: 'read', id }),
+    guide: (id) => go({ name: 'guide', id }),
   };
   function applySkin() { document.documentElement.dataset.skin = S.equip.skin; }
   function topbar() {
@@ -509,7 +555,7 @@
   function go(v) {
     speech.stop();
     view = v;
-    const map = { home: renderHome, station: () => renderStation(SBY.get(v.id) || STATIONS[1], v.tab), collection: () => renderCollection(v.tab), shop: renderShop, gacha: renderGacha, dict: renderDict, mix: renderMix };
+    const map = { home: renderHome, station: () => renderStation(SBY.get(v.id) || STATIONS[1], v.tab), collection: () => renderCollection(v.tab), shop: renderShop, gacha: renderGacha, dict: renderDict, mix: renderMix, reading: renderReadingRoom, read: () => renderReader(RBY.get(v.id)), guide: () => renderGuide(v.id) };
     (map[v.name] || renderHome)();
     window.scrollTo(0, 0);
   }
@@ -520,9 +566,9 @@
   function readiness() {
     const rows = [
       ['Kana', mastery(KANA.map(kanaKey))], ['Words', mastery(VOCAB.filter(quizzable).map(vKey))], ['Grammar', mastery(GRAMMAR.flatMap(drillKeys))],
-      ['Kanji', mastery(KANJI.map(kanjiKey))], ['Verbs', mastery(stationKeys(SBY.get('verbs')))], ['Numbers', numMastery()],
+      ['Kanji', mastery(KANJI.map(kanjiKey))], ['Verbs', mastery(stationKeys(SBY.get('verbs')))], ['Reading', mastery(READING.flatMap(readingKeys))], ['Numbers', numMastery()],
     ];
-    const w = { Kana: 0.1, Words: 0.33, Grammar: 0.27, Kanji: 0.14, Verbs: 0.1, Numbers: 0.06 };
+    const w = { Kana: 0.08, Words: 0.3, Grammar: 0.25, Kanji: 0.12, Verbs: 0.1, Reading: 0.1, Numbers: 0.05 };
     return { rows, total: rows.reduce((a, [k, m]) => a + m * w[k], 0) };
   }
   function greeting() {
@@ -590,6 +636,8 @@
           ${weak ? hubBtn('weak', 'Weak spots', 'にがて', `${weak} things you've missed before`) : ''}
           ${hubBtn('particles', 'Particle dojo', 'じょしの どうじょう', 'は・が・を・に・で and friends')}
           ${hubBtn('sentences', 'Sentence listening', 'ききとり', 'Hear real sentences, pick the meaning')}
+          ${hubBtn('reading', 'Reading room', 'よむ・はなす', `${READING.length} conversations and texts`)}
+          ${hubBtn('guide', 'Guidebook', 'ガイドブック', 'Cheat sheets for particles, verbs and more')}
           ${hubBtn('mix', 'Custom mix', 'ミックス', 'Pick lessons and question types')}
           ${hubBtn('dict', 'Dictionary', 'じしょ', `Search all ${VOCAB.length.toLocaleString('en-US')} words`)}
           ${hubBtn('gacha', 'Capsule machine', 'ガチャ', S.tickets ? `${S.tickets} free ticket${S.tickets > 1 ? 's' : ''}!` : `${GACHA_PRICE} yen a spin`)}
@@ -682,7 +730,10 @@
     const vk = () => prioritize(voc.map(vKey));
     const actions = {}, learn = [], play = [], gram = [], kana = [];
     if (st.kind === 'kana') {
-      kana.push(act('hira', 'Hiragana', 'Sounds and letters'), act('kata', 'Katakana', 'Sounds and letters'), act('ktype', 'Kana typing', 'See it, type the sound'), act('ksprint', 'Kana sprint', '60-second rush'));
+      kana.push(act('hira', 'Hiragana', 'Sounds and letters'), act('kata', 'Katakana', 'Sounds and letters'), act('ktype', 'Kana typing', 'See it, type the sound'), act('kread', 'Read katakana words', 'コーヒー, テレビ, タクシー…'), act('kwh', 'Write hiragana', 'Stroke order, by hand'), act('kwk', 'Write katakana', 'Stroke order, by hand'), act('ksprint', 'Kana sprint', '60-second rush'));
+      actions.kread = () => quizSession({ title: 'Read katakana words', keys: prioritize(VOCAB.filter((v) => isKataWord(v) && v.L <= 20).map(vKey)).slice(0, 15), mode: 'kanaread', back, color: c });
+      const writeKana = (set) => writeSession({ title: set === 'h' ? 'Write hiragana' : 'Write katakana', items: shuffle(KANA.filter((k) => k.set === set && k.grp !== 'combo' && S.settings.kanaSets.includes(k.grp))).sort((a, b) => stage(kanaKey(a)) - stage(kanaKey(b))).slice(0, 10).map(kanaWriteItem), back, color: c });
+      actions.kwh = () => writeKana('h'); actions.kwk = () => writeKana('k');
       actions.hira = () => quizSession({ title: 'Hiragana', keys: prioritize(kanaSel('h')).slice(0, 20), back, color: c });
       actions.kata = () => quizSession({ title: 'Katakana', keys: prioritize(kanaSel('k')).slice(0, 20), back, color: c });
       actions.ktype = () => quizSession({ title: 'Kana typing', keys: prioritize([...kanaSel('h'), ...kanaSel('k')]).slice(0, 20), mode: 'type', back, color: c });
@@ -712,9 +763,12 @@
       actions.conj = () => quizSession({ title: `${st.name}: forms`, keys: prioritize(cj.map(([f, v]) => conjKey(f, v))).slice(0, 12), back, color: c });
     }
     if (kj.length) {
-      gram.push(act('kj', 'Kanji', kj.map((k) => k.k).join('')));
+      gram.push(act('kj', 'Kanji', kj.map((k) => k.k).join('')), act('kw', 'Write the kanji', 'Stroke order, by hand'));
       actions.kj = () => quizSession({ title: `${st.name}: kanji`, keys: prioritize(kj.map(kanjiKey)).slice(0, 12), back, color: c });
+      actions.kw = () => writeSession({ title: `${st.name}: writing`, items: kj.slice(0, 10).map(kanjiWriteItem), back, color: c });
     }
+    const rd = stationReading(st), talk = [];
+    for (const r of rd) talk.push(`<button class="act" data-act="read" data-arg="${r.id}"><b>${r.type === 'conversation' ? 'Conversation' : 'Reading'}</b><span>${esc(r.title)}</span></button>`);
     actions.boss = () => {
       let keys;
       if (st.kind === 'kana') keys = [...shuffle(KANA.filter((k) => k.grp !== 'combo').map(kanaKey)).slice(0, 14), ...shuffle(voc.map(vKey)).slice(0, 6)];
@@ -746,7 +800,7 @@
       ${signHTML(st)}
       <div class="mbars">${mb.map(([k, m]) => `<div>${k} · ${Math.round(m * 100)}%${meter(m)}</div>`).join('')}</div>
       ${st.kind === 'kana' ? `<div class="row-between"><span class="muted small">Kana sets in drills:</span><div class="chooser">${['basic', 'voiced', 'combo'].map((s) => `<button class="chip" data-act="kset" data-arg="${s}" aria-pressed="${S.settings.kanaSets.includes(s)}">${{ basic: 'Basic', voiced: 'Dakuten ゛゜', combo: 'Combos きゃ' }[s]}</button>`).join('')}</div></div>` : ''}
-      ${group('Kana', 'かな', kana)}${group('Learn', 'まなぶ', learn)}${group('Grammar and more', 'ぶんぽう', gram)}${group('Play', 'あそぶ', play)}
+      ${group('Kana', 'かな', kana)}${group('Learn', 'まなぶ', learn)}${group('Grammar and more', 'ぶんぽう', gram)}${group('Read and talk', 'よむ・はなす', talk)}${group('Play', 'あそぶ', play)}
       ${bossCard(st, `20 questions. Land ${Math.ceil(20 * 0.8)} hits before you lose 5 hearts to win the stamp.`)}
       <div class="tabs" role="tablist">${tabs.map(([id, l]) => `<button role="tab" aria-selected="${id === tab}" data-act="tab" data-arg="${id}">${l}</button>`).join('')}</div>
       <div class="stack">${panel}</div>
@@ -773,10 +827,15 @@
       <div class="eyebrow">Combination sounds</div><div class="kgrid">${grp('combo').map(cell).join('')}</div><div class="muted small">Tap a letter to hear it.</div>`;
   }
   function kanjiModal(k) {
-    modal(`<div class="row-between"><div class="glyph">${esc(k.k)}</div><button class="btn" data-x>Close</button></div>
+    const m = modal(`<div class="row-between"><div class="glyph">${esc(k.k)}</div><button class="btn" data-x>Close</button></div>
+      ${STROKES[k.k] ? `<div class="strokebox">${strokeSVG(k.k)}<div class="stack"><button class="btn sm" data-replay>Replay stroke order</button><button class="btn sm primary" data-write>Write it</button></div></div>` : ''}
       <div><b>${esc(k.m)}</b> · ${k.strokes || '?'} strokes · first useful in Lesson ${k.lesson}</div>
       <div class="small">音読み on: ${esc((k.on || []).join('、') || '—')}<br>訓読み kun: ${esc((k.kun || []).join('、') || '—')}</div>
-      <div>${(k.words || []).map((w) => `<div class="ex">${sayBtn(w.r)}<div><div style="font-size:20px">${esc(w.w)} <span class="muted" style="font-size:15px">${esc(w.r)}</span></div><div class="en">${esc(w.m)}</div></div></div>`).join('')}</div>`);
+      <div>${(k.words || []).map((w) => `<div class="ex">${sayBtn(w.r)}<div><div style="font-size:20px">${esc(w.w)} <span class="muted" style="font-size:15px">${esc(w.r)}</span></div><div class="en">${esc(w.m)}</div></div></div>`).join('')}</div>`, (e) => {
+      if (e.target.closest('[data-replay]')) animateStrokes(m.querySelector('.strokes'));
+      if (e.target.closest('[data-write]')) { const back = { ...view }; m.remove(); writeSession({ title: `Write ${k.k}`, items: [kanjiWriteItem(k)], back }); }
+    });
+    const sv = m.querySelector('.strokes'); if (sv) animateStrokes(sv);
   }
 
   // ---------------------------------------------------------------- special stations
@@ -789,13 +848,14 @@
     render(`<div class="station" style="--c:${c}">${signHTML(st)}
       <p class="muted" style="margin:0">All ${KANJI.length} JLPT N5 kanji, grouped by the Minna no Nihongo lesson where you first need them. Tap one for readings and words.</p>
       <div class="chooser">${bands.map((b, i) => `<button class="chip" data-act="band" data-arg="${i}" aria-pressed="${sel === i}">Lessons ${b[0]}–${b[1] > 25 ? '25+' : b[1]}</button>`).join('')}<button class="chip" data-act="band" data-arg="all" aria-pressed="${sel === 'all'}">All</button></div>
-      ${group('Practise this group', 'れんしゅう', [act('km', 'Meanings', 'Kanji → meaning'), act('kr', 'Readings', 'Word → reading'), act('kw', 'Words', 'Meaning → kanji word'), act('ksp', 'Kanji sprint', '60-second rush')])}
+      ${group('Practise this group', 'れんしゅう', [act('km', 'Meanings', 'Kanji → meaning'), act('kr', 'Readings', 'Word → reading'), act('kw', 'Words', 'Meaning → kanji word'), act('kwr', 'Write them', 'Stroke order, by hand'), act('ksp', 'Kanji sprint', '60-second rush')])}
       ${bossCard(st, '20 kanji from all of N5. Win to take the Kanji Hall stamp.')}
       ${kanjiGrid(list)}</div>`, {
       band: (b) => { view.band = b === 'all' ? 'all' : +b; renderKanjiHall(st); },
       km: () => quizSession({ title: 'Kanji meanings', keys: prioritize(list.map(kanjiKey)).slice(0, 15), mode: 'meaning', back, color: c }),
       kr: () => quizSession({ title: 'Kanji readings', keys: prioritize(list.map(kanjiKey)).slice(0, 15), mode: 'reading', back, color: c }),
       kw: () => quizSession({ title: 'Kanji words', keys: prioritize(list.map(kanjiKey)).slice(0, 15), mode: 'word', back, color: c }),
+      kwr: () => writeSession({ title: 'Write the kanji', items: prioritize(list.map(kanjiKey)).slice(0, 10).map((key) => kanjiWriteItem(KBY.get(key.slice(2)))), back, color: c }),
       ksp: () => sprintSession({ id: 'kanji', title: 'Kanji sprint', make: () => kanjiQ(pick(list), pick(['meaning', 'reading'])), back }),
       boss: () => quizSession({ title: 'Kanji Hall: battle', keys: shuffle(KANJI.map(kanjiKey)).slice(0, 20), back, battle: st, color: 'var(--stamp)' }),
       kdetail: (k) => kanjiModal(KBY.get(k)),
@@ -803,27 +863,28 @@
   }
   function renderVerbs(st) {
     const back = { name: 'station', id: st.id };
-    const forms = view.forms || ['te'], maxL = view.maxL || 20, c = lineColor(st);
-    const keysFor = () => forms.flatMap((f) => (FORMS[f].verb ? conjVerbs(maxL) : conjAdjs(maxL)).map((v) => conjKey(f, v)));
+    const forms = view.forms || ['mneg', 'mpast', 'mpastneg'], maxL = view.maxL || 20, c = lineColor(st);
+    const keysFor = () => forms.flatMap((f) => (FORMS[f].verb ? conjVerbs(maxL) : conjAdjs(maxL)).filter((v) => canForm(f, v)).map((v) => conjKey(f, v)));
     const verbs = conjVerbs(maxL);
+    const fam = (id, label) => `<div class="field"><label>${label}</label><div class="chooser">${Object.entries(FORMS).filter(([, F]) => F.fam === id).map(([f, F]) => `<button class="chip" data-act="form" data-arg="${f}" aria-pressed="${forms.includes(f)}" title="Lesson ${F.L}">${esc(F.label)}</button>`).join('')}</div></div>`;
     render(`<div class="station" style="--c:${c}">${signHTML(st)}
-      <div class="field"><label>Forms</label><div class="chooser">${Object.entries(FORMS).map(([f, F]) => `<button class="chip" data-act="form" data-arg="${f}" aria-pressed="${forms.includes(f)}">${F.adj ? 'adj. ' : ''}${esc(F.label)}</button>`).join('')}</div></div>
+      ${fam('polite', 'Polite ます forms · Lessons 4–6')}${fam('plain', 'Plain forms · Lessons 14–20')}${fam('pattern', 'Patterns built on them · Lessons 13–25')}${fam('adj', 'Adjectives · Lessons 8–16')}
       <div class="field"><label>Words up to</label><div class="chooser">${[5, 10, 15, 20, 26].map((l) => `<button class="chip" data-act="maxl" data-arg="${l}" aria-pressed="${maxL === l}">${l > 25 ? 'All N5' : 'Lesson ' + l}</button>`).join('')}</div></div>
-      ${group('Practise', 'れんしゅう', [act('vq', 'Pick the form', 'Multiple choice'), act('vt', 'Type the form', 'Romaji or kana'), act('vsp', 'Forms sprint', '60-second rush')])}
-      ${bossCard(st, 'て・ない・dictionary・た forms mixed, 20 questions.')}
+      ${group('Practise', 'れんしゅう', [act('vq', 'Pick the form', 'Multiple choice'), act('vt', 'Type the form', 'Romaji or kana'), act('vsp', 'Forms sprint', '60-second rush'), `<button class="act" data-act="guide" data-arg="verbs"><b>Verb cheat sheet</b><span>Every form on one page</span></button>`])}
+      ${bossCard(st, 'ます・て・ない・dictionary・た forms mixed, 20 questions.')}
       <article class="gpoint"><h3>Verb groups at a glance</h3>
         <p><b>Group 1</b> (stem ends in an い-sound): the て-form depends on the last sound. い・ち・り → って, み・び・に → んで, き → いて, ぎ → いで, し → して. Exception: いきます → いって.</p>
         <p><b>Group 2</b> (stem ends in an え-sound, plus みます, おきます, かります, あびます, できます, います…): drop ます, add て / ない / る / た.</p>
         <p><b>Group 3</b>: します → して・しない・する・した. きます → きて・こない・くる・きた.</p></article>
-      <div class="tblwrap"><table class="vocab"><thead><tr><th>ます-form</th><th>Grp</th><th>て</th><th>ない</th><th>Dictionary</th><th>た</th><th>Meaning</th></tr></thead><tbody>
-        ${verbs.map((v) => { const f = verbForms(v); return `<tr><td class="kana">${esc(v.kana)}</td><td class="pop">${v.pos[1]}</td><td>${esc(f.te)}</td><td>${esc(f.nai)}</td><td>${esc(f.dict)}</td><td>${esc(f.ta)}</td><td class="small">${esc(v.en)}</td></tr>`; }).join('')}
+      <div class="tblwrap"><table class="vocab"><thead><tr><th>ます-form</th><th>Grp</th><th>ません</th><th>ました</th><th>ませんでした</th><th>て</th><th>ない</th><th>Dictionary</th><th>た</th><th>Meaning</th></tr></thead><tbody>
+        ${verbs.map((v) => { const f = verbForms(v); return `<tr><td class="kana">${esc(v.kana)}</td><td class="pop">${v.pos[1]}</td><td>${esc(f.mneg)}</td><td>${esc(f.mpast)}</td><td>${esc(f.mpastneg)}</td><td>${esc(f.te)}</td><td>${esc(f.nai)}</td><td>${esc(f.dict)}</td><td>${esc(f.ta)}</td><td class="small">${esc(v.en)}</td></tr>`; }).join('')}
       </tbody></table></div></div>`, {
-      form: (f) => { const s = new Set(forms); s.has(f) ? s.delete(f) : s.add(f); if (!s.size) s.add('te'); view.forms = [...s]; renderVerbs(st); },
+      form: (f) => { const s = new Set(forms); s.has(f) ? s.delete(f) : s.add(f); if (!s.size) s.add('mneg'); view.forms = [...s]; renderVerbs(st); },
       maxl: (l) => { view.maxL = +l; renderVerbs(st); },
       vq: () => quizSession({ title: 'Verb forms', keys: prioritize(keysFor()).slice(0, 15), mode: 'mc', back, color: c }),
       vt: () => quizSession({ title: 'Verb forms: typing', keys: prioritize(keysFor()).slice(0, 15), mode: 'type', back, color: c }),
       vsp: () => sprintSession({ id: 'verbs', title: 'Forms sprint', make: () => keyToQ(pick(keysFor()), 'mc'), back }),
-      boss: () => quizSession({ title: 'Verb Forge: battle', keys: shuffle(conjVerbs(20).flatMap((v) => ['te', 'nai', 'dict', 'ta'].map((f) => conjKey(f, v)))).slice(0, 20), mode: 'mc', back, battle: st, color: 'var(--stamp)' }),
+      boss: () => quizSession({ title: 'Verb Forge: battle', keys: shuffle(stationKeys(st)).slice(0, 20), mode: 'mc', back, battle: st, color: 'var(--stamp)' }),
     });
   }
   function renderNumbers(st) {
@@ -854,8 +915,8 @@
     const back = { name: 'station', id: st.id };
     render(`<div class="station" style="--c:${lineColor(st)}">${signHTML(st)}
       <article class="gpoint"><h3>Practice test, N5 style</h3>
-        <p>30 questions in the order of the real exam sections: kanji reading (漢字読み), writing (表記), vocabulary (語彙), grammar (文法) and listening (聴解). It draws on Lessons 1–25, the N5 word bank, numbers and all N5 kanji. Score 70% to collect the stamp.</p>
-        <p class="muted small">The real JLPT N5 has longer reading and listening passages. Use this to find weak spots, then drill them at their station.</p>
+        <p>About 33 questions in the order of the real exam sections: kanji reading (漢字読み), writing (表記), vocabulary (語彙), grammar (文法), reading (読解) and listening (聴解). It draws on Lessons 1–25, the N5 word bank, numbers and all N5 kanji. Score 70% to collect the stamp.</p>
+        <p class="muted small">Use this to find weak spots, then drill them at their station. The Guidebook explains how the real exam works.</p>
         <div><button class="btn primary" data-act="start">Start the mock exam</button></div></article>
       ${S.stamps.exam ? `<div class="muted">Best score: ${S.stamps.exam.score}%</div>` : ''}</div>`, {
       start: () => {
@@ -872,7 +933,10 @@
         qs.push({ ...numQ('date'), section: '語彙 Vocabulary' }, { ...numQ('counter'), section: '語彙 Vocabulary' });
         const drills = shuffle(GRAMMAR.flatMap((g) => g.drills.map((d, i) => [g, i]).filter(([, i]) => g.drills[i].type !== 'order')));
         drills.slice(0, 7).forEach(([g, i]) => qs.push({ ...grammarQ(g, i), section: '文法 Grammar' }));
-        shuffle(EXAMPLES).slice(0, 3).forEach((e) => qs.push({ ...sentenceQ(e), section: '聴解 Listening' }));
+        const psg = shuffle(READING.filter((r) => r.type === 'passage'))[0], cv = shuffle(READING.filter((r) => r.type === 'conversation'))[0];
+        if (psg) psg.questions.forEach((_, i) => qs.push({ ...readingQ(psg, i), section: '読解 Reading' }));
+        shuffle(EXAMPLES).slice(0, cv ? 2 : 3).forEach((e) => qs.push({ ...sentenceQ(e), section: '聴解 Listening' }));
+        if (cv) qs.push({ ...readingQ(cv, 0, 'listen'), section: '聴解 Listening' });
         quizSession({ title: 'N5 mock exam', questions: qs, back, exam: st, pass: 70, color: 'var(--stamp)', noRequeue: true });
       },
     });
@@ -912,41 +976,223 @@
       const g = e.target.closest('[data-go]'); if (g) { m.remove(); go({ name: 'station', id: g.dataset.go }); }
     });
   }
+  function mixPools(a, b) {
+    const inL = (L) => L >= a && L <= b;
+    const vs = VOCAB.filter((v) => quizzable(v) && inL(v.L));
+    const forms = [];
+    for (const f of Object.keys(FORMS)) {
+      if (FORMS[f].L > b) continue;
+      const all = (FORMS[f].verb ? conjVerbs(b) : conjAdjs(b)).filter((v) => canForm(f, v)), here = all.filter((v) => inL(v.L));
+      for (const v of here.length ? here : all) forms.push([conjKey(f, v), 'mc']);
+    }
+    return {
+      words: vs.map((v) => [vKey(v), 'auto']), listen: vs.map((v) => [vKey(v), 'listen']), typing: vs.map((v) => [vKey(v), 'type']),
+      grammar: GRAMMAR.filter((g) => inL(g.lesson)).flatMap(drillKeys).map((k) => [k]), sentences: EXAMPLES.filter((e) => inL(e.L)).map((e) => ['e|' + e.id]),
+      reading: READING.filter((r) => inL(r.lesson)).flatMap(readingKeys).map((k) => [k]),
+      kanji: KANJI.filter((k) => inL(k.lesson)).map((k) => [kanjiKey(k), 'auto']), forms,
+    };
+  }
   function renderMix() {
-    const mx = view.mx || (view.mx = { from: 1, to: Math.min(myMaxL(), 20), types: ['words', 'grammar'], n: 20 });
-    const types = [['words', 'Words'], ['listen', 'Listening'], ['typing', 'Typing'], ['grammar', 'Grammar'], ['sentences', 'Sentences'], ['kanji', 'Kanji'], ['forms', 'Verb forms'], ['numbers', 'Numbers']];
+    const mx = view.mx || (view.mx = { from: 1, to: Math.min(myMaxL(), 20), types: ['words', 'grammar', 'forms'], n: 20 });
+    const types = [['words', 'Words'], ['listen', 'Listening'], ['typing', 'Typing'], ['grammar', 'Grammar'], ['sentences', 'Sentences'], ['reading', 'Reading'], ['kanji', 'Kanji'], ['forms', 'Verb forms'], ['numbers', 'Numbers']];
     const Ls = Array.from({ length: 25 }, (_, i) => i + 1);
+    const a = Math.min(mx.from, mx.to), b = Math.max(mx.from, mx.to), pools = mixPools(a, b);
+    const count = (k) => (k === 'numbers' ? Infinity : pools[k].length);
+    const empty = types.filter(([k]) => !count(k));
+    const live = mx.types.filter((k) => count(k));
     render(`<div class="station"><button class="back" data-act="home">${ICON.back} Route map</button>
       <h1>ミックス · Custom mix</h1>
       <div class="card"><div class="field"><label for="mfrom">Lessons</label><div class="row-between" style="justify-content:flex-start">
         <select id="mfrom" class="chip">${Ls.map((l) => `<option value="${l}" ${l === mx.from ? 'selected' : ''}>Lesson ${l}</option>`).join('')}</select> to
         <select id="mto" class="chip">${Ls.map((l) => `<option value="${l}" ${l === mx.to ? 'selected' : ''}>Lesson ${l}</option>`).join('')}</select></div></div>
-      <div class="field"><label>Question types</label><div class="chooser">${types.map(([k, l]) => `<button class="chip" data-act="mt" data-arg="${k}" aria-pressed="${mx.types.includes(k)}">${l}</button>`).join('')}</div></div>
+      <div class="field"><label>Question types</label><div class="chooser">${types.map(([k, l]) => { const n = count(k); return `<button class="chip" data-act="mt" data-arg="${k}" aria-pressed="${live.includes(k)}" ${n ? '' : 'disabled'}>${l}${n === Infinity ? '' : ` <span class="muted">${n}</span>`}</button>`; }).join('')}</div>
+        ${empty.length ? `<div class="muted small">Not in these lessons: ${empty.map(([, l]) => l).join(', ')}. Verb forms start at Lesson 4, when the first verbs appear.</div>` : ''}</div>
       <div class="field"><label>How many</label><div class="chooser">${[10, 20, 30, 50].map((n) => `<button class="chip" data-act="mn" data-arg="${n}" aria-pressed="${mx.n === n}">${n}</button>`).join('')}</div></div>
-      <button class="btn primary" data-act="go">Start the mix</button></div></div>`, {
-      mt: (k) => { const s = new Set(mx.types); s.has(k) ? s.delete(k) : s.add(k); if (!s.size) s.add('words'); mx.types = [...s]; renderMix(); },
+      <button class="btn primary" data-act="go" ${live.length ? '' : 'disabled'}>${live.length ? 'Start the mix' : 'Pick a question type'}</button></div></div>`, {
+      mt: (k) => { const s = new Set(mx.types); s.has(k) ? s.delete(k) : s.add(k); mx.types = [...s]; renderMix(); },
       mn: (n) => { mx.n = +n; renderMix(); },
       go: () => {
-        const a = Math.min(mx.from, mx.to), b = Math.max(mx.from, mx.to), inL = (L) => L >= a && L <= b;
-        const vs = VOCAB.filter((v) => quizzable(v) && inL(v.L));
-        const pools = {
-          words: () => vs.map(vKey).map((k) => [k, 'auto']), listen: () => vs.map(vKey).map((k) => [k, 'listen']), typing: () => vs.map(vKey).map((k) => [k, 'type']),
-          grammar: () => GRAMMAR.filter((g) => inL(g.lesson)).flatMap(drillKeys).map((k) => [k]), sentences: () => EXAMPLES.filter((e) => inL(e.L)).map((e) => ['e|' + e.id]),
-          kanji: () => KANJI.filter((k) => inL(k.lesson)).map((k) => [kanjiKey(k), 'auto']), forms: () => [...conjAdjs(b).flatMap((v) => Object.keys(FORMS).filter((f) => FORMS[f].adj && FORMS[f].L <= b).map((f) => [conjKey(f, v), 'mc'])), ...conjVerbs(b).flatMap((v) => Object.keys(FORMS).filter((f) => FORMS[f].verb && FORMS[f].L <= b).map((f) => [conjKey(f, v), 'mc']))],
-        };
-        const per = Math.ceil(mx.n / mx.types.length), qs = [];
-        for (const t of mx.types) {
+        const per = Math.ceil(mx.n / live.length), qs = [];
+        for (const t of live) {
           if (t === 'numbers') { for (let i = 0; i < per; i++) qs.push(numQ()); continue; }
-          const p = pools[t]();
-          for (const [k, m] of shuffle(p.map((x) => ({ x, s: stage(x[0]) + Math.random() * 2 })).sort((u, v) => u.s - v.s).map((o) => o.x)).slice(0, per)) { const q = keyToQ(k, m); if (q) qs.push(q); }
+          for (const [k, m] of shuffle(pools[t].map((x) => ({ x, s: stage(x[0]) + Math.random() * 2 })).sort((u, v) => u.s - v.s).map((o) => o.x).slice(0, per))) { const q = keyToQ(k, m); if (q) qs.push(q); }
         }
-        if (!qs.length) { toast('Nothing in that range yet. Try different lessons or types.'); return; }
-        quizSession({ title: `Mix · Lessons ${a}–${b}`, questions: shuffle(qs).slice(0, mx.n), back: { name: 'mix' } });
+        quizSession({ title: `Mix · Lessons ${a}–${b}`, questions: shuffle(qs).slice(0, mx.n), back: { name: 'mix', mx } });
       },
     }, () => {
-      document.getElementById('mfrom').addEventListener('change', (e) => { mx.from = +e.target.value; });
-      document.getElementById('mto').addEventListener('change', (e) => { mx.to = +e.target.value; });
+      document.getElementById('mfrom').addEventListener('change', (e) => { mx.from = +e.target.value; renderMix(); });
+      document.getElementById('mto').addEventListener('change', (e) => { mx.to = +e.target.value; renderMix(); });
     });
+  }
+
+  // ---------------------------------------------------------------- reading room
+  function renderReadingRoom() {
+    const f = view.f || 'all';
+    const list = READING.filter((r) => f === 'all' || r.type === f);
+    const row = (r) => { const m = mastery(readingKeys(r)); return `<button class="hubbtn" data-act="read" data-arg="${r.id}"><span class="jp">${esc(r.titleJp || '')}</span><b>${esc(r.title)}</b><span>Lesson ${r.lesson} · ${r.type === 'conversation' ? 'Conversation' : esc(r.form || 'Reading')}</span>${meter(m)}</button>`; };
+    render(`<div class="station"><button class="back" data-act="home">${ICON.back} Route map</button>
+      <h1>よむ・はなす · Reading room</h1>
+      <p class="muted" style="margin:0">Short conversations and N5-style texts for every lesson. Each one has audio and three questions.</p>
+      <div class="chooser">${[['all', 'All'], ['conversation', 'Conversations'], ['passage', 'Reading texts']].map(([k, l]) => `<button class="chip" data-act="rf" data-arg="${k}" aria-pressed="${f === k}">${l}</button>`).join('')}</div>
+      ${list.length ? `<div class="hub">${list.map(row).join('')}</div>` : '<p class="muted">Nothing here yet.</p>'}</div>`, { rf: (k) => { view.f = k; renderReadingRoom(); } });
+  }
+  function renderReader(r) {
+    if (!r) return go({ name: 'reading' });
+    const i = READING.indexOf(r), prev = READING[i - 1], next = READING[i + 1];
+    const back = { name: 'read', id: r.id };
+    const showRo = !!view.ro, showEn = !!view.en;
+    const st = SBY.get('L' + r.lesson);
+    render(`<div class="station" style="--c:var(--line)"><button class="back" data-act="reading">${ICON.back} Reading room</button>
+      <div class="row-between"><div><div class="eyebrow">Lesson ${r.lesson} · ${r.type === 'conversation' ? 'Conversation' : esc(r.form || 'Reading')}</div><h1 style="font-size:24px">${esc(r.titleJp || r.title)}</h1><div class="muted">${esc(r.title)}</div></div>
+        ${st ? `<button class="btn sm" data-act="station" data-arg="${st.id}">Go to ${codeOf(st)}</button>` : ''}</div>
+      <div class="chooser">${speech.ok ? `<button class="chip" data-act="playall">Play all</button>` : ''}<button class="chip" data-act="tro" aria-pressed="${showRo}">Romaji</button><button class="chip" data-act="ten" aria-pressed="${showEn}">English</button></div>
+      <div class="card reader">${r.lines.map((l, n) => `<div class="rline" data-line="${n}">${sayBtn(rubyToKana(l.jp))}<div>${l.s ? `<b class="small muted">${esc(l.s)}</b>` : ''}<div class="rjp">${rubyLine(l.jp)}</div>${showRo ? `<div class="ro small muted">${esc(l.ro)}</div>` : ''}${showEn ? `<div class="small">${esc(l.en)}</div>` : ''}</div></div>`).join('')}</div>
+      <div class="row-between" style="justify-content:flex-start"><button class="btn primary" data-act="ans">Answer the questions</button>${r.type === 'conversation' && speech.ok ? '<button class="btn" data-act="ansl">Listening test</button>' : ''}</div>
+      <div class="row-between">${prev ? `<button class="btn sm ghost" data-act="read" data-arg="${prev.id}">← ${esc(prev.title)}</button>` : '<span></span>'}${next ? `<button class="btn sm ghost" data-act="read" data-arg="${next.id}">${esc(next.title)} →</button>` : '<span></span>'}</div></div>`, {
+      tro: () => { view.ro = !showRo; renderReader(r); }, ten: () => { view.en = !showEn; renderReader(r); },
+      playall: () => speech.sayLines(r.lines, (n) => { document.querySelectorAll('.rline').forEach((e, k) => e.classList.toggle('on', k === n)); }),
+      ans: () => quizSession({ title: r.title, keys: readingKeys(r), back, noRequeue: true }),
+      ansl: () => quizSession({ title: `${r.title}: listening`, questions: r.questions.map((_, n) => readingQ(r, n, 'listen')), back, noRequeue: true }),
+    });
+  }
+
+  // ---------------------------------------------------------------- guidebook
+  function renderGuide(id) {
+    const page = GUIDE.find((g) => g.id === id) || GUIDE[0];
+    if (!page) { render(`<button class="back" data-act="home">${ICON.back} Route map</button><p class="muted">The guidebook isn't loaded.</p>`); return; }
+    const cell = (c, head) => {
+      if (/wrong|incorrect|not this/i.test(head || '')) return `<s class="muted">${esc(c)}</s>`;
+      return /[\u3040-\u30ff\u4e00-\u9fff]/.test(c) && !/[（＿]/.test(c) && speech.ok ? `<button class="cellsay" data-act="say" data-arg="${esc(c)}">${esc(c)}</button>` : esc(c);
+    };
+    render(`<div class="station"><button class="back" data-act="home">${ICON.back} Route map</button>
+      <h1>ガイドブック · Guidebook</h1>
+      <div class="chooser">${GUIDE.map((g) => `<button class="chip" data-act="guide" data-arg="${g.id}" aria-pressed="${g === page}">${esc(g.title)}</button>`).join('')}</div>
+      <div><h2 style="font-size:22px">${esc(page.jp || '')} · ${esc(page.title)}</h2>${page.intro ? `<p class="muted" style="margin:6px 0 0">${esc(page.intro)}</p>` : ''}</div>
+      ${page.sections.map((s) => `<article class="gpoint"><h3>${esc(s.h)}</h3>${s.note ? `<p>${esc(s.note)}</p>` : ''}
+        ${s.rows ? `<div class="tblwrap"><table class="vocab">${s.headers ? `<thead><tr>${s.headers.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : ''}<tbody>${s.rows.map((r) => `<tr>${r.map((c, i) => `<td>${cell(c, s.headers && s.headers[i])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : ''}
+        ${s.tip ? `<div class="tip">${esc(s.tip)}</div>` : ''}</article>`).join('')}</div>`);
+  }
+
+  // ---------------------------------------------------------------- handwriting
+  function strokeSVG(c, cls = '') {
+    return `<svg class="strokes ${cls}" viewBox="0 0 109 109" role="img" aria-label="Stroke order for ${esc(c)}">${gridLines()}${(STROKES[c] || []).map((d) => `<path d="${d}" class="sk"/>`).join('')}</svg>`;
+  }
+  const gridLines = () => '<path d="M54.5 0V109M0 54.5H109" class="sgrid"/>';
+  function animateStrokes(svg) {
+    const ps = [...svg.querySelectorAll('.sk')];
+    if (reduced()) return;
+    let t = 0;
+    for (const p of ps) {
+      const L = p.getTotalLength(), d = Math.max(260, L * 9);
+      p.style.strokeDasharray = L; 
+      p.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: d, delay: t, fill: 'both', easing: 'ease-in-out' });
+      t += d + 130;
+    }
+  }
+  const kanjiWriteItem = (k) => ({ c: k.k, key: kanjiKey(k), en: k.m, sub: (k.kun && k.kun[0]) || (k.on && k.on[0]) || '', say: k.words && k.words[0] ? k.words[0].r : '' });
+  const kanaWriteItem = (k) => ({ c: k.c, key: kanaKey(k), en: k.r, sub: k.set === 'h' ? 'hiragana' : 'katakana', say: k.c });
+  const resample = (pts, n = 20) => {
+    const seg = [0]; for (let i = 1; i < pts.length; i++) seg[i] = seg[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y);
+    const total = seg[seg.length - 1] || 1, out = []; let j = 0;
+    for (let i = 0; i < n; i++) {
+      const t = (total * i) / (n - 1);
+      while (j < seg.length - 2 && seg[j + 1] < t) j++;
+      const u = (t - seg[j]) / ((seg[j + 1] - seg[j]) || 1);
+      out.push({ x: pts[j].x + (pts[j + 1] ? pts[j + 1].x - pts[j].x : 0) * u, y: pts[j].y + (pts[j + 1] ? pts[j + 1].y - pts[j].y : 0) * u });
+    }
+    return out;
+  };
+  const meanDist = (a, b) => a.reduce((s, p, i) => s + Math.hypot(p.x - b[i].x, p.y - b[i].y), 0) / a.length;
+  function writeSession(cfg) {
+    const items = cfg.items.filter((x) => STROKES[x.c]);
+    if (!items.length) { toast('No stroke data for these yet.'); return; }
+    view = { name: 'session' };
+    let i = 0, clean = 0, lvl = 0, memory = !!cfg.memory;
+    function show() {
+      const it = items[i];
+      if (!it) return finish();
+      const strokes = STROKES[it.c];
+      let n = 0, miss = 0, fails = 0, pts = null, hint = !memory;
+      render(`<div class="session" style="--c:${cfg.color || 'var(--line)'}">
+        <div class="sess-head"><button class="back" data-act="quit">${ICON.back} Quit</button><div class="progress"><i style="width:${(i / items.length) * 100}%"></i></div><div class="combo">${i + 1}/${items.length}</div></div>
+        <div class="qcard">
+          <div class="qtype"><span class="eyebrow">${memory ? 'Write it from memory' : 'Trace it in stroke order'}</span><div class="chooser"><button class="chip" data-act="mode" aria-pressed="${!memory}">Trace</button><button class="chip" data-act="mode" aria-pressed="${memory}">From memory</button></div></div>
+          <div class="prompt"><div class="en-q">${memory ? esc(it.en) : `${esc(it.c)} · ${esc(it.en)}`}</div><div class="sub">${esc(it.sub)} · ${strokes.length} stroke${strokes.length > 1 ? 's' : ''}</div></div>
+          <div class="padwrap"><svg id="pad" class="pad" viewBox="0 0 109 109" aria-label="Writing pad">${gridLines()}
+            <g id="guide">${strokes.map((d) => `<path d="${d}" class="sguide"/>`).join('')}</g><g id="done"></g><path id="nextp" class="snext" d=""/><circle id="dot" class="sdot" r="3.2" cx="-9" cy="-9"/><polyline id="ink" class="sink" points=""/></svg></div>
+          <div class="row-between"><span class="small muted" id="wmsg">Stroke 1 of ${strokes.length}</span><div class="chooser"><button class="chip" data-act="watch">Watch</button><button class="chip" data-act="hint">Hint</button><button class="chip" data-act="redo">Start over</button>${it.say ? `<button class="chip" data-act="say" data-arg="${esc(it.say)}">Hear it</button>` : ''}</div></div>
+        </div>
+        <div class="sess-foot"><span class="muted small">${esc(cfg.title)}</span><span class="muted small">Draw with your finger, pen or mouse</span></div></div>`, {
+        quit: () => go(cfg.back),
+        mode: () => { memory = !memory; show(); },
+        redo: () => show(),
+        hint: () => { hint = true; paint(); },
+        watch: () => { const g = document.getElementById('guide'); g.style.opacity = 1; [...g.children].forEach((p) => p.classList.add('sk')); animateStrokes(g.parentNode); setTimeout(() => { if (document.getElementById('guide') === g) { [...g.children].forEach((p) => { p.classList.remove('sk'); p.getAnimations().forEach((a) => a.cancel()); p.style.strokeDasharray = ''; }); g.style.opacity = ''; paint(); } }, strokes.length * 900 + 700); },
+      });
+      const refPts = (idx) => { const p = document.querySelectorAll('#guide path')[idx], L = p.getTotalLength(); return Array.from({ length: 20 }, (_, k) => { const q = p.getPointAtLength((L * k) / 19); return { x: q.x, y: q.y }; }); };
+      mount();
+      function paint() {
+        const pad = document.getElementById('pad'); if (!pad) return;
+        document.getElementById('guide').style.opacity = memory ? 0 : '';
+        const nextD = hint && n < strokes.length ? strokes[n] : '';
+        document.getElementById('nextp').setAttribute('d', nextD);
+        const dot = document.getElementById('dot');
+        if (nextD) { const s0 = refPts(n)[0]; dot.setAttribute('cx', s0.x); dot.setAttribute('cy', s0.y); } else { dot.setAttribute('cx', -9); dot.setAttribute('cy', -9); }
+      }
+      function mount() {
+        const pad = document.getElementById('pad'), ink = document.getElementById('ink');
+        paint();
+        const toLocal = (e) => { const r = pad.getBoundingClientRect(); return { x: ((e.clientX - r.left) / r.width) * 109, y: ((e.clientY - r.top) / r.height) * 109 }; };
+        const line = () => ink.setAttribute('points', pts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' '));
+        pad.addEventListener('pointerdown', (e) => { e.preventDefault(); try { pad.setPointerCapture(e.pointerId); } catch (x) { /* ok */ } pts = [toLocal(e)]; line(); });
+        pad.addEventListener('pointermove', (e) => { if (!pts) return; e.preventDefault(); pts.push(toLocal(e)); line(); });
+        const up = () => {
+          if (!pts) return;
+          const got = pts; pts = null; ink.setAttribute('points', '');
+          if (got.length < 2) { if (strokes[n] && strokes[n].length < 30) got.push({ x: got[0].x + 1, y: got[0].y + 1 }); else return; }
+          judge(got);
+        };
+        pad.addEventListener('pointerup', up); pad.addEventListener('pointercancel', () => { pts = null; ink.setAttribute('points', ''); });
+      }
+      function judge(got) {
+        const ref = refPts(n), mine = resample(got), fwd = meanDist(mine, ref), rev = meanDist([...mine].reverse(), ref);
+        const limit = memory ? 17 : 13;
+        const msg = document.getElementById('wmsg');
+        if (fwd <= limit) {
+          document.getElementById('done').insertAdjacentHTML('beforeend', `<path d="${strokes[n]}" class="sdone"/>`);
+          n++; fails = 0; if (!memory) hint = true; else hint = false; sfx.play('tap');
+          if (n >= strokes.length) return complete();
+          msg.textContent = `Stroke ${n + 1} of ${strokes.length}`;
+        } else {
+          miss++; fails++; sfx.play('bad');
+          msg.textContent = rev <= limit ? 'Right shape, wrong direction. Start from the dot.' : fails >= 2 ? 'Follow the highlighted stroke from the dot.' : 'Not quite. Try that stroke again.';
+          if (fails >= 2 || rev <= limit) hint = true;
+          const pad = document.getElementById('pad'); pad.classList.remove('nope'); void pad.getBBox(); pad.classList.add('nope');
+        }
+        paint();
+      }
+      function complete() {
+        const perfect = miss === 0;
+        if (perfect) clean++;
+        const isNew = stage(it.key) < 0;
+        if (perfect) grade(it.key, 2);
+        const g = record({ cat: 'write', kind: 'write' }, true, { isNew, combo: perfect ? clean : 0 });
+        if (g.levelUp) lvl = g.levelUp;
+        save(); sfx.play('ok');
+        document.getElementById('wmsg').textContent = perfect ? 'じょうず！ Perfect strokes.' : `Done, with ${miss} retr${miss === 1 ? 'y' : 'ies'}.`;
+        if (it.say && S.settings.audio) speech.say(it.say);
+        setTimeout(() => { i++; show(); }, 750);
+      }
+    }
+    function finish() {
+      render(`<div class="session"><div class="qcard result">${mascotSVG('cheer', { cls: 'hop' })}<div class="eyebrow">${esc(cfg.title)}</div><div class="score">${clean}/${items.length}</div>
+        <div class="gains"><span class="pill">written with no retries</span></div>
+        <div class="row-between" style="justify-content:center"><button class="btn primary" data-act="again">${memory ? 'Again' : 'Now from memory'}</button><button class="btn" data-act="quit">Back</button></div></div></div>`,
+        { quit: () => go(cfg.back), again: () => writeSession({ ...cfg, memory: true }) });
+      if (clean === items.length) petals(16);
+      setTimeout(() => celebrate(lvl), 300);
+    }
+    show();
   }
 
   // ---------------------------------------------------------------- collection, shop, capsules
@@ -1066,6 +1312,7 @@
         check: () => checkTyped(q),
         checkorder: () => checkOrder(q),
         skip: () => answer(q, false),
+        playlines: () => speech.sayLines(q.lines),
         reveal: (a, el) => { const r = document.getElementById('rv'); if (r) { r.hidden = false; el.hidden = true; } },
       }, () => mountQ(q));
     }
@@ -1078,7 +1325,8 @@
       return '';
     }
     function mountQ(q) {
-      if (q.autoplay && q.say) setTimeout(() => speech.say(q.say), 150);
+      if (q.autoplay && q.lines) setTimeout(() => speech.sayLines(q.lines), 150);
+      else if (q.autoplay && q.say) setTimeout(() => speech.say(q.say), 150);
       if (q.kind === 'type') {
         const inp = document.getElementById('typein'), live = document.getElementById('live');
         inp.focus();
@@ -1098,10 +1346,10 @@
       answer(q, q.check(inp.value));
     }
     function checkOrder(q) {
-      const got = [...document.querySelectorAll('#tans .tile')].map((t) => t.textContent).join(' ');
-      if (!got) return;
+      const got = [...document.querySelectorAll('#tans .tile')].map((t) => t.textContent);
+      if (!got.length) return;
       document.querySelectorAll('.tile').forEach((t) => (t.disabled = true));
-      answer(q, got.replace(/\s/g, '') === q.answer.replace(/\s/g, ''));
+      answer(q, orderOK(got, q.tiles));
     }
     function answer(q, ok, val) {
       if (st.locked) return;
@@ -1383,7 +1631,8 @@
         <div class="field"><label>Sound effects</label>${seg('sound', [[true, 'On'], [false, 'Off']])}</div>
         <div class="field"><label for="bk">Backup</label><div class="muted small">Progress saves automatically${ML.isRemote() ? ' to your account' : ' in this browser'}. Copy this text to move it somewhere else, or paste a backup and press Restore.</div>
           <textarea id="bk" rows="3"></textarea>
-          <div class="seg"><button class="chip" data-op="copy">Copy backup</button><button class="chip" data-op="restore">Restore from text</button><button class="chip" data-op="reset" style="color:var(--bad)">${armed ? 'Press again to erase everything' : 'Reset all progress'}</button></div></div>`;
+          <div class="seg"><button class="chip" data-op="copy">Copy backup</button><button class="chip" data-op="restore">Restore from text</button><button class="chip" data-op="reset" style="color:var(--bad)">${armed ? 'Press again to erase everything' : 'Reset all progress'}</button></div></div>
+        <div class="muted small">Stroke order data from <a href="https://kanjivg.tagaini.net" target="_blank" rel="noopener">KanjiVG</a> by Ulrich Apel, CC BY-SA 3.0.</div>`;
       box.querySelector('#bk').value = JSON.stringify(ML.S);
     };
     draw();
@@ -1413,5 +1662,5 @@
   go(SBY.has(hash) ? { name: 'station', id: hash } : { name: 'home' });
   window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (SBY.has(h)) go({ name: 'station', id: h }); });
   setTimeout(() => ML.connectRemote(() => { applySkin(); refresh(); }), 0);
-  window.__minna = { ML, keyToQ, numQ, stationKeys, conjKey, go, quizSession, VOCAB, KANJI, GRAMMAR, STATIONS };
+  window.__minna = { ML, keyToQ, numQ, stationKeys, conjKey, go, quizSession, writeSession, VOCAB, KANJI, GRAMMAR, STATIONS };
 })();

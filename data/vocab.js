@@ -1915,7 +1915,7 @@ window.VOCAB = [
 "kanji": "船",
 "ro": "fune",
 "en": "ship",
-"pos": "exp",
+"pos": "n",
 "id": "5:ふね"
 },
 {
@@ -1958,7 +1958,7 @@ window.VOCAB = [
 "L": 5,
 "kana": "タクシー",
 "kanji": "",
-"ro": "takushii",
+"ro": "takushī",
 "en": "taxi",
 "pos": "n",
 "id": "5:タクシー"
@@ -2366,7 +2366,7 @@ window.VOCAB = [
 "kana": "こうしえん",
 "kanji": "甲子園",
 "ro": "Kōshien",
-"en": "Kōshien (town/stadium area in Osaka)",
+"en": "Kōshien (town/stadium area near Osaka)",
 "pos": "n",
 "cat": "proper",
 "id": "5:こうしえん"
@@ -3042,7 +3042,7 @@ window.VOCAB = [
 "L": 7,
 "kana": "ホッチキス",
 "kanji": "",
-"ro": "hocchikisu",
+"ro": "hotchikisu",
 "en": "stapler",
 "pos": "n",
 "id": "7:ホッチキス"
@@ -3116,7 +3116,7 @@ window.VOCAB = [
 "kanji": "お金",
 "ro": "okane",
 "en": "money",
-"pos": "exp",
+"pos": "n",
 "id": "7:おかね"
 },
 {
@@ -4426,7 +4426,7 @@ window.VOCAB = [
 "L": 10,
 "kana": "スイッチ",
 "kanji": "",
-"ro": "suicchi",
+"ro": "suitchi",
 "en": "switch",
 "pos": "n",
 "id": "10:スイッチ"
@@ -4804,7 +4804,7 @@ window.VOCAB = [
 "L": 11,
 "kana": "サンドイッチ",
 "kanji": "",
-"ro": "sandoicchi",
+"ro": "sandoitchi",
 "en": "sandwich",
 "pos": "n",
 "id": "11:サンドイッチ"
@@ -4932,7 +4932,7 @@ window.VOCAB = [
 "kanji": "姉",
 "ro": "ane",
 "en": "my older sister",
-"pos": "exp",
+"pos": "n",
 "id": "11:あね"
 },
 {
@@ -7054,7 +7054,7 @@ window.VOCAB = [
 "L": 17,
 "kana": "しゅっちょうします",
 "kanji": "出張します",
-"ro": "shucchō shimasu",
+"ro": "shutchō shimasu",
 "en": "go on a business trip",
 "pos": "v3",
 "id": "17:しゅっちょうします"
@@ -7083,7 +7083,7 @@ window.VOCAB = [
 "kanji": "危ない",
 "ro": "abunai",
 "en": "dangerous",
-"pos": "n",
+"pos": "i-adj",
 "id": "17:あぶない"
 },
 {

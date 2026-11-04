@@ -277,7 +277,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "＿＿は きょうしつです。", answer: "ここ", options: ["ここ", "これ", "この", "どこ"], en: "This place (where we are) is the classroom." },
-      { type: "fill", jp: "＿＿は じむしょです。", answer: "あそこ", options: ["あそこ", "あれ", "あの", "どこ"], en: "Over there is the office." },
+      { type: "fill", jp: "＿＿は じむしょです。", answer: "あそこ", options: ["あそこ", "ここ", "あの", "どこ"], en: "Over there is the office." },
       { type: "order", tiles: ["あそこは", "かいぎしつ", "です"], en: "Over there is the meeting room." },
       { type: "choose", q: "Which word refers to a PLACE (not a thing)?", answer: "そこ", options: ["そこ", "それ", "その", "そう"] },
       { type: "choose", q: "You and a friend are both standing in the cafeteria. How do you say 'This is the cafeteria'?", answer: "ここは しょくどうです。", options: ["そこは しょくどうです。", "あそこは しょくどうです。", "これは しょくどうです。", "ここは しょくどうです。"] }
@@ -299,7 +299,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "ミラーさんは かいぎしつ＿＿。", answer: "です", options: ["です", "の", "か", "を"], en: "Mr. Miller is in the meeting room." },
       { type: "order", tiles: ["エレベーターは", "あそこ", "です"], en: "The elevator is over there." },
       { type: "order", tiles: ["じどうはんばいきは", "どこ", "ですか"], en: "Where is the vending machine?" },
-      { type: "choose", q: "'かいぎしつは なんがいですか。' — It's on the 3rd floor. Which answer is correct?", answer: "さんがいです。", options: ["さんがいです。", "さんかいです。", "みっかいです。", "さんがいですか。"] },
+      { type: "choose", q: "'かいぎしつは なんがいですか。' — It's on the 3rd floor. Which answer is correct?", answer: "さんがいです。", options: ["さんがいです。", "さんばんです。", "みっかいです。", "さんがいですか。"] },
       { type: "choose", q: "How do you say: 'Where is Ms. Sato?'", answer: "さとうさんは どこですか。", options: ["さとうさんは だれですか。", "さとうさんは どこです。", "どこは さとうさんですか。", "さとうさんは どこですか。"] }
     ]
   },
@@ -436,7 +436,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "まいあさ しちじ＿＿ おきます。", answer: "に", options: ["に", "で", "を", "の"], en: "I get up at seven every morning." },
-      { type: "fill", jp: "げつようび＿＿ やすみます。", answer: "に", options: ["に", "を", "で", "の"], en: "I take Mondays off." },
+      { type: "fill", jp: "げつようび＿＿ やすみます。", answer: "に", options: ["に", "へ", "で", "の"], en: "I take Mondays off." },
       { type: "order", tiles: ["わたしは", "じゅうにじに", "ねます"], en: "I go to bed at twelve." },
       { type: "choose", q: "Which sentence is WRONG?", answer: "あしたに はたらきます。", options: ["じゅうじに ねます。", "あしたに はたらきます。", "あした はたらきます。", "まいにち べんきょうします。"] },
       { type: "choose", q: "Which time word does NOT take に?", answer: "きょう", options: ["ろくじ", "くじはん", "きょう", "ごご さんじ"] },
@@ -808,7 +808,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "わたしは ちち＿＿ とけいを もらいました。", answer: "に", options: ["に", "を", "へ", "で"], en: "I received a watch from my father." },
-      { type: "fill", jp: "ぎんこう＿＿ おかねを かりました。", answer: "から", options: ["から", "を", "で", "へ"], en: "I borrowed money from the bank." },
+      { type: "fill", jp: "ぎんこう＿＿ おかねを かりました。", answer: "から", options: ["から", "を", "と", "へ"], en: "I borrowed money from the bank." },
       { type: "fill", jp: "わたしは カリナさんに ほんを ＿＿。", answer: "かりました", options: ["かりました", "かしました", "あげました", "おしえました"], en: "I borrowed a book from Karina." },
       { type: "order", tiles: ["わたしは", "せんせいに", "にほんごを", "ならいます"], en: "I learn Japanese from my teacher." },
       { type: "choose", q: "How do you say: 'I received flowers from Maria.'?", answer: "マリアさんに はなを もらいました。", options: ["マリアさんに はなを あげました。", "マリアさんを はなに もらいました。", "マリアさんに はなを もらいました。", "マリアさんで はなを もらいました。"] },
@@ -988,7 +988,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "こんばん じかん＿＿ ありますか。", answer: "が", options: ["が", "を", "で", "へ"], en: "Do you have time tonight?" },
       { type: "order", tiles: ["きょうは", "ようじが", "あります"], en: "I have something to do today." },
       { type: "order", tiles: ["サントスさんは", "にほんごが", "すこし", "わかります"], en: "Mr. Santos understands a little Japanese." },
-      { type: "choose", q: "Which sentence is correct?", answer: "わたしは えいごが わかります。", options: ["わたしは えいごを わかります。", "わたしは えいごで わかります。", "わたしは えいごが わかります。", "わたしは えいごに わかります。"] },
+      { type: "choose", q: "Which sentence is correct?", answer: "わたしは えいごが わかります。", options: ["わたしは えいごを わかります。", "わたしは えいごへ わかります。", "わたしは えいごが わかります。", "わたしは えいごに わかります。"] },
       { type: "choose", q: "'おかねが ありません' means…", answer: "I don't have any money.", options: ["There is no bank.", "I didn't buy anything.", "I don't have any money.", "Money isn't important."] }
     ]
   },
