@@ -63,15 +63,22 @@ window.ML = (() => {
   const speakable = (kana) => String(kana).split(/\s*[\/／]\s*/)[0].replace(/[（(].*?[）)]/g, '').replace(/[～〜［］\[\]]/g, '');
 
   // ---------------------------------------------------------------- data
-  const CORE = (window.VOCAB || []).filter((v) => v.kana && v.en);
+  // vocab.js comes from the lesson notes; the overlay holds the cleaned wording, grouping and usage on top of it.
+  const OVERLAY = window.VOCAB_OVERLAY || {};
+  const CORE = [...(window.VOCAB || []).map((v) => ({ ...v, ...OVERLAY[`${v.L}:${v.kana}`] })), ...(window.VOCAB_ADD || []).map((v) => ({ ...v, id: `${v.L}:${v.kana}` }))].filter((v) => v.kana && v.en);
   const coreKey = new Set(CORE.map((v) => v.kana + '|' + (v.kanji || '')));
-  const EXTRA = (window.VOCAB_EXTRA || []).filter((v) => v.kana && v.en && !coreKey.has(v.kana + '|' + (v.kanji || ''))).map((v) => ({ ...v, id: `${v.L}:${v.kana}${v.kanji ? ':' + v.kanji : ''}` }));
+  const EXTRA = (window.VOCAB_EXTRA || []).filter((v) => v.kana && v.en && !coreKey.has(v.kana + '|' + (v.kanji || ''))).map((v) => ({ ...v, ...OVERLAY[`${v.L}:${v.kana}`], id: `${v.L}:${v.kana}${v.kanji ? ':' + v.kanji : ''}` }));
   const VOCAB = uniqBy([...CORE, ...EXTRA], (v) => v.id);
   const VBY = new Map(VOCAB.map((v) => [v.id, v]));
   const KANA = window.KANA || [];
   const KANJI = window.KANJI || [];
   const KBY = new Map(KANJI.map((k) => [k.k, k]));
-  const GRAMMAR = (window.GRAMMAR || []).slice().sort((a, b) => a.lesson - b.lesson);
+  const STUDY = window.GRAMMAR_STUDY || {};
+  const GRAMMAR = (window.GRAMMAR || []).map((g) => {
+    const st = STUDY[g.id];
+    return st ? { ...g, title: st.title || g.title, meaning: st.meaning || g.meaning, examples: st.examples || g.examples, study: st } : g;
+  }).sort((a, b) => a.lesson - b.lesson);
+  const LESSON_GUIDE = window.LESSON_GUIDE || {};
   const GBY = new Map(GRAMMAR.map((g) => [g.id, g]));
   const EXAMPLES = GRAMMAR.flatMap((g) => g.examples.map((x, i) => ({ ...x, id: `${g.id}|${i}`, L: g.lesson, g })));
   const EBY = new Map(EXAMPLES.map((e) => [e.id, e]));
@@ -84,6 +91,10 @@ window.ML = (() => {
   const quizzable = (v) => v.cat !== 'proper';
   const posGroup = (v) => ((v.pos || 'n').startsWith('v') ? 'v' : v.pos === 'i-adj' || v.pos === 'na-adj' ? 'adj' : v.pos === 'exp' ? 'exp' : 'n');
   const vKey = (v) => 'v|' + v.id;
+  // Word groups for the study lists, in display order.
+  const GROUPS = [['verbs', 'Verbs', 'どうし'], ['i-adj', 'い-adjectives', 'いけいようし'], ['na-adj', 'な-adjectives', 'なけいようし'], ['people', 'People', 'ひと'], ['places', 'Places', 'ばしょ'], ['things', 'Things', 'もの'], ['food', 'Food and drink', 'たべもの'], ['body', 'Body and health', 'からだ'], ['nature', 'Nature and weather', 'しぜん'], ['time', 'Time', 'じかん'], ['numbers', 'Numbers', 'かず'], ['questions', 'Question words', 'ぎもんし'], ['adverbs', 'Adverbs', 'ふくし'], ['connectors', 'Connectors', 'つなぎ'], ['suffixes', 'Suffixes and counters', 'じょすうし'], ['phrases', 'Phrases', 'フレーズ'], ['countries', 'Countries and languages', 'くに'], ['names', 'Names', 'なまえ'], ['other', 'Other', 'その ほか']];
+  const CAT_GROUP = { misc: 'things', people: 'people', family: 'people', nature: 'nature', weather: 'nature', time: 'time', calendar: 'time', adverbs: 'adverbs', expressions: 'phrases', clothes: 'things', things: 'things', school: 'things', colors: 'things', food: 'food', places: 'places', directions: 'places', counters: 'suffixes', body: 'body', questions: 'questions' };
+  const groupOf = (v) => v.grp || (/^v[123]$/.test(v.pos) ? 'verbs' : v.pos === 'i-adj' || v.pos === 'na-adj' ? v.pos : v.pos === 'adv' ? 'adverbs' : v.pos === 'exp' ? 'phrases' : v.pos === 'q' ? 'questions' : CAT_GROUP[v.cat] || (v.cat === 'proper' ? 'names' : v.cat === 'country' ? 'countries' : 'other'));
   const exCache = new Map();
   function exampleFor(v) {
     if (exCache.has(v.id)) return exCache.get(v.id);
@@ -590,7 +601,7 @@ window.ML = (() => {
   return {
     esc, shuffle, pick, uniqBy, dayStr, hasKanji, DAY, hashStr, rng, toHira, normKana, particleNorm, romajiToKana, answerVariants, typedMatches, speakable,
     VOCAB, VBY, KANA, KANJI, KBY, GRAMMAR, GBY, EXAMPLES, EBY, quizzable, posGroup, vKey, exampleFor, TITLES, STATIONS, SBY,
-    verbForms, adjForms, FORMS, CONJ_BY_LESSON, conjVerbs, conjAdjs, conjAnswer, canForm, I2A, READING, RBY, GUIDE, STROKES, rubyToKana, rubyToKanji,
+    verbForms, adjForms, FORMS, CONJ_BY_LESSON, conjVerbs, conjAdjs, conjAnswer, canForm, I2A, READING, RBY, GUIDE, STROKES, rubyToKana, rubyToKanji, LESSON_GUIDE, GROUPS, groupOf,
     numKana, timeKana, HOURS, funKana, MONTHS, dayKana, COUNTERS, ageKana, D1,
     get S() { return S; }, defaults, adopt, save, connectRemote, isRemote: () => !!remote,
     stage, grade, mastery, keyValid, dueKeys, weakKeys, level, lvlFloor, rank, RANKS, liveStreak, ensureToday, record, bonus,

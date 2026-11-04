@@ -241,7 +241,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     drills: [
       { type: "fill", jp: "わたしは あたらしい くるま＿＿ ほしいです。", answer: "が", options: ["が", "を", "に", "で"], en: "I want a new car." },
       { type: "fill", jp: "いまは なにも ほしく＿＿。", answer: "ないです", options: ["ないです", "じゃ ありません", "ません", "なかったです"], en: "I don't want anything right now." },
-      { type: "choose", q: "ほしい conjugates like…", answer: "an い-adjective", options: ["an い-adjective", "a な-adjective", "a group I verb", "a noun"] },
+      { type: "choose", q: "ほしい conjugates like…", answer: "an い-adjective", options: ["an い-adjective", "a な-adjective", "a Group 1 verb", "a noun"] },
       { type: "choose", q: "Which sentence is correct?", answer: "わたしは ともだちが ほしいです。", options: ["わたしは ともだちが ほしいです。", "わたしは ともだちを ほしいです。", "わたしは ともだちが ほしいます。", "わたしは ともだちが ほしいだです。"] },
       { type: "order", tiles: ["わたしは", "あたらしい", "くつが", "ほしいです"], en: "I want new shoes." },
       { type: "order", tiles: ["いま", "なにが", "いちばん", "ほしいですか"], en: "What do you want most right now?" }
@@ -314,7 +314,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     lesson: 14,
     title: "Verb groups & the て-form",
     meaning: "how to make the て-form",
-    explain: "Group I (い-sound before ます): い・ち・り → って (かいます→かって, まちます→まって); み・び・に → んで (のみます→のんで, よびます→よんで); き → いて, ぎ → いで (かきます→かいて, いそぎます→いそいで); し → して. BIG exception: いきます → いって. Group II (mostly え-sound before ます, plus some like みます, おきます, かります, います): drop ます + て (たべて, みて). Group III: します → して, きます → きて.",
+    explain: "Group 1 (い-sound before ます): い・ち・り → って (かいます→かって, まちます→まって); み・び・に → んで (のみます→のんで, よびます→よんで); き → いて, ぎ → いで (かきます→かいて, いそぎます→いそいで); し → して. BIG exception: いきます → いって. Group 2 (mostly え-sound before ます, plus some like みます, おきます, かります, います): drop ます + て (たべて, みて). Group 3: します → して, きます → きて.",
     examples: [
       { jp: "かいます → かって・まちます → まって・かえります → かえって", ro: "kaimasu → katte, machimasu → matte, kaerimasu → kaette", en: "い・ち・り → って" },
       { jp: "のみます → のんで・よびます → よんで・しにます → しんで", ro: "nomimasu → nonde, yobimasu → yonde, shinimasu → shinde", en: "み・び・に → んで" },
@@ -325,7 +325,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "choose", q: "て-form of いきます?", answer: "いって", options: ["いって", "いいて", "いきて", "いんで"] },
       { type: "choose", q: "て-form of よびます?", answer: "よんで", options: ["よんで", "よびて", "よって", "よいで"] },
       { type: "choose", q: "て-form of いそぎます?", answer: "いそいで", options: ["いそいで", "いそいて", "いそって", "いそぎて"] },
-      { type: "choose", q: "Which of these is a Group II verb?", answer: "みせます", options: ["みせます", "かえります", "はなします", "まちます"] },
+      { type: "choose", q: "Which of these is a Group 2 verb?", answer: "みせます", options: ["みせます", "かえります", "はなします", "まちます"] },
       { type: "fill", jp: "でんきを ＿＿ ください。", answer: "つけて", options: ["つけて", "つけって", "ついて", "つけいて"], en: "Please turn on the light. (つけます)" },
       { type: "order", tiles: ["なまえと", "じゅうしょを", "かいて", "ください"], en: "Please write your name and address." }
     ]
@@ -598,11 +598,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     lesson: 17,
     title: "The ない-form",
     meaning: "plain negative of verbs",
-    explain: "Group I: change the い-sound before ます to the あ-sound + ない (かきます → かかない, のみます → のまない). If it's い, it becomes わ: かいます → かわない. Group II: drop ます + ない (たべない, みない). Group III: します → しない, きます → こない.",
+    explain: "Group 1: change the い-sound before ます to the あ-sound + ない (かきます → かかない, のみます → のまない). If it's い, it becomes わ: かいます → かわない. Group 2: drop ます + ない (たべない, みない). Group 3: します → しない, きます → こない.",
     examples: [
-      { jp: "かきます → かかない・のみます → のまない・まちます → またない", ro: "kakimasu → kakanai, nomimasu → nomanai, machimasu → matanai", en: "Group I: い-sound → あ-sound + ない" },
-      { jp: "かいます → かわない・すいます → すわない", ro: "kaimasu → kawanai, suimasu → suwanai", en: "Group I: い → わ (not あ!)" },
-      { jp: "たべます → たべない・します → しない・きます → こない", ro: "tabemasu → tabenai, shimasu → shinai, kimasu → konai", en: "Group II & III" }
+      { jp: "かきます → かかない・のみます → のまない・まちます → またない", ro: "kakimasu → kakanai, nomimasu → nomanai, machimasu → matanai", en: "Group 1: い-sound → あ-sound + ない" },
+      { jp: "かいます → かわない・すいます → すわない", ro: "kaimasu → kawanai, suimasu → suwanai", en: "Group 1: い → わ (not あ!)" },
+      { jp: "たべます → たべない・します → しない・きます → こない", ro: "tabemasu → tabenai, shimasu → shinai, kimasu → konai", en: "Group 2 & III" }
     ],
     drills: [
       { type: "choose", q: "ない-form of かいます (buy)?", answer: "かわない", options: ["かわない", "かあない", "かいない", "かかない"] },
@@ -719,11 +719,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     lesson: 18,
     title: "The dictionary form",
     meaning: "plain present form of verbs",
-    explain: "Group I: change the い-sound before ます to the う-sound (かきます → かく, のみます → のむ, かいます → かう, まちます → まつ). Group II: drop ます + る (たべる, みる). Group III: します → する, きます → くる. It's the form you look up in a dictionary.",
+    explain: "Group 1: change the い-sound before ます to the う-sound (かきます → かく, のみます → のむ, かいます → かう, まちます → まつ). Group 2: drop ます + る (たべる, みる). Group 3: します → する, きます → くる. It's the form you look up in a dictionary.",
     examples: [
-      { jp: "かきます → かく・のみます → のむ・まちます → まつ", ro: "kakimasu → kaku, nomimasu → nomu, machimasu → matsu", en: "Group I: い-sound → う-sound" },
-      { jp: "たべます → たべる・みます → みる", ro: "tabemasu → taberu, mimasu → miru", en: "Group II: ます → る" },
-      { jp: "します → する・きます → くる", ro: "shimasu → suru, kimasu → kuru", en: "Group III (irregular)" }
+      { jp: "かきます → かく・のみます → のむ・まちます → まつ", ro: "kakimasu → kaku, nomimasu → nomu, machimasu → matsu", en: "Group 1: い-sound → う-sound" },
+      { jp: "たべます → たべる・みます → みる", ro: "tabemasu → taberu, mimasu → miru", en: "Group 2: ます → る" },
+      { jp: "します → する・きます → くる", ro: "shimasu → suru, kimasu → kuru", en: "Group 3 (irregular)" }
     ],
     drills: [
       { type: "choose", q: "Dictionary form of のみます?", answer: "のむ", options: ["のむ", "のみる", "のまる", "のる"] },
@@ -800,11 +800,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     lesson: 19,
     title: "The た-form",
     meaning: "plain past form of verbs",
-    explain: "The た-form is made exactly like the て-form, just swap て→た and で→だ: かいて → かいた, のんで → のんだ, いって → いった. Group III: した, きた. If you know your て-forms, you know your た-forms.",
+    explain: "The た-form is made exactly like the て-form, just swap て→た and で→だ: かいて → かいた, のんで → のんだ, いって → いった. Group 3: した, きた. If you know your て-forms, you know your た-forms.",
     examples: [
-      { jp: "かきます → かいた・のみます → のんだ・いきます → いった", ro: "kakimasu → kaita, nomimasu → nonda, ikimasu → itta", en: "Group I: same rules as the て-form" },
-      { jp: "たべます → たべた・みます → みた", ro: "tabemasu → tabeta, mimasu → mita", en: "Group II: ます → た" },
-      { jp: "します → した・きます → きた", ro: "shimasu → shita, kimasu → kita", en: "Group III" }
+      { jp: "かきます → かいた・のみます → のんだ・いきます → いった", ro: "kakimasu → kaita, nomimasu → nonda, ikimasu → itta", en: "Group 1: same rules as the て-form" },
+      { jp: "たべます → たべた・みます → みた", ro: "tabemasu → tabeta, mimasu → mita", en: "Group 2: ます → た" },
+      { jp: "します → した・きます → きた", ro: "shimasu → shita, kimasu → kita", en: "Group 3" }
     ],
     drills: [
       { type: "choose", q: "た-form of のみます?", answer: "のんだ", options: ["のんだ", "のみた", "のった", "のんた"] },

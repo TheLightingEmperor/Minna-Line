@@ -8,7 +8,7 @@ window.VOCAB_EXTRA = [
   { kana: "かちます", kanji: "勝ちます", ro: "kachimasu", en: "win", pos: "v1", L: 21, cat: "verbs" },
   { kana: "まけます", kanji: "負けます", ro: "makemasu", en: "lose (a game)", pos: "v2", L: 21, cat: "verbs" },
   { kana: "やくにたちます", kanji: "役に立ちます", ro: "yaku ni tachimasu", en: "be useful", pos: "v1", L: 21, cat: "verbs" },
-  { kana: "うごきます", kanji: "動きます", ro: "ugokimasu", en: "move; work (machine)", pos: "v1", L: 21, cat: "verbs" },
+  { kana: "うごきます", kanji: "動きます", ro: "ugokimasu", en: "move, work (machine)", pos: "v1", L: 21, cat: "verbs" },
   { kana: "きをつけます", kanji: "気をつけます", ro: "ki o tsukemasu", en: "be careful, pay attention", pos: "v2", L: 21, cat: "verbs" },
   { kana: "りゅうがくします", kanji: "留学します", ro: "ryūgaku shimasu", en: "study abroad", pos: "v3", L: 21, cat: "verbs" },
   { kana: "むだ", kanji: "無駄", ro: "muda", en: "wasteful, useless", pos: "na-adj", L: 21, cat: "adjectives" },
@@ -72,7 +72,7 @@ window.VOCAB_EXTRA = [
   { kana: "おと", kanji: "音", ro: "oto", en: "sound", pos: "n", L: 23, cat: "misc" },
   { kana: "サイズ", kanji: "", ro: "saizu", en: "size", pos: "n", L: 23, cat: "misc" },
   { kana: "こしょう", kanji: "故障", ro: "koshō", en: "breakdown, out of order", pos: "n", L: 23, cat: "misc" },
-  { kana: "みち", kanji: "道", ro: "michi", en: "road, street; way", pos: "n", L: 23, cat: "places" },
+  { kana: "みち", kanji: "道", ro: "michi", en: "road, street, way", pos: "n", L: 23, cat: "places" },
   { kana: "こうさてん", kanji: "交差点", ro: "kōsaten", en: "intersection", pos: "n", L: 23, cat: "places" },
   { kana: "しんごう", kanji: "信号", ro: "shingō", en: "traffic light", pos: "n", L: 23, cat: "places" },
   { kana: "かど", kanji: "角", ro: "kado", en: "corner", pos: "n", L: 23, cat: "places" },
@@ -81,16 +81,16 @@ window.VOCAB_EXTRA = [
   { kana: "たてもの", kanji: "建物", ro: "tatemono", en: "building", pos: "n", L: 23, cat: "places" },
 
   // ===== Minna no Nihongo Lesson 24 =====
-  { kana: "くれます", kanji: "", ro: "kuremasu", en: "give (to me / my group)", pos: "v2", L: 24, cat: "verbs" },
-  { kana: "なおします", kanji: "直します", ro: "naoshimasu", en: "repair; correct", pos: "v1", L: 24, cat: "verbs" },
+  { kana: "くれます", kanji: "", ro: "kuremasu", en: "give (to me or my group)", pos: "v2", L: 24, cat: "verbs" },
+  { kana: "なおします", kanji: "直します", ro: "naoshimasu", en: "repair, correct", pos: "v1", L: 24, cat: "verbs" },
   { kana: "つれていきます", kanji: "連れて行きます", ro: "tsurete ikimasu", en: "take (someone) along", pos: "v1", L: 24, cat: "verbs" },
   { kana: "つれてきます", kanji: "連れて来ます", ro: "tsurete kimasu", en: "bring (someone) along", pos: "v3", L: 24, cat: "verbs" },
   { kana: "おくります", kanji: "送ります", ro: "okurimasu", en: "see (someone) off, take (someone home)", pos: "v1", L: 24, cat: "verbs" },
   { kana: "しょうかいします", kanji: "紹介します", ro: "shōkai shimasu", en: "introduce", pos: "v3", L: 24, cat: "verbs" },
   { kana: "あんないします", kanji: "案内します", ro: "annai shimasu", en: "show around, guide", pos: "v3", L: 24, cat: "verbs" },
   { kana: "せつめいします", kanji: "説明します", ro: "setsumei shimasu", en: "explain", pos: "v3", L: 24, cat: "verbs" },
-  { kana: "おじいさん", kanji: "", ro: "ojiisan", en: "grandfather; old man", pos: "n", L: 24, cat: "family" },
-  { kana: "おばあさん", kanji: "", ro: "obāsan", en: "grandmother; old woman", pos: "n", L: 24, cat: "family" },
+  { kana: "おじいさん", kanji: "", ro: "ojiisan", en: "grandfather, old man", pos: "n", L: 24, cat: "family" },
+  { kana: "おばあさん", kanji: "", ro: "obāsan", en: "grandmother, old woman", pos: "n", L: 24, cat: "family" },
   { kana: "じゅんび", kanji: "準備", ro: "junbi", en: "preparation", pos: "n", L: 24, cat: "misc" },
   { kana: "ひっこし", kanji: "引っ越し", ro: "hikkoshi", en: "moving (house)", pos: "n", L: 24, cat: "misc" },
   { kana: "おかし", kanji: "お菓子", ro: "okashi", en: "sweets, snacks", pos: "n", L: 24, cat: "food" },
@@ -104,7 +104,7 @@ window.VOCAB_EXTRA = [
   { kana: "つきます", kanji: "着きます", ro: "tsukimasu", en: "arrive", pos: "v1", L: 25, cat: "verbs" },
   { kana: "としをとります", kanji: "年を取ります", ro: "toshi o torimasu", en: "grow old", pos: "v1", L: 25, cat: "verbs" },
   { kana: "たります", kanji: "足ります", ro: "tarimasu", en: "be enough, suffice", pos: "v2", L: 25, cat: "verbs" },
-  { kana: "いなか", kanji: "田舎", ro: "inaka", en: "countryside; hometown", pos: "n", L: 25, cat: "places" },
+  { kana: "いなか", kanji: "田舎", ro: "inaka", en: "countryside, hometown", pos: "n", L: 25, cat: "places" },
   { kana: "たいしかん", kanji: "大使館", ro: "taishikan", en: "embassy", pos: "n", L: 25, cat: "places" },
   { kana: "グループ", kanji: "", ro: "gurūpu", en: "group", pos: "n", L: 25, cat: "misc" },
   { kana: "チャンス", kanji: "", ro: "chansu", en: "chance, opportunity", pos: "n", L: 25, cat: "misc" },
@@ -126,7 +126,7 @@ window.VOCAB_EXTRA = [
   { kana: "じゅうがつ", kanji: "十月", ro: "jūgatsu", en: "October", pos: "n", L: 26, cat: "calendar" },
   { kana: "じゅういちがつ", kanji: "十一月", ro: "jūichigatsu", en: "November", pos: "n", L: 26, cat: "calendar" },
   { kana: "じゅうにがつ", kanji: "十二月", ro: "jūnigatsu", en: "December", pos: "n", L: 26, cat: "calendar" },
-  { kana: "いちにち", kanji: "一日", ro: "ichinichi", en: "one day; all day", pos: "n", L: 26, cat: "calendar" },
+  { kana: "いちにち", kanji: "一日", ro: "ichinichi", en: "one day, all day", pos: "n", L: 26, cat: "calendar" },
   { kana: "なつやすみ", kanji: "夏休み", ro: "natsuyasumi", en: "summer vacation", pos: "n", L: 26, cat: "calendar" },
 
   // ===== General N5: time =====
@@ -145,7 +145,7 @@ window.VOCAB_EXTRA = [
   { kana: "あと", kanji: "後", ro: "ato", en: "after, later", pos: "n", L: 26, cat: "time" },
 
   // ===== General N5: seasons & weather =====
-  { kana: "はれ", kanji: "晴れ", ro: "hare", en: "sunny / clear weather", pos: "n", L: 26, cat: "weather" },
+  { kana: "はれ", kanji: "晴れ", ro: "hare", en: "sunny, clear weather", pos: "n", L: 26, cat: "weather" },
   { kana: "かぜ", kanji: "風", ro: "kaze", en: "wind", pos: "n", L: 26, cat: "weather" },
   { kana: "はれます", kanji: "晴れます", ro: "haremasu", en: "clear up, be sunny", pos: "v2", L: 26, cat: "weather" },
   { kana: "くもります", kanji: "曇ります", ro: "kumorimasu", en: "become cloudy", pos: "v1", L: 26, cat: "weather" },
@@ -164,11 +164,11 @@ window.VOCAB_EXTRA = [
 
   // ===== General N5: body =====
   { kana: "はな", kanji: "鼻", ro: "hana", en: "nose", pos: "n", L: 26, cat: "body" },
-  { kana: "せ", kanji: "背", ro: "se", en: "height (stature); back", pos: "n", L: 26, cat: "body" },
+  { kana: "せ", kanji: "背", ro: "se", en: "height (stature), back", pos: "n", L: 26, cat: "body" },
 
   // ===== General N5: family & people =====
-  { kana: "おじさん", kanji: "", ro: "ojisan", en: "uncle; middle-aged man", pos: "n", L: 26, cat: "family" },
-  { kana: "おばさん", kanji: "", ro: "obasan", en: "aunt; middle-aged woman", pos: "n", L: 26, cat: "family" },
+  { kana: "おじさん", kanji: "", ro: "ojisan", en: "uncle, middle-aged man", pos: "n", L: 26, cat: "family" },
+  { kana: "おばさん", kanji: "", ro: "obasan", en: "aunt, middle-aged woman", pos: "n", L: 26, cat: "family" },
   { kana: "おとな", kanji: "大人", ro: "otona", en: "adult", pos: "n", L: 26, cat: "people" },
   { kana: "せいと", kanji: "生徒", ro: "seito", en: "pupil, (school) student", pos: "n", L: 26, cat: "people" },
   { kana: "おまわりさん", kanji: "お巡りさん", ro: "omawarisan", en: "police officer (friendly)", pos: "n", L: 26, cat: "people" },
@@ -180,7 +180,7 @@ window.VOCAB_EXTRA = [
   { kana: "しょうゆ", kanji: "醤油", ro: "shōyu", en: "soy sauce", pos: "n", L: 26, cat: "food" },
   { kana: "バター", kanji: "", ro: "batā", en: "butter", pos: "n", L: 26, cat: "food" },
   { kana: "スープ", kanji: "", ro: "sūpu", en: "soup", pos: "n", L: 26, cat: "food" },
-  { kana: "ちゃわん", kanji: "茶碗", ro: "chawan", en: "rice bowl; teacup", pos: "n", L: 26, cat: "food" },
+  { kana: "ちゃわん", kanji: "茶碗", ro: "chawan", en: "rice bowl, teacup", pos: "n", L: 26, cat: "food" },
   { kana: "さら", kanji: "皿", ro: "sara", en: "plate, dish", pos: "n", L: 26, cat: "food" },
   { kana: "コップ", kanji: "", ro: "koppu", en: "glass, cup", pos: "n", L: 26, cat: "food" },
   { kana: "まずい", kanji: "", ro: "mazui", en: "bad-tasting", pos: "i-adj", L: 26, cat: "food" },
@@ -201,13 +201,13 @@ window.VOCAB_EXTRA = [
   { kana: "みなみ", kanji: "南", ro: "minami", en: "south", pos: "n", L: 26, cat: "directions" },
   { kana: "ひがし", kanji: "東", ro: "higashi", en: "east", pos: "n", L: 26, cat: "directions" },
   { kana: "にし", kanji: "西", ro: "nishi", en: "west", pos: "n", L: 26, cat: "directions" },
-  { kana: "よこ", kanji: "横", ro: "yoko", en: "side, beside; horizontal", pos: "n", L: 26, cat: "directions" },
+  { kana: "よこ", kanji: "横", ro: "yoko", en: "side, beside, horizontal", pos: "n", L: 26, cat: "directions" },
   { kana: "そば", kanji: "", ro: "soba", en: "near, beside", pos: "n", L: 26, cat: "directions" },
-  { kana: "むこう", kanji: "向こう", ro: "mukō", en: "over there; the other side", pos: "n", L: 26, cat: "directions" },
+  { kana: "むこう", kanji: "向こう", ro: "mukō", en: "over there, the other side", pos: "n", L: 26, cat: "directions" },
   { kana: "ほう", kanji: "方", ro: "hō", en: "direction, side", pos: "n", L: 26, cat: "directions" },
 
   // ===== General N5: い-adjectives =====
-  { kana: "うすい", kanji: "薄い", ro: "usui", en: "thin (paper); weak/light (taste, color)", pos: "i-adj", L: 26, cat: "adjectives" },
+  { kana: "うすい", kanji: "薄い", ro: "usui", en: "thin (paper), weak, light (taste, color)", pos: "i-adj", L: 26, cat: "adjectives" },
   { kana: "あつい", kanji: "厚い", ro: "atsui", en: "thick (book, wall)", pos: "i-adj", L: 26, cat: "adjectives" },
   { kana: "うるさい", kanji: "", ro: "urusai", en: "noisy, annoying", pos: "i-adj", L: 26, cat: "adjectives" },
   { kana: "きたない", kanji: "汚い", ro: "kitanai", en: "dirty", pos: "i-adj", L: 26, cat: "adjectives" },
@@ -222,9 +222,9 @@ window.VOCAB_EXTRA = [
   // ===== General N5: な-adjectives =====
   { kana: "いや", kanji: "嫌", ro: "iya", en: "unpleasant, disagreeable", pos: "na-adj", L: 26, cat: "adjectives" },
   { kana: "だいすき", kanji: "大好き", ro: "daisuki", en: "very fond of, love", pos: "na-adj", L: 26, cat: "adjectives" },
-  { kana: "じょうぶ", kanji: "丈夫", ro: "jōbu", en: "sturdy, durable; healthy", pos: "na-adj", L: 26, cat: "adjectives" },
+  { kana: "じょうぶ", kanji: "丈夫", ro: "jōbu", en: "sturdy, durable, healthy", pos: "na-adj", L: 26, cat: "adjectives" },
   { kana: "りっぱ", kanji: "立派", ro: "rippa", en: "splendid, fine", pos: "na-adj", L: 26, cat: "adjectives" },
-  { kana: "けっこう", kanji: "結構", ro: "kekkō", en: "fine, good; (no) thank you", pos: "na-adj", L: 26, cat: "adjectives" },
+  { kana: "けっこう", kanji: "結構", ro: "kekkō", en: "fine, good, (no) thank you", pos: "na-adj", L: 26, cat: "adjectives" },
   { kana: "おなじ", kanji: "同じ", ro: "onaji", en: "same", pos: "other", L: 26, cat: "adjectives" },
 
   // ===== General N5: verbs =====
@@ -239,8 +239,8 @@ window.VOCAB_EXTRA = [
   { kana: "さします", kanji: "差します", ro: "sashimasu", en: "put up (an umbrella)", pos: "v1", L: 26, cat: "verbs" },
   { kana: "しにます", kanji: "死にます", ro: "shinimasu", en: "die", pos: "v1", L: 26, cat: "verbs" },
   { kana: "しめます", kanji: "締めます", ro: "shimemasu", en: "fasten, tie (a necktie, belt)", pos: "v2", L: 26, cat: "verbs" },
-  { kana: "たのみます", kanji: "頼みます", ro: "tanomimasu", en: "ask (a favor); order", pos: "v1", L: 26, cat: "verbs" },
-  { kana: "ちがいます", kanji: "違います", ro: "chigaimasu", en: "be different; be wrong", pos: "v1", L: 26, cat: "verbs" },
+  { kana: "たのみます", kanji: "頼みます", ro: "tanomimasu", en: "ask (a favor), order", pos: "v1", L: 26, cat: "verbs" },
+  { kana: "ちがいます", kanji: "違います", ro: "chigaimasu", en: "be different, be wrong", pos: "v1", L: 26, cat: "verbs" },
   { kana: "とびます", kanji: "飛びます", ro: "tobimasu", en: "fly", pos: "v1", L: 26, cat: "verbs" },
   { kana: "なきます", kanji: "鳴きます", ro: "nakimasu", en: "cry, chirp, bark (animals, birds)", pos: "v1", L: 26, cat: "verbs" },
   { kana: "ならびます", kanji: "並びます", ro: "narabimasu", en: "line up, stand in line", pos: "v1", L: 26, cat: "verbs" },
@@ -249,7 +249,7 @@ window.VOCAB_EXTRA = [
   { kana: "はります", kanji: "貼ります", ro: "harimasu", en: "stick, paste", pos: "v1", L: 26, cat: "verbs" },
   { kana: "みがきます", kanji: "磨きます", ro: "migakimasu", en: "brush (teeth), polish", pos: "v1", L: 26, cat: "verbs" },
   { kana: "わたします", kanji: "渡します", ro: "watashimasu", en: "hand over", pos: "v1", L: 26, cat: "verbs" },
-  { kana: "やります", kanji: "", ro: "yarimasu", en: "do (casual); give (to an animal/plant)", pos: "v1", L: 26, cat: "verbs" },
+  { kana: "やります", kanji: "", ro: "yarimasu", en: "do (casual), give (to an animal or plant)", pos: "v1", L: 26, cat: "verbs" },
   { kana: "つとめます", kanji: "勤めます", ro: "tsutomemasu", en: "work for (a company)", pos: "v2", L: 26, cat: "verbs" },
 
   // ===== General N5: adverbs & conjunctions =====
@@ -268,11 +268,11 @@ window.VOCAB_EXTRA = [
   { kana: "～ひき", kanji: "～匹", ro: "~hiki", en: "counter for small animals", pos: "other", L: 26, cat: "counters" },
   { kana: "～ほん", kanji: "～本", ro: "~hon", en: "counter for long, thin things", pos: "other", L: 26, cat: "counters" },
   { kana: "～こ", kanji: "～個", ro: "~ko", en: "counter for small objects", pos: "other", L: 26, cat: "counters" },
-  { kana: "～ど", kanji: "～度", ro: "~do", en: "times (occurrences); degrees", pos: "other", L: 26, cat: "counters" },
+  { kana: "～ど", kanji: "～度", ro: "~do", en: "times (occurrences), degrees", pos: "other", L: 26, cat: "counters" },
   { kana: "いっぽん", kanji: "一本", ro: "ippon", en: "one (long, thin thing)", pos: "n", L: 26, cat: "counters" },
   { kana: "さんぼん", kanji: "三本", ro: "sanbon", en: "three (long, thin things)", pos: "n", L: 26, cat: "counters" },
   { kana: "ろっぽん", kanji: "六本", ro: "roppon", en: "six (long, thin things)", pos: "n", L: 26, cat: "counters" },
-  { kana: "いっぱい", kanji: "一杯", ro: "ippai", en: "one cupful; full, a lot", pos: "n", L: 26, cat: "counters" },
+  { kana: "いっぱい", kanji: "一杯", ro: "ippai", en: "one cupful, full, a lot", pos: "n", L: 26, cat: "counters" },
   { kana: "さんばい", kanji: "三杯", ro: "sanbai", en: "three cupfuls", pos: "n", L: 26, cat: "counters" },
   { kana: "いっぴき", kanji: "一匹", ro: "ippiki", en: "one (small animal)", pos: "n", L: 26, cat: "counters" },
   { kana: "さんびき", kanji: "三匹", ro: "sanbiki", en: "three (small animals)", pos: "n", L: 26, cat: "counters" },

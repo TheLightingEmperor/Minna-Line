@@ -42,6 +42,8 @@ It's a static site, so any static host works. `netlify.toml` publishes the repo 
 | `data/grammar_a.js`, `data/grammar_b.js` | Grammar points with explanations, examples and drills (Lessons 1–25) |
 | `data/kanji.js` | N5 kanji with readings and example words |
 | `data/kana.js` | Hiragana, katakana and the romaji → kana table |
+| `data/study_a.js`, `data/study_b.js` | Structured study notes for each grammar point (formula, bullets, rule tables, common mistakes) and lesson overviews |
+| `data/vocab_overlay.js` | Cleaned meanings, word groups, usage examples and added words, layered over `vocab.js` |
 | `data/reading_a.js`, `data/reading_b.js` | Conversations and reading texts with questions (Lessons 1–25) |
 | `data/guide.js` | Guidebook pages |
 | `data/strokes.js` | Stroke order paths for kana and N5 kanji, from KanjiVG |
@@ -55,6 +57,8 @@ python3 1_parse_notes.py "/path/to/Learning Japanese"   # → raw.json
 python3 2_normalize.py                                   # → words.json
 python3 3_build_vocab.py                                 # → ../data/vocab.js
 ```
+
+Rebuilding only replaces `data/vocab.js`. The cleaned wording lives in `data/vocab_overlay.js`, keyed by `lesson:kana`, so it survives. Saved progress is keyed to word ids and drill positions, so never reorder or delete drills.
 
 ## Credits
 
