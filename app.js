@@ -33,11 +33,11 @@
   const YOKAI = ART.YOKAI, yokaiSVG = ART.yokai;
   const yokaiFor = (st) => YOKAI[(hashStr(st.id) >>> 3) % YOKAI.length];
   const isLine = (st) => st.kind === 'lesson' || st.kind === 'kana';
-  const LINE_C = { M: 'var(--line)', X: 'var(--express)', S: 'var(--n4)', SX: 'var(--n4)', K: 'var(--n3)', KX: 'var(--n3)' };
+  const LINE_C = { M: 'var(--line)', X: 'var(--express)', S: 'var(--n4)', SX: 'var(--n4)', K: 'var(--n3)', KX: 'var(--n3)', W: 'var(--n2)', WX: 'var(--n2)' };
   const lineColor = (st) => LINE_C[st.line];
-  const lineLetter = (st) => ({ M: 'M', X: 'X', S: 'S', SX: 'S', K: 'A', KX: 'A' }[st.line]);
+  const lineLetter = (st) => ({ M: 'M', X: 'X', S: 'S', SX: 'S', K: 'A', KX: 'A', W: 'W', WX: 'W' }[st.line]);
   const curLevel = () => S.settings.level || 'N5';
-  const levelRange = (l = curLevel()) => (l === 'N5' ? [1, 26] : l === 'N4' ? [126, 150] : [201, 224]);
+  const levelRange = (l = curLevel()) => (l === 'N5' ? [1, 26] : l === 'N4' ? [126, 150] : l === 'N2' ? [301, 324] : [201, 224]);
   const inLevel = (L, l = curLevel()) => { const [a, b] = levelRange(l); return L >= a && L <= b; };
   const codeOf = (st) => (isLine(st) ? lineLetter(st) + st.code : st.code);
   const badgeHTML = (st) => (isLine(st) ? `<span class="badge"><small>${lineLetter(st)}</small><b>${st.code}</b></span>` : `<span class="badge"><b>${st.code}</b></span>`);
@@ -410,7 +410,7 @@
     if (st.kind === 'kana') keys = [...KANA.map(kanaKey), ...stationVocab(st).map(vKey)];
     else if (st.kind === 'lesson') keys = [...stationVocab(st).map(vKey), ...stationGrammar(st).flatMap(drillKeys), ...stationKanji(st).map(kanjiKey), ...stationReading(st).flatMap(readingKeys)];
     else if (st.kind === 'kanji') keys = KANJI.filter((k) => k.level === st.level && !k.extra).map(kanjiKey);
-    else if (st.kind === 'academy') keys = READING.filter((r) => r.lesson === 225).flatMap(readingKeys);
+    else if (st.kind === 'academy') keys = READING.filter((r) => r.lesson === (st.level === 'N2' ? 325 : 225)).flatMap(readingKeys);
     else if (st.kind === 'verbs') {
       const fs = st.level === 'N5' ? ['mneg', 'mpast', 'mpastneg', 'te', 'nai', 'dict', 'ta'] : ['pot', 'vol', 'ba', 'pass', 'caus', 'imper'];
       keys = conjVerbs(st.level === 'N5' ? 20 : 150).flatMap((v) => fs.filter((f) => canForm(f, v)).map((f) => conjKey(f, v)));
@@ -537,7 +537,7 @@
     const lo = lvlFloor(l), hi = lvlFloor(l + 1);
     const quests = todaysQuests(), weak = weakKeys().length, w = wordOfDay();
     const lv = LEVELS.find((x) => x.id === curLevel());
-    const lines = { N5: [['Minna Line', 'M', 'M00–M20', ''], ['N5 Express', 'X', 'beyond Lesson 20', 'express']], N4: [['Summer Line', 'S', 'Lessons 26–50', 'summer'], ['N4 Terminal', 'SX', 'kanji, verbs, exam', 'summer']], N3: [['Autumn Line', 'K', 'Units 1–24', 'autumn'], ['N3 Terminal', 'KX', 'reading, kanji, exam', 'autumn']] }[lv.id];
+    const lines = { N5: [['Minna Line', 'M', 'M00–M20', ''], ['N5 Express', 'X', 'beyond Lesson 20', 'express']], N4: [['Summer Line', 'S', 'Lessons 26–50', 'summer'], ['N4 Terminal', 'SX', 'kanji, verbs, exam', 'summer']], N3: [['Autumn Line', 'K', 'Units 1–24', 'autumn'], ['N3 Terminal', 'KX', 'reading, kanji, exam', 'autumn']], N2: [['Winter Line', 'W', 'Units 1–24', 'winter'], ['N2 Terminal', 'WX', 'reading, kanji, exam', 'winter']] }[lv.id];
     render(`
       <div class="leveltabs" role="tablist" aria-label="JLPT level">${LEVELS.map((x) => `<button role="tab" class="lvtab ${x.season}" aria-selected="${x.id === lv.id}" data-act="level" data-arg="${x.id}"><i class="lvico">${ART.seasonIcon(x.season)}</i><b>${x.name}</b><span>${x.title}</span><small>${Math.round(readiness(x.id).total * 100)}%</small></button>`).join('')}</div>
       <div class="home"><div>
@@ -793,10 +793,10 @@
   // ---------------------------------------------------------------- special stations
   function renderKanjiHall(st) {
     const back = { name: 'station', id: st.id };
-    const bands = { N5: [[1, 5], [6, 10], [11, 15], [16, 20], [21, 26]], N4: [[126, 130], [131, 135], [136, 140], [141, 145], [146, 150]], N3: [[201, 204], [205, 208], [209, 212], [213, 216], [217, 220], [221, 224]] }[st.level];
+    const bands = { N5: [[1, 5], [6, 10], [11, 15], [16, 20], [21, 26]], N4: [[126, 130], [131, 135], [136, 140], [141, 145], [146, 150]], N3: [[201, 204], [205, 208], [209, 212], [213, 216], [217, 220], [221, 224]], N2: [[301, 304], [305, 308], [309, 312], [313, 316], [317, 320], [321, 324]] }[st.level];
     const sel = view.band ?? 0, mine = KANJI.filter((k) => k.level === st.level && !k.extra), extras = KANJI.filter((k) => k.level === st.level && k.extra);
     const list = sel === 'extra' ? extras : sel === 'all' ? mine : mine.filter((k) => k.lesson >= bands[sel][0] && k.lesson <= bands[sel][1]);
-    const c = lineColor(st), bname = (b) => (st.level === 'N3' ? `Units ${b[0] - 200}–${b[1] - 200}` : st.level === 'N4' ? `Lessons ${b[0] - 100}–${b[1] - 100}` : `Lessons ${b[0]}–${b[1] > 25 ? '25+' : b[1]}`);
+    const c = lineColor(st), bname = (b) => (st.level === 'N3' || st.level === 'N2' ? `Units ${b[0] % 100}–${b[1] % 100}` : st.level === 'N4' ? `Lessons ${b[0] - 100}–${b[1] - 100}` : `Lessons ${b[0]}–${b[1] > 25 ? '25+' : b[1]}`);
     render(`<div class="station" style="--c:${c}">${signHTML(st)}
       <p class="muted" style="margin:0">All ${mine.length} ${st.level} kanji, grouped by where you first need them. Tap one for its stroke order, readings and words.</p>
       <div class="chooser">${bands.map((b, i) => `<button class="chip" data-act="band" data-arg="${i}" aria-pressed="${sel === i}">${bname(b)}</button>`).join('')}<button class="chip" data-act="band" data-arg="all" aria-pressed="${sel === 'all'}">All</button>${extras.length ? `<button class="chip" data-act="band" data-arg="extra" aria-pressed="${sel === 'extra'}">Also in your words (${extras.length})</button>` : ''}</div>
@@ -888,7 +888,7 @@
         const drills = shuffle(GRAMMAR.filter((g) => inL(g.lesson)).flatMap((g) => g.drills.map((d, i) => [g, i]).filter(([, i]) => g.drills[i].type !== 'order')));
         drills.slice(0, 7).forEach(([g, i]) => qs.push({ ...grammarQ(g, i), section: '文法 Grammar' }));
         const texts = READING.filter((r) => inL(r.lesson));
-        const psg = shuffle(texts.filter((r) => r.type === 'passage' && (lvl !== 'N3' || r.skill === 'exam' || !r.skill)))[0], cv = shuffle(texts.filter((r) => r.type === 'conversation'))[0];
+        const psg = shuffle(texts.filter((r) => r.type === 'passage' && (!['N3', 'N2'].includes(lvl) || r.skill === 'exam' || !r.skill)))[0], cv = shuffle(texts.filter((r) => r.type === 'conversation'))[0];
         if (psg) psg.questions.forEach((_, i) => qs.push({ ...readingQ(psg, i), section: '読解 Reading' }));
         shuffle(EXAMPLES.filter((e) => inL(e.L))).slice(0, cv ? 2 : 3).forEach((e) => qs.push({ ...sentenceQ(e), section: '聴解 Listening' }));
         if (cv) qs.push({ ...readingQ(cv, 0, 'listen'), section: '聴解 Listening' });
@@ -989,16 +989,16 @@
     render(`<div class="station"><button class="back" data-act="home">${ICON.back} Route map</button>
       <h1>よむ・はなす · Reading room <span class="pill">${curLevel()}</span></h1>
       <p class="muted" style="margin:0">Short conversations and exam-style texts for every lesson. Each one has audio and questions.</p>
-      <div class="chooser">${[['all', 'All'], ['conversation', 'Conversations'], ['passage', 'Reading texts']].map(([k, l]) => `<button class="chip" data-act="rf" data-arg="${k}" aria-pressed="${f === k}">${l}</button>`).join('')}${curLevel() === 'N3' ? '<button class="chip" data-act="station" data-arg="read3">Reading Academy →</button>' : ''}</div>
+      <div class="chooser">${[['all', 'All'], ['conversation', 'Conversations'], ['passage', 'Reading texts']].map(([k, l]) => `<button class="chip" data-act="rf" data-arg="${k}" aria-pressed="${f === k}">${l}</button>`).join('')}${curLevel() === 'N3' || curLevel() === 'N2' ? `<button class="chip" data-act="station" data-arg="${curLevel() === 'N2' ? 'read2' : 'read3'}">Reading Academy →</button>` : ''}</div>
       ${list.length ? `<div class="hub">${list.map(readingRow).join('')}</div>` : '<p class="muted">Nothing here yet.</p>'}</div>`, { rf: (k) => { view.f = k; renderReadingRoom(); } });
   }
   function renderAcademy(st) {
-    const skills = [['basics', 'Reading basics', 'きほん', 'Written style, finding the subject, guessing words, following the structure'], ['formats', 'Types of text', 'いろいろな ぶんしょう', 'Emails, letters, memos, instructions, opinions, essays'], ['info', 'Finding information', 'じょうほうけんさく', 'Adverts, notices, pamphlets, charts'], ['exam', 'Exam practice', 'じっせんもんだい', 'Short, medium and long texts in N3 exam style']];
-    const all = READING.filter((r) => r.lesson === 225);
+    const skills = [['basics', 'Reading basics', 'きほん', 'Written style, finding the subject, guessing words, following the structure'], ['formats', 'Types of text', 'いろいろな ぶんしょう', 'Emails, letters, memos, instructions, opinions, essays'], ['info', 'Finding information', 'じょうほうけんさく', 'Adverts, notices, pamphlets, charts'], ['compare', 'Comparing two texts', 'とうごうりかい', 'Two short texts on one topic, compared'], ['exam', 'Exam practice', 'じっせんもんだい', 'Short, medium and long texts in exam style']];
+    const all = READING.filter((r) => r.lesson === (st.level === 'N2' ? 325 : 225));
     const back = { name: 'station', id: st.id };
     render(`<div class="station" style="--c:${lineColor(st)}">${signHTML(st)}
-      <p class="muted" style="margin:0">A step-by-step course in N3 reading, from understanding written style to exam-length texts.</p>
-      <div><button class="btn" data-act="guide" data-arg="n3-reading">Reading skills guide</button></div>
+      <p class="muted" style="margin:0">A step-by-step course in ${st.level} reading, from understanding written style to exam-length texts.</p>
+      <div><button class="btn" data-act="guide" data-arg="${st.level === 'N2' ? 'n2-reading' : 'n3-reading'}">Reading skills guide</button></div>
       ${skills.map(([k, en, jp, sub]) => { const l = all.filter((r) => r.skill === k); return l.length ? `<section class="stack"><div><h3>${en} <span class="muted small">${jp}</span></h3><div class="muted small">${sub}</div></div><div class="hub">${l.map(readingRow).join('')}</div></section>` : ''; }).join('')}
       ${all.length ? bossCard(st, '15 questions from exam-style texts.') : '<p class="muted">The course is being added.</p>'}</div>`, {
       boss: () => quizSession({ title: 'Reading Academy: battle', questions: shuffle(all.filter((r) => r.skill === 'exam').flatMap((r) => r.questions.map((_, i) => readingQ(r, i)))).slice(0, 15), back, battle: st, color: 'var(--stamp)' }),
@@ -1009,7 +1009,7 @@
     const sib = READING.filter((x) => levelOfL(x.lesson) === levelOfL(r.lesson)), i = sib.indexOf(r), prev = sib[i - 1], next = sib[i + 1];
     const back = { name: 'read', id: r.id };
     const showRo = !!view.ro, showEn = !!view.en;
-    const st = SBY.get('L' + r.lesson) || (r.lesson === 225 ? SBY.get('read3') : null);
+    const st = SBY.get('L' + r.lesson) || (r.lesson === 225 ? SBY.get('read3') : r.lesson === 325 ? SBY.get('read2') : null);
     render(`<div class="station" style="--c:var(--line)"><button class="back" data-act="reading">${ICON.back} Reading room</button>
       <div class="row-between"><div><div class="eyebrow">${[lessonName(r.lesson), r.type === 'conversation' ? 'Conversation' : r.form || 'Reading'].filter(Boolean).map(esc).join(' · ')}</div><h1 style="font-size:24px">${esc(rubyToKana(r.titleJp || r.title))}</h1><div class="muted">${esc(r.title)}</div></div>
         ${st ? `<button class="btn sm" data-act="station" data-arg="${st.id}">Go to ${codeOf(st)}</button>` : ''}</div>

@@ -10,6 +10,7 @@
   --express: #7cc7f0;       /* N5 Express */
   --n4: #4fc3b0;            /* Summer Line */
   --n3: #f0905a;            /* Autumn Line */
+  --n2: #6f9be8;            /* Winter Line */
   --stamp: #b462aa;         /* ume ink */
   --coin: #f5b52b;          /* yuzu gold */
   --good: #4fae6c;
@@ -34,7 +35,7 @@
   :root:not([data-theme="light"]) {
     --bg: #1c1730; --panel: #2a2342; --ink: #f8eff8; --muted: #b6a9c8; --rule: #3c3359;
     --express: #86cff4; --stamp: #dc9fd4; --coin: #ffcd5c; --good: #73d391; --bad: #ff8794;
-    --mochi: #fff9fd; --blush: #ff9fbd; --shade: #120e22; --veil: .52; --stars: 1; --n4: #62d6c2; --n3: #ffa877;
+    --mochi: #fff9fd; --blush: #ff9fbd; --shade: #120e22; --veil: .52; --stars: 1; --n4: #62d6c2; --n3: #ffa877; --n2: #9dbcff;
     --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='28' viewBox='0 0 56 28'%3E%3Cg fill='none' stroke='%232b2443' stroke-width='1.6'%3E%3Cpath d='M0 28a28 28 0 0 1 56 0M8 28a20 20 0 0 1 40 0M16 28a12 12 0 0 1 24 0M-28 14a28 28 0 0 1 56 0M28 14a28 28 0 0 1 56 0'/%3E%3C/g%3E%3C/svg%3E");
     color-scheme: dark;
   }
@@ -42,7 +43,7 @@
 :root[data-theme="dark"] {
   --bg: #1c1730; --panel: #2a2342; --ink: #f8eff8; --muted: #b6a9c8; --rule: #3c3359;
   --express: #86cff4; --stamp: #dc9fd4; --coin: #ffcd5c; --good: #73d391; --bad: #ff8794;
-  --mochi: #fff9fd; --blush: #ff9fbd; --shade: #120e22; --veil: .52; --stars: 1; --n4: #62d6c2; --n3: #ffa877;
+  --mochi: #fff9fd; --blush: #ff9fbd; --shade: #120e22; --veil: .52; --stars: 1; --n4: #62d6c2; --n3: #ffa877; --n2: #9dbcff;
   --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='28' viewBox='0 0 56 28'%3E%3Cg fill='none' stroke='%232b2443' stroke-width='1.6'%3E%3Cpath d='M0 28a28 28 0 0 1 56 0M8 28a20 20 0 0 1 40 0M16 28a12 12 0 0 1 24 0M-28 14a28 28 0 0 1 56 0M28 14a28 28 0 0 1 56 0'/%3E%3C/g%3E%3C/svg%3E");
   color-scheme: dark;
 }
@@ -170,6 +171,7 @@ main { padding-block: 20px 70px; }
 .rail.express { --c: var(--express); }
 .rail.summer { --c: var(--n4); }
 .rail.autumn { --c: var(--n3); }
+.rail.winter { --c: var(--n2); }
 .stop { position: relative; }
 .stop button { width: 100%; display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 6px 10px 6px 0; background: none; border: 0; text-align: left; border-radius: 16px; }
 .stop button:hover { background: color-mix(in srgb, var(--panel) 80%, transparent); }
@@ -400,12 +402,12 @@ table.vocab td.kana { font-size: 17px; white-space: nowrap; }
 @media (max-width: 560px) { .vista { height: 200px; } .vista-over { grid-template-columns: 84px minmax(0, 1fr); } .vista-over .mascot { width: 84px; height: 84px; } .vista-over .bubble { margin-bottom: 14px; font-size: 13.5px; } }
 
 /* level tabs */
-.leveltabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+.leveltabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
 .lvtab { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: 2px 10px; background: var(--panel); border: 2px solid var(--rule); border-radius: 18px; padding: 10px 14px; text-align: left; box-shadow: 0 3px 0 var(--shade); }
 .lvtab b { font-family: var(--f-pop); font-weight: 400; font-size: 22px; }
 .lvtab span { font-size: 13px; color: var(--muted); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lvtab small { font-family: var(--f-pop); font-size: 13px; }
-.lvtab.spring { --lv: var(--line); } .lvtab.summer { --lv: var(--n4); } .lvtab.autumn { --lv: var(--n3); }
+.lvtab.spring { --lv: var(--line); } .lvtab.summer { --lv: var(--n4); } .lvtab.autumn { --lv: var(--n3); } .lvtab.winter { --lv: var(--n2); }
 .lvtab[aria-selected="true"] { border-color: var(--lv); background: color-mix(in srgb, var(--lv) 22%, var(--panel)); }
 @media (max-width: 560px) { .lvtab { grid-template-columns: auto minmax(0, 1fr); padding: 8px 10px; } .lvtab span { grid-column: 1 / -1; font-size: 11px; } .lvtab small { grid-column: 1 / -1; } }
 

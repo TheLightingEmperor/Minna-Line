@@ -1,6 +1,6 @@
 # Minna Line
 
-A study game for Japanese from JLPT N5 to N3: *Minna no Nihongo* Lessons 1–50, then 24 themed N3 units and a Reading Academy. Each lesson is a station on a train line. Mochi, the cat conductor, rides along with you. Beat a station's yokai to collect its stamp.
+A study game for Japanese from JLPT N5 to N2: *Minna no Nihongo* Lessons 1–50, then 24 themed units each for N3 and N2, with a Reading Academy at both levels. Each lesson is a station on a train line. Mochi, the cat conductor, rides along with you. Beat a station's yokai to collect its stamp.
 
 ## What's inside
 
