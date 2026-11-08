@@ -92,7 +92,7 @@ window.READING = (window.READING || []).concat([
       { s: "やまださん", jp: "カランさん、よく この スポーツクラブに {来|き}て いますね。", ro: "Karan-san, yoku kono supōtsu kurabu ni kite imasu ne.", en: "Karan, you often come to this sports club, don't you?" },
       { s: "カラン", jp: "ええ、{毎週|まいしゅう} {土曜日|どようび}に {来|き}て います。", ro: "Ee, maishū doyōbi ni kite imasu.", en: "Yes, I come every Saturday." },
       { s: "やまださん", jp: "いつも {何|なに}を {聞|き}きながら {走|はし}って いるんですか。", ro: "Itsumo nani o kikinagara hashitte iru n desu ka.", en: "What do you always listen to while you run?" },
-      { s: "カラン", jp: "{日本語|にほんご}の ニュースです。{走|はし}りながら {聞|き}いて、{新|あたら}しい {言|こと}ばを おぼえて います。", ro: "Nihongo no nyūsu desu. Hashirinagara kiite, atarashii kotoba o oboete imasu.", en: "The news in Japanese. I listen while running and learn new words." },
+      { s: "カラン", jp: "{日本語|にほんご}の ニュースです。{走|はし}りながら {聞|き}いて、{新|あたら}しい ことばを おぼえて います。", ro: "Nihongo no nyūsu desu. Hashirinagara kiite, atarashii kotoba o oboete imasu.", en: "The news in Japanese. I listen while running and learn new words." },
       { s: "やまださん", jp: "それは いいですね。どうして この クラブに したんですか。", ro: "Sore wa ii desu ne. Dōshite kono kurabu ni shita n desu ka.", en: "That's great. Why did you choose this club?" },
       { s: "カラン", jp: "{安|やす}いし、{駅|えき}から {近|ちか}いし、シャワーも きれいですから。", ro: "Yasui shi, eki kara chikai shi, shawā mo kirei desu kara.", en: "It's cheap, it's close to the station, and the showers are clean." },
       { s: "やまださん", jp: "{私|わたし}は テレビを {見|み}ながら {走|はし}って います。", ro: "Watashi wa terebi o minagara hashitte imasu.", en: "I run while watching TV." },
@@ -115,7 +115,7 @@ window.READING = (window.READING || []).concat([
       { s: "", jp: "{店|みせ}の {主人|しゅじん}は {七十|ななじゅう}さいですが、{今|いま}も {毎朝|まいあさ} {自分|じぶん}で パンを {作|つく}って います。", ro: "Mise no shujin wa nanajussai desu ga, ima mo maiasa jibun de pan o tsukutte imasu.", en: "The owner is seventy, but he still makes the bread himself every morning." },
       { s: "", jp: "ときどき ギターを ひきながら、{歌|うた}も {歌|うた}います。", ro: "Tokidoki gitā o hikinagara, uta mo utaimasu.", en: "Sometimes he sings as he plays the guitar." },
       { s: "", jp: "{私|わたし}は この {店|みせ}で {日本語|にほんご}の {勉強|べんきょう}も して います。", ro: "Watashi wa kono mise de nihongo no benkyō mo shite imasu.", en: "I also study Japanese in this shop." },
-      { s: "", jp: "{主人|しゅじん}と {話|はな}しながら、{新|あたら}しい {言|こと}ばを おぼえて いるんです。", ro: "Shujin to hanashinagara, atarashii kotoba o oboete iru n desu.", en: "I learn new words while chatting with the owner." }
+      { s: "", jp: "{主人|しゅじん}と {話|はな}しながら、{新|あたら}しい ことばを おぼえて いるんです。", ro: "Shujin to hanashinagara, atarashii kotoba o oboete iru n desu.", en: "I learn new words while chatting with the owner." }
     ],
     questions: [
       { q: "Why do many students come to the shop?", qjp: "どうして がくせいが たくさん きますか。", answer: "The coffee is good, the staff are kind and it's cheap.", options: ["It is open all night.", "It is close to their school.", "The coffee is good, the staff are kind and it's cheap.", "The owner teaches them Japanese."] },
@@ -183,7 +183,7 @@ window.READING = (window.READING || []).concat([
     ],
     questions: [
       { q: "Where are the drinks?", qjp: "のみものは どこに ありますか。", answer: "In the fridge", options: ["In the fridge", "On the chairs", "At the classroom entrance", "They have not been bought yet."] },
-      { q: "What has Karan not done yet?", qjp: "カランさんが まだ して いない ことは なんですか。", answer: "Set out the chairs", options: ["Buy the drinks", "Put up the poster", "Set out the chairs", "Close the windows"] },
+      { q: "What has Karan not done yet?", qjp: "カランさんが まだ して いない ことは なんですか。", answer: "Set out the chairs", options: ["Buy the drinks", "Put up the poster", "Set out the chairs", "Invite the guests"] },
       { q: "Why should the windows stay open for now?", qjp: "どうして まどを あけたままに しますか。", answer: "Because it is hot", options: ["Because it is raining", "Because the party has started", "Because Karan is still cleaning", "Because it is hot"] }
     ]
   },

@@ -4,22 +4,22 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
  {
   "id": "L301-1",
   "lesson": 301,
-  "title": "～しだい",
+  "title": "～次第",
   "meaning": "As soon as; depending on",
-  "explain": "Use V ます-stem + しだい for 'as soon as X, I will do Y'. Use N + しだいだ for 'it depends on N'.",
+  "explain": "Use V ます-stem + 次第 for 'as soon as X, I will do Y'. Use N + 次第だ for 'it depends on N'.",
   "examples": [
    {
-    "jp": "けっかが{分|わ}かりしだい、ご{連絡|れんらく}します。",
+    "jp": "{結果|けっか}が{分|わ}かり{次第|しだい}、ご{連絡|れんらく}します。",
     "ro": "Kekka ga wakari shidai, go-renraku shimasu.",
     "en": "I'll contact you as soon as the results are known."
    },
    {
-    "jp": "{駅|えき}に{着|つ}きしだい、{電話|でんわ}してください。",
+    "jp": "{駅|えき}に{着|つ}き{次第|しだい}、{電話|でんわ}してください。",
     "ro": "Eki ni tsuki shidai, denwa shite kudasai.",
     "en": "Please call me as soon as you reach the station."
    },
    {
-    "jp": "{行|い}くかどうかは、{天気|てんき}しだいです。",
+    "jp": "{行|い}くかどうかは、{天気|てんき}{次第|しだい}です。",
     "ro": "Iku ka dō ka wa, tenki shidai desu.",
     "en": "Whether I go depends on the weather."
    }
@@ -28,11 +28,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "fill",
     "jp": "{準備|じゅんび}ができ＿＿、{出発|しゅっぱつ}します。",
-    "answer": "しだい",
+    "answer": "{次第|しだい}",
     "options": [
      "ついで",
      "うちに",
-     "しだい",
+     "{次第|しだい}",
      "たび"
     ],
     "en": "I'll set off as soon as I'm ready."
@@ -40,12 +40,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "fill",
     "jp": "{私|わたし}が{行|い}くかどうかは、{天気|てんき}＿＿です。",
-    "answer": "しだい",
+    "answer": "{次第|しだい}",
     "options": [
      "ばかり",
      "ところ",
      "わけ",
-     "しだい"
+     "{次第|しだい}"
     ],
     "en": "Whether I go depends on the weather."
    },
@@ -54,7 +54,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{荷物|にもつ}が",
      "{届|とど}き",
-     "しだい",
+     "{次第|しだい}",
      "お{知|し}らせします"
     ],
     "en": "I'll let you know as soon as the package arrives."
@@ -64,7 +64,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{値段|ねだん}は",
      "{品物|しなもの}",
-     "しだい",
+     "{次第|しだい}",
      "です"
     ],
     "en": "The price depends on the product."
@@ -72,17 +72,17 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which means 'I'll call as soon as I get home'?",
-    "answer": "{家|いえ}に{着|つ}きしだい、{電話|でんわ}します。",
+    "answer": "{家|いえ}に{着|つ}き{次第|しだい}、{電話|でんわ}します。",
     "options": [
-     "{家|いえ}に{着|つ}いてしだい、{電話|でんわ}します。",
-     "{家|いえ}に{着|つ}くしだい、{電話|でんわ}します。",
-     "{家|いえ}に{着|つ}かないしだい、{電話|でんわ}します。",
-     "{家|いえ}に{着|つ}きしだい、{電話|でんわ}します。"
+     "{家|いえ}に{着|つ}いて{次第|しだい}、{電話|でんわ}します。",
+     "{家|いえ}に{着|つ}く{次第|しだい}、{電話|でんわ}します。",
+     "{家|いえ}に{着|つ}かない{次第|しだい}、{電話|でんわ}します。",
+     "{家|いえ}に{着|つ}き{次第|しだい}、{電話|でんわ}します。"
     ]
    },
    {
     "type": "choose",
-    "q": "How does しだい (as soon as) join to a verb?",
+    "q": "How does 次第 (as soon as) join to a verb?",
     "answer": "Use the ます-stem",
     "options": [
      "Use the ます-stem",
@@ -106,7 +106,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "After worrying for three days, I decided to quit my job."
    },
    {
-    "jp": "{長|なが}い{議論|ぎろん}の{末|すえ}に、{新|あたら}しいあんが{決|き}まった。",
+    "jp": "{長|なが}い{議論|ぎろん}の{末|すえ}に、{新|あたら}しい{案|あん}が{決|き}まった。",
     "ro": "Nagai giron no sue ni, atarashii an ga kimatta.",
     "en": "After a long debate, a new plan was decided."
    },
@@ -119,7 +119,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{何度|なんど}も{話|はな}し{合|あ}った＿＿、けつろんが{出|で}た。",
+    "jp": "{何度|なんど}も{話|はな}し{合|あ}った＿＿、{結論|けつろん}が{出|で}た。",
     "answer": "{末|すえ}に",
     "options": [
      "くせに",
@@ -155,9 +155,9 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "{長|なが}い",
-     "こうしょうの",
+     "{交渉|こうしょう}の",
      "{末|すえ}に",
-     "けいやくが",
+     "{契約|けいやく}が",
      "{決|き}まった"
     ],
     "en": "After a long negotiation, the contract was settled."
@@ -194,7 +194,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use V た / N の + あげく(に) when a long, tiring process ends in a disappointing result.",
   "examples": [
    {
-    "jp": "{長|なが}い{間|あいだ}{迷|まよ}ったあげく、けっきょく{何|なに}も{買|か}わなかった。",
+    "jp": "{長|なが}い{間|あいだ}{迷|まよ}ったあげく、{結局|けっきょく}{何|なに}も{買|か}わなかった。",
     "ro": "Nagai aida mayotta ageku, kekkyoku nani mo kawanakatta.",
     "en": "After hesitating for ages, I ended up buying nothing."
    },
@@ -204,7 +204,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "After failing again and again, my brother quit his job."
    },
    {
-    "jp": "{彼|かれ}はさんざんもんくを{言|い}ったあげくに、{帰|かえ}っていった。",
+    "jp": "{彼|かれ}はさんざん{文句|もんく}を{言|い}ったあげくに、{帰|かえ}っていった。",
     "ro": "Kare wa sanzan monku o itta ageku ni, kaette itta.",
     "en": "After complaining endlessly, he went home."
    }
@@ -257,12 +257,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is natural with ～あげく?",
-    "answer": "ずっと{迷|まよ}ったあげく、けっきょくやめた。",
+    "answer": "ずっと{迷|まよ}ったあげく、{結局|けっきょく}やめた。",
     "options": [
-     "ずっと{迷|まよ}ったあげく、{最高|さいこう}のけっかになった。",
-     "ずっと{迷|まよ}いあげく、けっきょくやめた。",
-     "ずっと{迷|まよ}わないあげく、けっきょくやめた。",
-     "ずっと{迷|まよ}ったあげく、けっきょくやめた。"
+     "ずっと{迷|まよ}ったあげく、{最高|さいこう}の{結果|けっか}になった。",
+     "ずっと{迷|まよ}いあげく、{結局|けっきょく}やめた。",
+     "ずっと{迷|まよ}わないあげく、{結局|けっきょく}やめた。",
+     "ずっと{迷|まよ}ったあげく、{結局|けっきょく}やめた。"
     ]
    },
    {
@@ -291,12 +291,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "I'll reply after talking it over with my family."
    },
    {
-    "jp": "けいやくしょをよく{読|よ}んだ{上|うえ}で、サインしてください。",
+    "jp": "{契約書|けいやくしょ}をよく{読|よ}んだ{上|うえ}で、サインしてください。",
     "ro": "Keiyakusho o yoku yonda ue de, sain shite kudasai.",
     "en": "Please sign after reading the contract carefully."
    },
    {
-    "jp": "{仕事|しごと}の{上|うえ}では、{彼|かれ}が{私|わたし}のせんぱいです。",
+    "jp": "{仕事|しごと}の{上|うえ}では、{彼|かれ}が{私|わたし}の{先輩|せんぱい}です。",
     "ro": "Shigoto no ue de wa, kare ga watashi no senpai desu.",
     "en": "As far as work goes, he is my senior."
    }
@@ -320,7 +320,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "answer": "{上|うえ}",
     "options": [
      "{末|すえ}",
-     "しだい",
+     "{次第|しだい}",
      "{最中|さいちゅう}",
      "{上|うえ}"
     ],
@@ -473,7 +473,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use N + からして to say 'even this one point shows it', with the rest being the same.",
   "examples": [
    {
-    "jp": "{彼|かれ}は、あいさつの{仕方|しかた}からして{失礼|しつれい}だ。",
+    "jp": "{彼|かれ}は、{挨拶|あいさつ}の{仕方|しかた}からして{失礼|しつれい}だ。",
     "ro": "Kare wa, aisatsu no shikata kara shite shitsurei da.",
     "en": "Even his way of greeting is rude."
    },
@@ -519,7 +519,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
      "{彼|かれ}は",
      "{服装|ふくそう}",
      "からして",
-     "はでだ"
+     "{派手|はで}だ"
     ],
     "en": "His clothes are flashy, starting with the outfit."
    },
@@ -596,7 +596,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "{客|きゃく}にしてみ＿＿、{待|ま}たされるのはいやなものだ。",
+    "jp": "{客|きゃく}にしてみ＿＿、{待|ま}たされるのは{嫌|いや}なものだ。",
     "answer": "れば",
     "options": [
      "ず",
@@ -641,9 +641,9 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is natural?",
-    "answer": "{店員|てんいん}にしたら、{忙|いそが}しい{日|ひ}はうれしいだろう。",
+    "answer": "{店員|てんいん}にしたら、{忙|いそが}しい{日|ひ}は{嬉|うれ}しいだろう。",
     "options": [
-     "{店員|てんいん}にしたら、{忙|いそが}しい{日|ひ}はうれしいだろう。",
+     "{店員|てんいん}にしたら、{忙|いそが}しい{日|ひ}は{嬉|うれ}しいだろう。",
      "{店員|てんいん}にしたら、{食|た}べに{行|い}きましょう。",
      "{店員|てんいん}にしたら、{駅|えき}まで{五分|ごふん}です。",
      "{店員|てんいん}にしたら、{昨日|きのう}{行|い}きました。"
@@ -659,7 +659,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use V ます-stem / N + がちだ for something that tends to happen, usually an unwelcome tendency.",
   "examples": [
    {
-    "jp": "{冬|ふゆ}はかぜをひきがちなので、{気|き}をつけてください。",
+    "jp": "{冬|ふゆ}は{風邪|かぜ}を{引|ひ}きがちなので、{気|き}をつけてください。",
     "ro": "Fuyu wa kaze o hikigachi na node, ki o tsukete kudasai.",
     "en": "In winter people tend to catch colds, so take care."
    },
@@ -703,8 +703,8 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "{冬|ふゆ}は",
-     "かぜを",
-     "ひき",
+     "{風邪|かぜ}を",
+     "{引|ひ}き",
      "がちだ"
     ],
     "en": "In winter I tend to catch colds."
@@ -751,12 +751,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use N / V ます-stem / adjective stem + っぽい to say something has a quality, or tends to be so.",
   "examples": [
    {
-    "jp": "{弟|おとうと}はあきっぽくて、{何|なに}をしても{続|つづ}かない。",
+    "jp": "{弟|おとうと}は{飽|あ}きっぽくて、{何|なに}をしても{続|つづ}かない。",
     "ro": "Otōto wa akippokute, nani o shite mo tsuzukanai.",
     "en": "My brother gets bored easily and sticks to nothing."
    },
    {
-    "jp": "このコーヒーは{水|みず}っぽくて、{味|あじ}がうすい。",
+    "jp": "このコーヒーは{水|みず}っぽくて、{味|あじ}が{薄|うす}い。",
     "ro": "Kono kōhī wa mizuppokute, aji ga usui.",
     "en": "This coffee is watery and tastes thin."
    },
@@ -876,7 +876,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "jp": "{彼|かれ}は{子|こ}ども＿＿わりに、しっかりしている。",
     "answer": "の",
     "options": [
-     "な",
+     "が",
      "だ",
      "に",
      "の"
@@ -935,7 +935,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use V て / い-adj く + て / na-adj で + ならない for a feeling that wells up by itself.",
   "examples": [
    {
-    "jp": "{試験|しけん}のけっかが{心配|しんぱい}でならない。",
+    "jp": "{試験|しけん}の{結果|けっか}が{心配|しんぱい}でならない。",
     "ro": "Shiken no kekka ga shinpai de naranai.",
     "en": "I can't stop worrying about the exam result."
    },
@@ -953,11 +953,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{合格|ごうかく}できたのがうれしくて＿＿。",
+    "jp": "{合格|ごうかく}できたのが{嬉|うれ}しくて＿＿。",
     "answer": "ならない",
     "options": [
      "ほしい",
-     "ちがいない",
+     "{違|ちが}いない",
      "ならない",
      "かもしれない"
     ],
@@ -965,7 +965,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "{試験|しけん}のけっかが{心配|しんぱい}＿＿ならない。",
+    "jp": "{試験|しけん}の{結果|けっか}が{心配|しんぱい}＿＿ならない。",
     "answer": "で",
     "options": [
      "に",
@@ -1025,7 +1025,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use V て / い-adj く + て / na-adj で + たまらない for a feeling or sense too strong to bear.",
   "examples": [
    {
-    "jp": "{夏|なつ}はあつくてたまらない。",
+    "jp": "{夏|なつ}は{暑|あつ}くてたまらない。",
     "ro": "Natsu wa atsukute tamaranai.",
     "en": "The heat in summer is unbearable."
    },
@@ -1035,7 +1035,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "I'm dying to see her."
    },
    {
-    "jp": "おなかが{空|す}いてたまらない。",
+    "jp": "お{腹|なか}が{空|す}いてたまらない。",
     "ro": "Onaka ga suite tamaranai.",
     "en": "I'm so hungry I can't stand it."
    }
@@ -1046,16 +1046,16 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "jp": "{早|はや}く{家|いえ}に{帰|かえ}りたくて＿＿。",
     "answer": "たまらない",
     "options": [
-     "ちがいない",
-     "かまわない",
+     "{違|ちが}いない",
+     "{構|かま}わない",
      "たまらない",
-     "おそれがある"
+     "{恐|おそ}れがある"
     ],
     "en": "I'm dying to get home soon."
    },
    {
     "type": "fill",
-    "jp": "この{部屋|へや}はあつく＿＿たまらない。",
+    "jp": "この{部屋|へや}は{暑|あつ}く＿＿たまらない。",
     "answer": "て",
     "options": [
      "に",
@@ -1120,7 +1120,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "Hearing that story, I couldn't help laughing."
    },
    {
-    "jp": "おいしそうなにおいがして、{食|た}べずにはいられなかった。",
+    "jp": "おいしそうな{匂|にお}いがして、{食|た}べずにはいられなかった。",
     "ro": "Oishisō na nioi ga shite, tabezu ni wa irarenakatta.",
     "en": "It smelled so good that I couldn't help eating."
    },
@@ -1133,7 +1133,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{悲|かな}しい{話|はなし}を{聞|き}いて、なか＿＿はいられなかった。",
+    "jp": "{悲|かな}しい{話|はなし}を{聞|き}いて、{泣|な}か＿＿はいられなかった。",
     "answer": "ずに",
     "options": [
      "なくて",
@@ -1158,7 +1158,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "じょうだんを",
+     "{冗談|じょうだん}を",
      "{聞|き}いて",
      "{笑|わら}わずには",
      "いられなかった"
@@ -1212,7 +1212,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "Although he is frail, he works every day."
    },
    {
-    "jp": "せまいながらも、{楽|たの}しいわが{家|や}です。",
+    "jp": "{狭|せま}いながらも、{楽|たの}しいわが{家|や}です。",
     "ro": "Semai nagara mo, tanoshii wagaya desu.",
     "en": "It's small, but it's our happy home."
    },
@@ -1281,12 +1281,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is correct?",
-    "answer": "{残念|ざんねん}ながらも{断|ことわ}った",
+    "answer": "{貧|まず}しいながらも{幸|しあわ}せだった",
     "options": [
-     "{残念|ざんねん}ながらも{断|ことわ}った",
-     "{残念|ざんねん}ながらもに{断|ことわ}った",
-     "{残念|ざんねん}がながらも{断|ことわ}った",
-     "{残念|ざんねん}てながらも{断|ことわ}った"
+     "{貧|まず}しいながらも{幸|しあわ}せだった",
+     "{貧|まず}しいながらもに{幸|しあわ}せだった",
+     "{貧|まず}しいがながらも{幸|しあわ}せだった",
+     "{貧|まず}しくながらも{幸|しあわ}せだった"
     ]
    }
   ]
@@ -1299,7 +1299,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use V ます-stem / N + 気味 for a slight sign or feeling, often a bad one.",
   "examples": [
    {
-    "jp": "かぜ{気味|ぎみ}なので、{今日|きょう}は{早|はや}く{帰|かえ}ります。",
+    "jp": "{風邪|かぜ}{気味|ぎみ}なので、{今日|きょう}は{早|はや}く{帰|かえ}ります。",
     "ro": "Kaze gimi na node, kyō wa hayaku kaerimasu.",
     "en": "I have a bit of a cold, so I'm going home early today."
    },
@@ -1329,11 +1329,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "かぜ＿＿なので、{薬|くすり}を{飲|の}んだ。",
+    "jp": "{風邪|かぜ}＿＿なので、{薬|くすり}を{飲|の}んだ。",
     "answer": "{気味|ぎみ}",
     "options": [
      "{最中|さいちゅう}",
-     "しだい",
+     "{次第|しだい}",
      "{以上|いじょう}",
      "{気味|ぎみ}"
     ],
@@ -1389,12 +1389,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use V ます-stem + かねない to warn that something bad could easily happen.",
   "examples": [
    {
-    "jp": "そんなに{飲|の}むと、{体|からだ}をこわしかねない。",
+    "jp": "そんなに{飲|の}むと、{体|からだ}を{壊|こわ}しかねない。",
     "ro": "Sonna ni nomu to, karada o kowashikanenai.",
     "en": "If you drink that much, you could ruin your health."
    },
    {
-    "jp": "スピードを{出|だ}しすぎると、じこを{起|お}こしかねない。",
+    "jp": "スピードを{出|だ}しすぎると、{事故|じこ}を{起|お}こしかねない。",
     "ro": "Supīdo o dashisugiru to, jiko o okoshikanenai.",
     "en": "If you speed, you could cause an accident."
    },
@@ -1432,7 +1432,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "むりを",
+     "{無理|むり}を",
      "すると",
      "{病気|びょうき}に",
      "なりかねない"
@@ -1462,12 +1462,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is correct?",
-    "answer": "じこになりかねない",
+    "answer": "{事故|じこ}になりかねない",
     "options": [
-     "じこになりかねない",
-     "じこになりかねる",
-     "じこになるかねない",
-     "じこになれかねない"
+     "{事故|じこ}になりかねない",
+     "{事故|じこ}になりかねる",
+     "{事故|じこ}になるかねない",
+     "{事故|じこ}になれかねない"
     ]
    }
   ]
@@ -1475,22 +1475,22 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
  {
   "id": "L305-3",
   "lesson": 305,
-  "title": "～おそれがある",
+  "title": "～恐れがある",
   "meaning": "There is a risk that",
-  "explain": "Use V る / N の + おそれがある for a possible bad event, in news or formal notices.",
+  "explain": "Use V る / N の + 恐れがある for a possible bad event, in news or formal notices.",
   "examples": [
    {
-    "jp": "{台風|たいふう}のえいきょうで、{明日|あした}は{大雨|おおあめ}になるおそれがあります。",
+    "jp": "{台風|たいふう}の{影響|えいきょう}で、{明日|あした}は{大雨|おおあめ}になる{恐|おそ}れがあります。",
     "ro": "Taifū no eikyō de, ashita wa ōame ni naru osore ga arimasu.",
     "en": "Due to the typhoon, there is a risk of heavy rain tomorrow."
    },
    {
-    "jp": "この{薬|くすり}は、{眠|ねむ}くなるおそれがあります。",
+    "jp": "この{薬|くすり}は、{眠|ねむ}くなる{恐|おそ}れがあります。",
     "ro": "Kono kusuri wa, nemuku naru osore ga arimasu.",
     "en": "This medicine may cause drowsiness."
    },
    {
-    "jp": "{夜|よる}は{道|みち}がこおるおそれがあるので、{気|き}をつけてください。",
+    "jp": "{夜|よる}は{道|みち}が{凍|こお}る{恐|おそ}れがあるので、{気|き}をつけてください。",
     "ro": "Yoru wa michi ga kōru osore ga aru node, ki o tsukete kudasai.",
     "en": "The roads may freeze at night, so please take care."
    }
@@ -1498,19 +1498,19 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "つなみが{来|く}る＿＿があります。",
-    "answer": "おそれ",
+    "jp": "{津波|つなみ}が{来|く}る＿＿があります。",
+    "answer": "{恐|おそ}れ",
     "options": [
      "はず",
      "つもり",
-     "おそれ",
+     "{恐|おそ}れ",
      "わけ"
     ],
     "en": "There is a risk that a tsunami will come."
    },
    {
     "type": "fill",
-    "jp": "{大雨|おおあめ}で、{川|かわ}が＿＿おそれがあります。",
+    "jp": "{大雨|おおあめ}で、{川|かわ}が＿＿{恐|おそ}れがあります。",
     "answer": "あふれる",
     "options": [
      "あふれ",
@@ -1526,7 +1526,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
      "{台風|たいふう}で",
      "{電車|でんしゃ}が",
      "{止|と}まる",
-     "おそれがある"
+     "{恐|おそ}れがある"
     ],
     "en": "The trains may stop because of the typhoon."
    },
@@ -1536,13 +1536,13 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
      "この",
      "{薬|くすり}は",
      "{眠|ねむ}くなる",
-     "おそれがある"
+     "{恐|おそ}れがある"
     ],
     "en": "This medicine may make you sleepy."
    },
    {
     "type": "choose",
-    "q": "What kind of event does おそれがある describe?",
+    "q": "What kind of event does 恐れがある describe?",
     "answer": "An unwelcome possibility",
     "options": [
      "A wish for the future",
@@ -1554,12 +1554,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which sentence is natural?",
-    "answer": "{雨|あめ}が{降|ふ}るおそれがあります。",
+    "answer": "{雨|あめ}が{降|ふ}る{恐|おそ}れがあります。",
     "options": [
-     "{雨|あめ}が{降|ふ}るおそれがあります。",
-     "{優勝|ゆうしょう}できるおそれがあります。",
-     "{旅行|りょこう}に{行|い}きたいおそれがあります。",
-     "おいしいおそれがあります。"
+     "{雨|あめ}が{降|ふ}る{恐|おそ}れがあります。",
+     "{優勝|ゆうしょう}できる{恐|おそ}れがあります。",
+     "{旅行|りょこう}に{行|い}きたい{恐|おそ}れがあります。",
+     "おいしい{恐|おそ}れがあります。"
     ]
    }
   ]
@@ -1673,7 +1673,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "My brother came home, then went right out again."
    },
    {
-    "jp": "さっきまでないていたかと{思|おも}ったら、もう{笑|わら}っている。",
+    "jp": "さっきまで{泣|な}いていたかと{思|おも}ったら、もう{笑|わら}っている。",
     "ro": "Sakki made naite ita ka to omottara, mō waratte iru.",
     "en": "One moment crying, the next he's laughing."
    }
@@ -1681,7 +1681,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "ごはんを{食|た}べ{終|お}わったか＿＿{思|おも}うと、もう{寝|ね}ている。",
+    "jp": "ご{飯|はん}を{食|た}べ{終|お}わったか＿＿{思|おも}うと、もう{寝|ね}ている。",
     "answer": "と",
     "options": [
      "に",
@@ -1693,7 +1693,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "ないていた＿＿{思|おも}ったら、もう{笑|わら}っている。",
+    "jp": "{泣|な}いていた＿＿{思|おも}ったら、もう{笑|わら}っている。",
     "answer": "かと",
     "options": [
      "かが",
@@ -1717,7 +1717,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "ないていたかと",
+     "{泣|な}いていたかと",
      "{思|おも}ったら",
      "もう",
      "{笑|わら}っている"
@@ -2028,22 +2028,22 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
  {
   "id": "L307-1",
   "lesson": 307,
-  "title": "～におうじて",
+  "title": "～に応じて",
   "meaning": "In line with; depending on",
-  "explain": "Use N + におうじて when something changes or is chosen to match a situation, need or amount.",
+  "explain": "Use N + に応じて when something changes or is chosen to match a situation, need or amount.",
   "examples": [
    {
-    "jp": "きせつにおうじて、メニューが{変|か}わります。",
+    "jp": "{季節|きせつ}に{応|おう}じて、メニューが{変|か}わります。",
     "ro": "Kisetsu ni ōjite, menyū ga kawarimasu.",
     "en": "The menu changes according to the season."
    },
    {
-    "jp": "お{客|きゃく}さんの{好|この}みにおうじて、{味|あじ}を{選|えら}べます。",
+    "jp": "お{客|きゃく}さんの{好|この}みに{応|おう}じて、{味|あじ}を{選|えら}べます。",
     "ro": "Okyaku-san no konomi ni ōjite, aji o erabemasu.",
     "en": "You can choose the flavour to suit your taste."
    },
    {
-    "jp": "{収入|しゅうにゅう}におうじて、{税金|ぜいきん}が{決|き}まる。",
+    "jp": "{収入|しゅうにゅう}に{応|おう}じて、{税金|ぜいきん}が{決|き}まる。",
     "ro": "Shūnyū ni ōjite, zeikin ga kimaru.",
     "en": "Tax is set according to income."
    }
@@ -2051,7 +2051,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{予算|よさん}＿＿おうじて、{料理|りょうり}を{選|えら}んでください。",
+    "jp": "{予算|よさん}＿＿{応|おう}じて、{料理|りょうり}を{選|えら}んでください。",
     "answer": "に",
     "options": [
      "を",
@@ -2063,13 +2063,13 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "きせつに＿＿、{食材|しょくざい}が{変|か}わる。",
-    "answer": "おうじて",
+    "jp": "{季節|きせつ}に＿＿、{食材|しょくざい}が{変|か}わる。",
+    "answer": "{応|おう}じて",
     "options": [
      "{関|かん}して",
      "{対|たい}して",
      "つき",
-     "おうじて"
+     "{応|おう}じて"
     ],
     "en": "The ingredients change with the season."
    },
@@ -2077,7 +2077,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "{年齢|ねんれい}に",
-     "おうじて",
+     "{応|おう}じて",
      "{料金|りょうきん}が",
      "{変|か}わる"
     ],
@@ -2087,14 +2087,14 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "{必要|ひつよう}に",
-     "おうじて",
+     "{応|おう}じて",
      "{追加|ついか}できます"
     ],
     "en": "You can add more as needed."
    },
    {
     "type": "choose",
-    "q": "What does におうじて mean?",
+    "q": "What does に応じて mean?",
     "answer": "Changing in step with a situation or need",
     "options": [
      "Going against a situation",
@@ -2106,12 +2106,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is correct?",
-    "answer": "{天気|てんき}におうじて",
+    "answer": "{天気|てんき}に{応|おう}じて",
     "options": [
-     "{天気|てんき}におうじて",
-     "{天気|てんき}をおうじて",
-     "{天気|てんき}がおうじて",
-     "{天気|てんき}とおうじて"
+     "{天気|てんき}に{応|おう}じて",
+     "{天気|てんき}を{応|おう}じて",
+     "{天気|てんき}が{応|おう}じて",
+     "{天気|てんき}と{応|おう}じて"
     ]
    }
   ]
@@ -2119,22 +2119,22 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
  {
   "id": "L307-2",
   "lesson": 307,
-  "title": "～にそって",
+  "title": "～に沿って",
   "meaning": "Along; in line with",
-  "explain": "Use N + にそって for following a rule, plan or guideline, or for going along a line.",
+  "explain": "Use N + に沿って for following a rule, plan or guideline, or for going along a line.",
   "examples": [
    {
-    "jp": "マニュアルにそって、{作業|さぎょう}を{進|すす}めてください。",
+    "jp": "マニュアルに{沿|そ}って、{作業|さぎょう}を{進|すす}めてください。",
     "ro": "Manyuaru ni sotte, sagyō o susumete kudasai.",
     "en": "Please carry out the work following the manual."
    },
    {
-    "jp": "{川|かわ}にそって、さくらの{木|き}が{並|なら}んでいる。",
+    "jp": "{川|かわ}に{沿|そ}って、{桜|さくら}の{木|き}が{並|なら}んでいる。",
     "ro": "Kawa ni sotte, sakura no ki ga narande iru.",
     "en": "Cherry trees line the river."
    },
    {
-    "jp": "{計画|けいかく}にそって{工事|こうじ}が{行|おこな}われた。",
+    "jp": "{計画|けいかく}に{沿|そ}って{工事|こうじ}が{行|おこな}われた。",
     "ro": "Keikaku ni sotte kōji ga okonawareta.",
     "en": "The construction was carried out according to the plan."
    }
@@ -2142,7 +2142,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "レシピ＿＿そって、{料理|りょうり}を{作|つく}る。",
+    "jp": "レシピ＿＿{沿|そ}って、{料理|りょうり}を{作|つく}る。",
     "answer": "に",
     "options": [
      "を",
@@ -2155,12 +2155,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "fill",
     "jp": "{川|かわ}に＿＿{歩|ある}いた。",
-    "answer": "そって",
+    "answer": "{沿|そ}って",
     "options": [
-     "おうじて",
-     "もとづいて",
+     "{応|おう}じて",
+     "{基|もと}づいて",
      "{比|くら}べて",
-     "そって"
+     "{沿|そ}って"
     ],
     "en": "We walked along the river."
    },
@@ -2168,7 +2168,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "{方針|ほうしん}に",
-     "そって",
+     "{沿|そ}って",
      "{仕事|しごと}を",
      "{進|すす}める"
     ],
@@ -2178,7 +2178,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "{道|みち}に",
-     "そって",
+     "{沿|そ}って",
      "{店|みせ}が",
      "{並|なら}んでいる"
     ],
@@ -2186,7 +2186,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "choose",
-    "q": "What does にそって express?",
+    "q": "What does に沿って express?",
     "answer": "Following a line, rule or plan",
     "options": [
      "Differing from a plan",
@@ -2198,12 +2198,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is correct?",
-    "answer": "{方針|ほうしん}にそって",
+    "answer": "{方針|ほうしん}に{沿|そ}って",
     "options": [
-     "{方針|ほうしん}にそって",
-     "{方針|ほうしん}をそって",
-     "{方針|ほうしん}がそって",
-     "{方針|ほうしん}でそって"
+     "{方針|ほうしん}に{沿|そ}って",
+     "{方針|ほうしん}を{沿|そ}って",
+     "{方針|ほうしん}が{沿|そ}って",
+     "{方針|ほうしん}で{沿|そ}って"
     ]
    }
   ]
@@ -2226,7 +2226,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "I made the soup based on my grandmother's recipe."
    },
    {
-    "jp": "アンケートのけっかをもとに、メニューを{考|かんが}えた。",
+    "jp": "アンケートの{結果|けっか}をもとに、メニューを{考|かんが}えた。",
     "ro": "Ankēto no kekka o moto ni, menyū o kangaeta.",
     "en": "We planned the menu based on the survey results."
    }
@@ -2303,22 +2303,22 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
  {
   "id": "L307-4",
   "lesson": 307,
-  "title": "～にもとづいて",
+  "title": "～に基づいて",
   "meaning": "Based on",
-  "explain": "Use N + にもとづいて for judging or acting according to facts, laws, rules or data.",
+  "explain": "Use N + に基づいて for judging or acting according to facts, laws, rules or data.",
   "examples": [
    {
-    "jp": "{法律|ほうりつ}にもとづいて、{判断|はんだん}する。",
+    "jp": "{法律|ほうりつ}に{基|もと}づいて、{判断|はんだん}する。",
     "ro": "Hōritsu ni motozuite, handan suru.",
     "en": "We judge on the basis of the law."
    },
    {
-    "jp": "{事実|じじつ}にもとづいた{報道|ほうどう}が{大切|たいせつ}だ。",
+    "jp": "{事実|じじつ}に{基|もと}づいた{報道|ほうどう}が{大切|たいせつ}だ。",
     "ro": "Jijitsu ni motozuita hōdō ga taisetsu da.",
     "en": "News based on facts is important."
    },
    {
-    "jp": "データにもとづいて、{計画|けいかく}を{立|た}てた。",
+    "jp": "データに{基|もと}づいて、{計画|けいかく}を{立|た}てた。",
     "ro": "Dēta ni motozuite, keikaku o tateta.",
     "en": "We drew up the plan based on the data."
    }
@@ -2327,18 +2327,18 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "fill",
     "jp": "{規則|きそく}に＿＿、{判断|はんだん}します。",
-    "answer": "もとづいて",
+    "answer": "{基|もと}づいて",
     "options": [
      "{比|くら}べて",
      "{限|かぎ}って",
-     "もとづいて",
+     "{基|もと}づいて",
      "{際|さい}して"
     ],
     "en": "I judge in accordance with the rules."
    },
    {
     "type": "fill",
-    "jp": "{事実|じじつ}＿＿もとづいた{話|はなし}です。",
+    "jp": "{事実|じじつ}＿＿{基|もと}づいた{話|はなし}です。",
     "answer": "に",
     "options": [
      "を",
@@ -2352,7 +2352,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "データに",
-     "もとづいて",
+     "{基|もと}づいて",
      "{計画|けいかく}を",
      "{立|た}てた"
     ],
@@ -2362,14 +2362,14 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "{法律|ほうりつ}に",
-     "もとづいて",
+     "{基|もと}づいて",
      "{判断|はんだん}する"
     ],
     "en": "We judge based on the law."
    },
    {
     "type": "choose",
-    "q": "What does にもとづいて suggest?",
+    "q": "What does に基づいて suggest?",
     "answer": "A firm base such as a rule, fact or law",
     "options": [
      "A casual source of ideas",
@@ -2381,12 +2381,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is correct?",
-    "answer": "{事実|じじつ}にもとづいた{話|はなし}",
+    "answer": "{事実|じじつ}に{基|もと}づいた{話|はなし}",
     "options": [
-     "{事実|じじつ}にもとづいた{話|はなし}",
-     "{事実|じじつ}をもとづいた{話|はなし}",
-     "{事実|じじつ}がもとづいた{話|はなし}",
-     "{事実|じじつ}でもとづいた{話|はなし}"
+     "{事実|じじつ}に{基|もと}づいた{話|はなし}",
+     "{事実|じじつ}を{基|もと}づいた{話|はなし}",
+     "{事実|じじつ}が{基|もと}づいた{話|はなし}",
+     "{事実|じじつ}で{基|もと}づいた{話|はなし}"
     ]
    }
   ]
@@ -2491,7 +2491,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use N + において for the place, time or field where something happens. It is a formal で.",
   "examples": [
    {
-    "jp": "{大会|たいかい}はおおさかにおいて{行|おこな}われた。",
+    "jp": "{大会|たいかい}は{大阪|おおさか}において{行|おこな}われた。",
     "ro": "Taikai wa Ōsaka ni oite okonawareta.",
     "en": "The tournament was held in Osaka."
    },
@@ -2501,7 +2501,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "In this field, he is famous."
    },
    {
-    "jp": "えどじだいにおいて、{町人|ちょうにん}の{文化|ぶんか}がはってんした。",
+    "jp": "{江戸時代|えどじだい}において、{町人|ちょうにん}の{文化|ぶんか}が{発展|はってん}した。",
     "ro": "Edo jidai ni oite, chōnin no bunka ga hatten shita.",
     "en": "In the Edo period, townspeople's culture developed."
    }
@@ -2509,7 +2509,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{大会|たいかい}は、おおさか＿＿{行|おこな}われた。",
+    "jp": "{大会|たいかい}は、{大阪|おおさか}＿＿{行|おこな}われた。",
     "answer": "において",
     "options": [
      "にわたって",
@@ -2589,7 +2589,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "Residents are split over the new building's construction."
    },
    {
-    "jp": "いさんをめぐって、{兄弟|きょうだい}が{争|あらそ}った。",
+    "jp": "{遺産|いさん}をめぐって、{兄弟|きょうだい}が{争|あらそ}った。",
     "ro": "Isan o megutte, kyōdai ga arasotta.",
     "en": "The brothers fought over the inheritance."
    },
@@ -2618,8 +2618,8 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "answer": "をめぐって",
     "options": [
      "にわたって",
-     "にそって",
-     "におうじて",
+     "に{沿|そ}って",
+     "に{応|おう}じて",
      "をめぐって"
     ],
     "en": "Opinions are divided over this problem."
@@ -2663,9 +2663,9 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "answer": "{税金|ぜいきん}をめぐって{議論|ぎろん}した",
     "options": [
      "{税金|ぜいきん}をめぐって{議論|ぎろん}した",
-     "{朝|あさ}ごはんをめぐって{食|た}べた",
+     "{朝|あさ}ご{飯|はん}をめぐって{食|た}べた",
      "{駅|えき}をめぐって{眠|ねむ}った",
-     "かさをめぐって{持|も}った"
+     "{傘|かさ}をめぐって{持|も}った"
     ]
    }
   ]
@@ -2752,7 +2752,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which meaning is NOT possible for につき?",
-    "answer": "Because of a formal reason",
+    "answer": "I want to do it",
     "options": [
      "Because of a formal reason",
      "Per one unit",
@@ -2780,7 +2780,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "In starting the new business, we drew up a plan."
    },
    {
-    "jp": "{引|ひ}っ{越|こ}しにあたって、{近所|きんじょ}にあいさつをした。",
+    "jp": "{引|ひ}っ{越|こ}しにあたって、{近所|きんじょ}に{挨拶|あいさつ}をした。",
     "ro": "Hikkoshi ni atatte, kinjo ni aisatsu o shita.",
     "en": "On moving, I greeted the neighbours."
    }
@@ -2803,7 +2803,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "jp": "{留学|りゅうがく}する＿＿、{家族|かぞく}と{相談|そうだん}した。",
     "answer": "にあたって",
     "options": [
-     "にそって",
+     "に{沿|そ}って",
      "に{比|くら}べて",
      "につれて",
      "にあたって"
@@ -2813,7 +2813,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "けっこんする",
+     "{結婚|けっこん}する",
      "にあたって",
      "{仕事|しごと}を",
      "{変|か}えた"
@@ -2826,7 +2826,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
      "{店|みせ}を",
      "{開|ひら}く",
      "にあたって",
-     "あいさつに",
+     "{挨拶|あいさつ}に",
      "{行|い}った"
     ],
     "en": "We went to greet people as we opened the shop."
@@ -2868,7 +2868,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "Documents are required upon enrolment."
    },
    {
-    "jp": "けいやくに{際|さい}して、みぶんしょうが{必要|ひつよう}です。",
+    "jp": "{契約|けいやく}に{際|さい}して、{身分証|みぶんしょう}が{必要|ひつよう}です。",
     "ro": "Keiyaku ni saishite, mibunshō ga hitsuyō desu.",
     "en": "ID is required when signing a contract."
    },
@@ -2884,8 +2884,8 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "jp": "{入学|にゅうがく}に＿＿して、{書類|しょるい}を{出|だ}してください。",
     "answer": "{際|さい}",
     "options": [
-     "そ",
-     "もと",
+     "{沿|そ}",
+     "{基|もと}",
      "{際|さい}",
      "{限|かぎ}"
     ],
@@ -2898,7 +2898,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "options": [
      "{上|うえ}",
      "{末|すえ}",
-     "しだい",
+     "{次第|しだい}",
      "{際|さい}"
     ],
     "en": "In case of fire, please use the stairs."
@@ -2906,9 +2906,9 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "けいやくに",
+     "{契約|けいやく}に",
      "{際|さい}して",
-     "みぶんしょうが",
+     "{身分証|みぶんしょう}が",
      "{必要|ひつよう}です"
     ],
     "en": "ID is required for the contract."
@@ -2955,7 +2955,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use plain form + ばかりに when one small cause led to an unfortunate result.",
   "examples": [
    {
-    "jp": "かぎを{忘|わす}れたばかりに、{家|いえ}に{入|はい}れなかった。",
+    "jp": "{鍵|かぎ}を{忘|わす}れたばかりに、{家|いえ}に{入|はい}れなかった。",
     "ro": "Kagi o wasureta bakari ni, ie ni hairenakatta.",
     "en": "Just because I forgot my key, I couldn't get in."
    },
@@ -2998,7 +2998,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "かぎを",
+     "{鍵|かぎ}を",
      "{忘|わす}れた",
      "ばかりに",
      "{家|いえ}に",
@@ -3030,12 +3030,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is natural?",
-    "answer": "{うそ}をついたばかりに、{信用|しんよう}を{失|うしな}った。",
+    "answer": "うそをついたばかりに、{信用|しんよう}を{失|うしな}った。",
     "options": [
-     "{うそ}をついたばかりに、{信用|しんよう}を{失|うしな}った。",
-     "{うそ}をついたばかりに、{賞|しょう}をもらった。",
-     "{うそ}をつくばかりに、{信用|しんよう}を{失|うしな}った。",
-     "{うそ}をつかないばかりに、{信用|しんよう}を{失|うしな}った。"
+     "うそをついたばかりに、{信用|しんよう}を{失|うしな}った。",
+     "うそをついたばかりに、{賞|しょう}をもらった。",
+     "うそをつくばかりに、{信用|しんよう}を{失|うしな}った。",
+     "うそをつかないばかりに、{信用|しんよう}を{失|うしな}った。"
     ]
    }
   ]
@@ -3066,7 +3066,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{長年|ながねん}{働|はたら}いてきた＿＿、{退職|たいしょく}はさびしい。",
+    "jp": "{長年|ながねん}{働|はたら}いてきた＿＿、{退職|たいしょく}は{寂|さび}しい。",
     "answer": "だけに",
     "options": [
      "ばかりに",
@@ -3078,7 +3078,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "{期待|きたい}していた＿＿、けっかを{聞|き}いてがっかりした。",
+    "jp": "{期待|きたい}していた＿＿、{結果|けっか}を{聞|き}いてがっかりした。",
     "answer": "だけに",
     "options": [
      "くせに",
@@ -3237,7 +3237,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "Having decided, I will see it through to the end."
    },
    {
-    "jp": "けいやくした{上|うえ}は、{守|まも}るぎむがある。",
+    "jp": "{契約|けいやく}した{上|うえ}は、{守|まも}る{義務|ぎむ}がある。",
     "ro": "Keiyaku shita ue wa, mamoru gimu ga aru.",
     "en": "Having signed the contract, you have a duty to keep it."
    },
@@ -3256,7 +3256,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
      "{末|すえ}",
      "{最中|さいちゅう}",
      "{以上|いじょう}",
-     "しだい"
+     "{次第|しだい}"
     ],
     "en": "Since you are an employee, you should follow the rules."
    },
@@ -3324,12 +3324,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use N + に比べて(比べると) to compare one thing with another.",
   "examples": [
    {
-    "jp": "{去年|きょねん}に{比|くら}べて、ぶっかが{上|あ}がった。",
+    "jp": "{去年|きょねん}に{比|くら}べて、{物価|ぶっか}が{上|あ}がった。",
     "ro": "Kyonen ni kurabete, bukka ga agatta.",
     "en": "Prices have risen compared with last year."
    },
    {
-    "jp": "{都会|とかい}に{比|くら}べて、いなかはやちんが{安|やす}い。",
+    "jp": "{都会|とかい}に{比|くら}べて、{田舎|いなか}は{家賃|やちん}が{安|やす}い。",
     "ro": "Tokai ni kurabete, inaka wa yachin ga yasui.",
     "en": "Rent is cheaper in the countryside than in the city."
    },
@@ -3369,7 +3369,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{去年|きょねん}に",
      "{比|くら}べて",
-     "ぶっかが",
+     "{物価|ぶっか}が",
      "{上|あ}がった"
     ],
     "en": "Prices rose compared with last year."
@@ -3417,17 +3417,17 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use N + に対して for an attitude or action aimed at someone, or for a contrast between two things.",
   "examples": [
    {
-    "jp": "お{客|きゃく}さんに{対|たい}して、ていねいな{言葉|ことば}を{使|つか}う。",
+    "jp": "お{客|きゃく}さんに{対|たい}して、{丁寧|ていねい}な{言葉|ことば}を{使|つか}う。",
     "ro": "Okyaku-san ni taishite, teinei na kotoba o tsukau.",
     "en": "We use polite language toward customers."
    },
    {
-    "jp": "{兄|あに}はしゃこうてきなのに{対|たい}して、{私|わたし}は{静|しず}かな{性格|せいかく}だ。",
+    "jp": "{兄|あに}は{社交的|しゃこうてき}なのに{対|たい}して、{私|わたし}は{静|しず}かな{性格|せいかく}だ。",
     "ro": "Ani wa shakōteki na no ni taishite, watashi wa shizuka na seikaku da.",
     "en": "My brother is sociable, whereas I am quiet."
    },
    {
-    "jp": "{彼|かれ}はお{金|かね}に{対|たい}して、あまりきょうみがない。",
+    "jp": "{彼|かれ}はお{金|かね}に{対|たい}して、あまり{興味|きょうみ}がない。",
     "ro": "Kare wa okane ni taishite, amari kyōmi ga nai.",
     "en": "He has little interest in money."
    }
@@ -3471,7 +3471,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "{兄|あに}は",
-     "しゃこうてきな",
+     "{社交的|しゃこうてき}な",
      "のに{対|たい}して",
      "{私|わたし}は",
      "{静|しず}かだ"
@@ -3531,16 +3531,16 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "jp": "{予想|よそう}に＿＿して、{売|う}り{上|あ}げは{減|へ}った。",
     "answer": "{反|はん}",
     "options": [
-     "おう",
-     "そ",
+     "{応|おう}",
+     "{沿|そ}",
      "{反|はん}",
-     "もと"
+     "{基|もと}"
     ],
     "en": "Contrary to expectations, sales fell."
    },
    {
     "type": "fill",
-    "jp": "{期待|きたい}＿＿{反|はん}して、けっかは{悪|わる}かった。",
+    "jp": "{期待|きたい}＿＿{反|はん}して、{結果|けっか}は{悪|わる}かった。",
     "answer": "に",
     "options": [
      "を",
@@ -3555,7 +3555,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{予想|よそう}に",
      "{反|はん}して",
-     "かぶかが",
+     "{株価|かぶか}が",
      "{下|さ}がった"
     ],
     "en": "Contrary to forecasts, the stock price fell."
@@ -3565,7 +3565,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{期待|きたい}に",
      "{反|はん}して",
-     "けっかは",
+     "{結果|けっか}は",
      "{悪|わる}かった"
     ],
     "en": "Contrary to hopes, the result was bad."
@@ -3602,7 +3602,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use N / plain form + にかかわらず when a condition makes no difference to the result.",
   "examples": [
    {
-    "jp": "{経験|けいけん}のうむにかかわらず、だれでもおうぼできます。",
+    "jp": "{経験|けいけん}の{有無|うむ}にかかわらず、{誰|だれ}でも{応募|おうぼ}できます。",
     "ro": "Keiken no umu ni kakawarazu, dare demo ōbo dekimasu.",
     "en": "Anyone can apply, regardless of experience."
    },
@@ -3632,11 +3632,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "けっかの{良|よ}し{悪|あ}し＿＿、{努力|どりょく}は{大切|たいせつ}だ。",
+    "jp": "{結果|けっか}の{良|よ}し{悪|あ}し＿＿、{努力|どりょく}は{大切|たいせつ}だ。",
     "answer": "にかかわらず",
     "options": [
      "に{際|さい}して",
-     "にそって",
+     "に{沿|そ}って",
      "につれて",
      "にかかわらず"
     ],
@@ -3647,7 +3647,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{年齢|ねんれい}に",
      "かかわらず",
-     "だれでも",
+     "{誰|だれ}でも",
      "{参加|さんか}できる"
     ],
     "en": "Anyone can join regardless of age."
@@ -3676,12 +3676,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is natural?",
-    "answer": "{好|す}ききらいにかかわらず、{食|た}べなさい。",
+    "answer": "{好|す}き{嫌|きら}いにかかわらず、{食|た}べなさい。",
     "options": [
-     "{好|す}ききらいにかかわらず、{食|た}べなさい。",
+     "{好|す}き{嫌|きら}いにかかわらず、{食|た}べなさい。",
      "{好|す}きにかかわらず、{食|た}べなさい。",
      "{食|た}べにかかわらず、{好|す}きだ。",
-     "きらいにかかわらず、{眠|ねむ}い。"
+     "{嫌|きら}いにかかわらず、{眠|ねむ}い。"
     ]
    }
   ]
@@ -3694,7 +3694,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use N + を問わず when a wide range of kinds or types are all included.",
   "examples": [
    {
-    "jp": "{経験|けいけん}を{問|と}わず、だれでもかんげいします。",
+    "jp": "{経験|けいけん}を{問|と}わず、{誰|だれ}でも{歓迎|かんげい}します。",
     "ro": "Keiken o towazu, dare demo kangei shimasu.",
     "en": "Everyone is welcome regardless of experience."
    },
@@ -3724,7 +3724,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "{男女|だんじょ}を＿＿、だれでも{参加|さんか}できる。",
+    "jp": "{男女|だんじょ}を＿＿、{誰|だれ}でも{参加|さんか}できる。",
     "answer": "{問|と}わず",
     "options": [
      "{問|と}えず",
@@ -3739,7 +3739,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{年齢|ねんれい}を",
      "{問|と}わず",
-     "だれでも",
+     "{誰|だれ}でも",
      "{入|はい}れる"
     ],
     "en": "Anyone can enter regardless of age."
@@ -3747,7 +3747,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "きせつを",
+     "{季節|きせつ}を",
      "{問|と}わず",
      "{客|きゃく}が",
      "{来|く}る"
@@ -3796,7 +3796,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "The law changed, so we must revise the plan."
    },
    {
-    "jp": "じょうしに{言|い}われたら、{残業|ざんぎょう}せざるを{得|え}ない。",
+    "jp": "{上司|じょうし}に{言|い}われたら、{残業|ざんぎょう}せざるを{得|え}ない。",
     "ro": "Jōshi ni iwaretara, zangyō sezaru o enai.",
     "en": "If my boss says so, I have no choice but to work overtime."
    }
@@ -3816,7 +3816,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "{社長|しゃちょう}の{命令|めいれい}だから、したがわ＿＿を{得|え}ない。",
+    "jp": "{社長|しゃちょう}の{命令|めいれい}だから、{従|したが}わ＿＿を{得|え}ない。",
     "answer": "ざる",
     "options": [
      "ざれ",
@@ -4136,9 +4136,9 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is natural?",
-    "answer": "{安|やす}いばかりでなく、{おいしい}。",
+    "answer": "{安|やす}いばかりでなく、おいしい。",
     "options": [
-     "{安|やす}いばかりでなく、{おいしい}。",
+     "{安|やす}いばかりでなく、おいしい。",
      "{安|やす}いばかりでなく、{高|たか}い。",
      "{安|やす}いばかりでなく、{食|た}べよう。",
      "{安|やす}いばかりでなく、{昨日|きのう}。"
@@ -4154,12 +4154,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use plain form + ことから to give the clue, evidence or origin behind a conclusion or a name.",
   "examples": [
    {
-    "jp": "こえが{低|ひく}かったことから、{電話|でんわ}の{相手|あいて}は{男|おとこ}だと{分|わ}かった。",
+    "jp": "{声|こえ}が{低|ひく}かったことから、{電話|でんわ}の{相手|あいて}は{男|おとこ}だと{分|わ}かった。",
     "ro": "Koe ga hikukatta koto kara, denwa no aite wa otoko da to wakatta.",
     "en": "From the low voice, I knew the caller was a man."
    },
    {
-    "jp": "さくらが{多|おお}いことから、この{町|まち}は「さくらの{町|まち}」と{呼|よ}ばれている。",
+    "jp": "{桜|さくら}が{多|おお}いことから、この{町|まち}は「{桜|さくら}の{町|まち}」と{呼|よ}ばれている。",
     "ro": "Sakura ga ōi koto kara, kono machi wa 'sakura no machi' to yobarete iru.",
     "en": "Because it has many cherry trees, this town is called the 'Cherry Town'."
    },
@@ -4208,10 +4208,10 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "さくらが",
+     "{桜|さくら}が",
      "{多|おお}い",
      "ことから",
-     "さくらの{町|まち}と",
+     "{桜|さくら}の{町|まち}と",
      "{呼|よ}ばれる"
     ],
     "en": "Because it has many cherry trees, it is called Cherry Town."
@@ -4243,22 +4243,22 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
  {
   "id": "L314-2",
   "lesson": 314,
-  "title": "～てはじめて",
+  "title": "～て初めて",
   "meaning": "Only after",
-  "explain": "Use V て + はじめて when you only realise or experience something after an action.",
+  "explain": "Use V て + 初めて when you only realise or experience something after an action.",
   "examples": [
    {
-    "jp": "{病気|びょうき}になってはじめて、けんこうの{大切|たいせつ}さが{分|わ}かった。",
+    "jp": "{病気|びょうき}になって{初|はじ}めて、{健康|けんこう}の{大切|たいせつ}さが{分|わ}かった。",
     "ro": "Byōki ni natte hajimete, kenkō no taisetsusa ga wakatta.",
     "en": "Only after getting sick did I understand the value of health."
    },
    {
-    "jp": "{外国|がいこく}に{住|す}んではじめて、{日本|にほん}のよさに{気|き}づいた。",
+    "jp": "{外国|がいこく}に{住|す}んで{初|はじ}めて、{日本|にほん}のよさに{気|き}づいた。",
     "ro": "Gaikoku ni sunde hajimete, Nihon no yosa ni kizuita.",
     "en": "Only after living abroad did I notice Japan's good points."
    },
    {
-    "jp": "{先生|せんせい}になってはじめて、{教|おし}える{難|むずか}しさを{知|し}った。",
+    "jp": "{先生|せんせい}になって{初|はじ}めて、{教|おし}える{難|むずか}しさを{知|し}った。",
     "ro": "Sensei ni natte hajimete, oshieru muzukashisa o shitta.",
     "en": "Only after becoming a teacher did I learn how hard teaching is."
    }
@@ -4266,7 +4266,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{親|おや}になっ＿＿はじめて、{親|おや}の{気持|きも}ちが{分|わ}かった。",
+    "jp": "{親|おや}になっ＿＿{初|はじ}めて、{親|おや}の{気持|きも}ちが{分|わ}かった。",
     "answer": "て",
     "options": [
      "た",
@@ -4279,12 +4279,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "fill",
     "jp": "{失|うしな}って＿＿、{大切|たいせつ}さが{分|わ}かる。",
-    "answer": "はじめて",
+    "answer": "{初|はじ}めて",
     "options": [
      "ばかりに",
      "ことから",
      "わりには",
-     "はじめて"
+     "{初|はじ}めて"
     ],
     "en": "Only after losing it do you see its value."
    },
@@ -4293,8 +4293,8 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{病気|びょうき}に",
      "なって",
-     "はじめて",
-     "けんこうの",
+     "{初|はじ}めて",
+     "{健康|けんこう}の",
      "{大切|たいせつ}さが",
      "{分|わ}かった"
     ],
@@ -4304,7 +4304,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "{留学|りゅうがく}して",
-     "はじめて",
+     "{初|はじ}めて",
      "{日本|にほん}の",
      "よさを",
      "{知|し}った"
@@ -4313,7 +4313,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "choose",
-    "q": "What does てはじめて emphasise?",
+    "q": "What does て初めて emphasise?",
     "answer": "A realisation that comes only after something happens",
     "options": [
      "A plan before something happens",
@@ -4325,12 +4325,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is correct?",
-    "answer": "{経験|けいけん}してはじめて{分|わ}かる",
+    "answer": "{経験|けいけん}して{初|はじ}めて{分|わ}かる",
     "options": [
-     "{経験|けいけん}してはじめて{分|わ}かる",
-     "{経験|けいけん}したはじめて{分|わ}かる",
-     "{経験|けいけん}しはじめて{分|わ}かる",
-     "{経験|けいけん}するはじめて{分|わ}かる"
+     "{経験|けいけん}して{初|はじ}めて{分|わ}かる",
+     "{経験|けいけん}した{初|はじ}めて{分|わ}かる",
+     "{経験|けいけん}し{初|はじ}めて{分|わ}かる",
+     "{経験|けいけん}する{初|はじ}めて{分|わ}かる"
     ]
    }
   ]
@@ -4440,12 +4440,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "I can't judge without actually seeing it."
    },
    {
-    "jp": "やってみないことには、けっかは{分|わ}からない。",
+    "jp": "やってみないことには、{結果|けっか}は{分|わ}からない。",
     "ro": "Yatte minai koto ni wa, kekka wa wakaranai.",
     "en": "Unless you try, you won't know the result."
    },
    {
-    "jp": "{先生|せんせい}のきょかがないことには、{実験|じっけん}を{始|はじ}められない。",
+    "jp": "{先生|せんせい}の{許可|きょか}がないことには、{実験|じっけん}を{始|はじ}められない。",
     "ro": "Sensei no kyoka ga nai koto ni wa, jikken o hajimerarenai.",
     "en": "We can't begin the experiment without the teacher's permission."
    }
@@ -4465,7 +4465,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "{実際|じっさい}に{会|あ}わ＿＿、ひとがらは{分|わ}からない。",
+    "jp": "{実際|じっさい}に{会|あ}わ＿＿、{人柄|ひとがら}は{分|わ}からない。",
     "answer": "ないことには",
     "options": [
      "ないことでは",
@@ -4490,7 +4490,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{試|ため}さない",
      "ことには",
-     "けっかは",
+     "{結果|けっか}は",
      "{分|わ}からない"
     ],
     "en": "Unless you try, you won't know the result."
@@ -4522,22 +4522,22 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
  {
   "id": "L315-1",
   "lesson": 315,
-  "title": "～にともなって",
+  "title": "～に伴って",
   "meaning": "Along with; as",
-  "explain": "Use N / V る + にともなって when a change in one thing goes together with a change in another.",
+  "explain": "Use N / V る + に伴って when a change in one thing goes together with a change in another.",
   "examples": [
    {
-    "jp": "{技術|ぎじゅつ}の{進歩|しんぽ}にともなって、{生活|せいかつ}が{便利|べんり}になった。",
+    "jp": "{技術|ぎじゅつ}の{進歩|しんぽ}に{伴|ともな}って、{生活|せいかつ}が{便利|べんり}になった。",
     "ro": "Gijutsu no shinpo ni tomonatte, seikatsu ga benri ni natta.",
     "en": "With technological progress, life became more convenient."
    },
    {
-    "jp": "{人口|じんこう}が{増|ふ}えるにともなって、{学校|がっこう}も{増|ふ}えた。",
+    "jp": "{人口|じんこう}が{増|ふ}えるに{伴|ともな}って、{学校|がっこう}も{増|ふ}えた。",
     "ro": "Jinkō ga fueru ni tomonatte, gakkō mo fueta.",
     "en": "As the population grew, schools increased too."
    },
    {
-    "jp": "{気温|きおん}の{上昇|じょうしょう}にともなって、{氷|こおり}がとけている。",
+    "jp": "{気温|きおん}の{上昇|じょうしょう}に{伴|ともな}って、{氷|こおり}がとけている。",
     "ro": "Kion no jōshō ni tomonatte, kōri ga tokete iru.",
     "en": "The ice is melting as temperatures rise."
    }
@@ -4545,7 +4545,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{技術|ぎじゅつ}の{進歩|しんぽ}＿＿ともなって、{生活|せいかつ}が{変|か}わった。",
+    "jp": "{技術|ぎじゅつ}の{進歩|しんぽ}＿＿{伴|ともな}って、{生活|せいかつ}が{変|か}わった。",
     "answer": "に",
     "options": [
      "を",
@@ -4558,12 +4558,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "fill",
     "jp": "{人口|じんこう}が{増|ふ}える＿＿、{学校|がっこう}も{増|ふ}えた。",
-    "answer": "にともなって",
+    "answer": "に{伴|ともな}って",
     "options": [
      "をめぐって",
      "において",
      "につき",
-     "にともなって"
+     "に{伴|ともな}って"
     ],
     "en": "Schools increased as the population grew."
    },
@@ -4571,7 +4571,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "{技術|ぎじゅつ}の{進歩|しんぽ}に",
-     "ともなって",
+     "{伴|ともな}って",
      "{生活|せいかつ}が",
      "{変|か}わった"
     ],
@@ -4582,7 +4582,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{人口|じんこう}が",
      "{増|ふ}える",
-     "にともなって",
+     "に{伴|ともな}って",
      "ごみも",
      "{増|ふ}えた"
     ],
@@ -4590,7 +4590,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "choose",
-    "q": "What does にともなって express?",
+    "q": "What does に伴って express?",
     "answer": "Two changes happening together",
     "options": [
      "A reason for a complaint",
@@ -4601,7 +4601,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "choose",
-    "q": "What kind of word goes before にともなって?",
+    "q": "What kind of word goes before に伴って?",
     "answer": "A change, such as a rise or growth",
     "options": [
      "A change, such as a rise or growth",
@@ -4615,22 +4615,22 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
  {
   "id": "L315-2",
   "lesson": 315,
-  "title": "～にしたがって",
+  "title": "～に従って",
   "meaning": "As; in accordance with",
-  "explain": "Use V る / N + にしたがって for a change that goes step by step, or for following a rule.",
+  "explain": "Use V る / N + に従って for a change that goes step by step, or for following a rule.",
   "examples": [
    {
-    "jp": "{高|たか}い{山|やま}に{登|のぼ}るにしたがって、{空気|くうき}がうすくなる。",
+    "jp": "{高|たか}い{山|やま}に{登|のぼ}るに{従|したが}って、{空気|くうき}が{薄|うす}くなる。",
     "ro": "Takai yama ni noboru ni shitagatte, kūki ga usuku naru.",
     "en": "The higher you climb, the thinner the air gets."
    },
    {
-    "jp": "{時間|じかん}が{経|た}つにしたがって、{痛|いた}みが{弱|よわ}くなった。",
+    "jp": "{時間|じかん}が{経|た}つに{従|したが}って、{痛|いた}みが{弱|よわ}くなった。",
     "ro": "Jikan ga tatsu ni shitagatte, itami ga yowaku natta.",
     "en": "As time passed, the pain grew weaker."
    },
    {
-    "jp": "{年|とし}を{取|と}るにしたがって、{体力|たいりょく}が{落|お}ちてきた。",
+    "jp": "{年|とし}を{取|と}るに{従|したが}って、{体力|たいりょく}が{落|お}ちてきた。",
     "ro": "Toshi o toru ni shitagatte, tairyoku ga ochite kita.",
     "en": "As I get older, my stamina has declined."
    }
@@ -4639,11 +4639,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "fill",
     "jp": "{夜|よる}が{深|ふか}くなる＿＿、{寒|さむ}くなってきた。",
-    "answer": "にしたがって",
+    "answer": "に{従|したが}って",
     "options": [
      "ばかりに",
      "くせに",
-     "にしたがって",
+     "に{従|したが}って",
      "ものの"
     ],
     "en": "It got colder as the night deepened."
@@ -4651,12 +4651,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "fill",
     "jp": "スピードが{上|あ}がる＿＿、{音|おと}が{大|おお}きくなった。",
-    "answer": "にしたがって",
+    "answer": "に{従|したが}って",
     "options": [
      "につき",
      "にあたって",
      "に{際|さい}して",
-     "にしたがって"
+     "に{従|したが}って"
     ],
     "en": "The noise grew as the speed rose."
    },
@@ -4665,7 +4665,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{山|やま}に",
      "{登|のぼ}る",
-     "にしたがって",
+     "に{従|したが}って",
      "{寒|さむ}く",
      "なる"
     ],
@@ -4676,7 +4676,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{時間|じかん}が",
      "{経|た}つ",
-     "にしたがって",
+     "に{従|したが}って",
      "{痛|いた}みが",
      "{弱|よわ}くなる"
     ],
@@ -4684,7 +4684,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "choose",
-    "q": "What can NOT follow にしたがって?",
+    "q": "What can NOT follow に従って?",
     "answer": "A plan or request, such as an invitation",
     "options": [
      "A gradual change",
@@ -4696,12 +4696,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is natural?",
-    "answer": "{年|とし}を{取|と}るにしたがって、{体力|たいりょく}が{落|お}ちる。",
+    "answer": "{年|とし}を{取|と}るに{従|したが}って、{体力|たいりょく}が{落|お}ちる。",
     "options": [
-     "{年|とし}を{取|と}るにしたがって、{体力|たいりょく}が{落|お}ちる。",
-     "{年|とし}を{取|と}るにしたがって、{食|た}べに{行|い}こう。",
-     "{年|とし}を{取|と}るにしたがって、{昨日|きのう}{寝|ね}た。",
-     "{年|とし}を{取|と}るにしたがって、{食|た}べたい。"
+     "{年|とし}を{取|と}るに{従|したが}って、{体力|たいりょく}が{落|お}ちる。",
+     "{年|とし}を{取|と}るに{従|したが}って、{食|た}べに{行|い}こう。",
+     "{年|とし}を{取|と}るに{従|したが}って、{昨日|きのう}{寝|ね}た。",
+     "{年|とし}を{取|と}るに{従|したが}って、{食|た}べたい。"
     ]
    }
   ]
@@ -4714,12 +4714,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use V ます-stem + ようがない to say it is impossible to do, because there is no means or method.",
   "examples": [
    {
-    "jp": "れんらくさきが{分|わ}からないので、{知|し}らせようがない。",
+    "jp": "{連絡先|れんらくさき}が{分|わ}からないので、{知|し}らせようがない。",
     "ro": "Renrakusaki ga wakaranai node, shirase yō ga nai.",
     "en": "I don't know the contact details, so I have no way to tell them."
    },
    {
-    "jp": "こんなにこわれては、{直|なお}しようがない。",
+    "jp": "こんなに{壊|こわ}れては、{直|なお}しようがない。",
     "ro": "Konna ni kowarete wa, naoshi yō ga nai.",
     "en": "It's broken this badly, so there's no way to fix it."
    },
@@ -4732,7 +4732,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "れんらくさきを{知|し}らないので、{連絡|れんらく}し＿＿がない。",
+    "jp": "{連絡先|れんらくさき}を{知|し}らないので、{連絡|れんらく}し＿＿がない。",
     "answer": "よう",
     "options": [
      "そう",
@@ -4767,7 +4767,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "れんらくさきを",
+     "{連絡先|れんらくさき}を",
      "{知|し}らないので",
      "{連絡|れんらく}し",
      "ようがない"
@@ -4801,22 +4801,22 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
  {
   "id": "L316-1",
   "lesson": 316,
-  "title": "～ないかぎり",
+  "title": "～ない限り",
   "meaning": "Unless",
-  "explain": "Use V ない + かぎり when a result will not change unless a condition is met.",
+  "explain": "Use V ない + 限り when a result will not change unless a condition is met.",
   "examples": [
    {
-    "jp": "{雨|あめ}が{降|ふ}らないかぎり、{試合|しあい}は{行|おこな}われる。",
+    "jp": "{雨|あめ}が{降|ふ}らない{限|かぎ}り、{試合|しあい}は{行|おこな}われる。",
     "ro": "Ame ga furanai kagiri, shiai wa okonawareru.",
     "en": "Unless it rains, the match will go ahead."
    },
    {
-    "jp": "{本人|ほんにん}が{来|こ}ないかぎり、{手続|てつづ}きはできません。",
+    "jp": "{本人|ほんにん}が{来|こ}ない{限|かぎ}り、{手続|てつづ}きはできません。",
     "ro": "Honnin ga konai kagiri, tetsuzuki wa dekimasen.",
     "en": "The procedure can't be done unless the person comes in."
    },
    {
-    "jp": "{努力|どりょく}しないかぎり、{夢|ゆめ}はかなわない。",
+    "jp": "{努力|どりょく}しない{限|かぎ}り、{夢|ゆめ}はかなわない。",
     "ro": "Doryoku shinai kagiri, yume wa kanawanai.",
     "en": "Unless you make an effort, your dream won't come true."
    }
@@ -4824,7 +4824,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{練習|れんしゅう}し＿＿かぎり、{上手|じょうず}にならない。",
+    "jp": "{練習|れんしゅう}し＿＿{限|かぎ}り、{上手|じょうず}にならない。",
     "answer": "ない",
     "options": [
      "なく",
@@ -4837,12 +4837,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "fill",
     "jp": "{天気|てんき}が{悪|わる}くならない＿＿、{出発|しゅっぱつ}します。",
-    "answer": "かぎり",
+    "answer": "{限|かぎ}り",
     "options": [
      "ばかり",
      "たびに",
      "ごとに",
-     "かぎり"
+     "{限|かぎ}り"
     ],
     "en": "Unless the weather turns bad, we'll set off."
    },
@@ -4851,7 +4851,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{本人|ほんにん}が",
      "{来|こ}ない",
-     "かぎり",
+     "{限|かぎ}り",
      "{手続|てつづ}きは",
      "できない"
     ],
@@ -4862,7 +4862,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "{努力|どりょく}し",
      "ない",
-     "かぎり",
+     "{限|かぎ}り",
      "{夢|ゆめ}は",
      "かなわない"
     ],
@@ -4870,7 +4870,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "choose",
-    "q": "What does ないかぎり mean?",
+    "q": "What does ない限り mean?",
     "answer": "Unless a condition is met, the result stays the same",
     "options": [
      "As soon as a condition is met",
@@ -4881,7 +4881,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "choose",
-    "q": "What kind of ending follows ないかぎり?",
+    "q": "What kind of ending follows ない限り?",
     "answer": "A result that won't change; often negative",
     "options": [
      "A result that won't change; often negative",
@@ -4954,7 +4954,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "type": "order",
     "tiles": [
      "もう{少|すこ}しで",
-     "じこに",
+     "{事故|じこ}に",
      "なる",
      "ところだった"
     ],
@@ -4997,7 +4997,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "He had a face as if he knew nothing."
    },
    {
-    "jp": "{今日|きょう}は{春|はる}が{来|き}たかのようにあたたかい。",
+    "jp": "{今日|きょう}は{春|はる}が{来|き}たかのように{暖|あたた}かい。",
     "ro": "Kyō wa haru ga kita ka no yō ni atatakai.",
     "en": "It's warm today, as if spring had come."
    },
@@ -5048,7 +5048,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
      "{今日|きょう}は",
      "{春|はる}が",
      "{来|き}たかのように",
-     "あたたかい"
+     "{暖|あたた}かい"
     ],
     "en": "It is warm today, as if spring had come."
    },
@@ -5106,7 +5106,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "answer": "{上|うえ}",
     "options": [
      "{末|すえ}",
-     "しだい",
+     "{次第|しだい}",
      "{上|うえ}",
      "{最中|さいちゅう}"
     ],
@@ -5119,7 +5119,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "options": [
      "{末|すえ}に",
      "あげく",
-     "しだい",
+     "{次第|しだい}",
      "{上|うえ}に"
     ],
     "en": "It's raining, and on top of that it's windy."
@@ -5207,7 +5207,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "この{店|みせ}は{味|あじ}はもちろん、ふんいき＿＿いい。",
+    "jp": "この{店|みせ}は{味|あじ}はもちろん、{雰囲気|ふんいき}＿＿いい。",
     "answer": "も",
     "options": [
      "だけ",
@@ -5363,7 +5363,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use N + にかけては to praise someone's skill or ability in a given area.",
   "examples": [
    {
-    "jp": "{料理|りょうり}にかけては、{母|はは}はだれにも{負|ま}けない。",
+    "jp": "{料理|りょうり}にかけては、{母|はは}は{誰|だれ}にも{負|ま}けない。",
     "ro": "Ryōri ni kakete wa, haha wa dare ni mo makenai.",
     "en": "When it comes to cooking, my mother is second to none."
    },
@@ -5393,12 +5393,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "{計算|けいさん}＿＿、{弟|おとうと}はだれより{速|はや}い。",
+    "jp": "{計算|けいさん}＿＿、{弟|おとうと}は{誰|だれ}より{速|はや}い。",
     "answer": "にかけては",
     "options": [
      "にわたって",
      "に{際|さい}して",
-     "にそって",
+     "に{沿|そ}って",
      "にかけては"
     ],
     "en": "When it comes to calculation, my brother is faster than anyone."
@@ -5409,7 +5409,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
      "{料理|りょうり}に",
      "かけては",
      "{母|はは}は",
-     "だれにも",
+     "{誰|だれ}にも",
      "{負|ま}けない"
     ],
     "en": "When it comes to cooking, my mother is the best."
@@ -5548,17 +5548,17 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use plain form + ほど to describe how extreme a state or action is.",
   "examples": [
    {
-    "jp": "なみだが{出|で}るほど、{笑|わら}った。",
+    "jp": "{涙|なみだ}が{出|で}るほど、{笑|わら}った。",
     "ro": "Namida ga deru hodo, waratta.",
     "en": "I laughed so hard I cried."
    },
    {
-    "jp": "おなかが{痛|いた}くなるほど、{食|た}べてしまった。",
+    "jp": "お{腹|なか}が{痛|いた}くなるほど、{食|た}べてしまった。",
     "ro": "Onaka ga itaku naru hodo, tabete shimatta.",
     "en": "I ate until my stomach hurt."
    },
    {
-    "jp": "この{映画|えいが}は、なきたくなるほど{美|うつく}しい{話|はなし}だ。",
+    "jp": "この{映画|えいが}は、{泣|な}きたくなるほど{美|うつく}しい{話|はなし}だ。",
     "ro": "Kono eiga wa, nakitaku naru hodo utsukushii hanashi da.",
     "en": "This film tells a story so beautiful it makes you want to cry."
    }
@@ -5621,12 +5621,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is correct?",
-    "answer": "なきたいほど{悲|かな}しい",
+    "answer": "{泣|な}きたいほど{悲|かな}しい",
     "options": [
-     "なきたいほど{悲|かな}しい",
-     "なきたいほどが{悲|かな}しい",
-     "なきたいほどを{悲|かな}しい",
-     "なきたいほどと{悲|かな}しい"
+     "{泣|な}きたいほど{悲|かな}しい",
+     "{泣|な}きたいほどが{悲|かな}しい",
+     "{泣|な}きたいほどを{悲|かな}しい",
+     "{泣|な}きたいほどと{悲|かな}しい"
     ]
    }
   ]
@@ -5716,7 +5716,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "answer": "{雨|あめ}が{降|ふ}っているから、{寒|さむ}いに{決|き}まっている。",
     "options": [
      "{雨|あめ}が{降|ふ}っているから、{寒|さむ}いに{決|き}まっている。",
-     "{雨|あめ}が{降|ふ}っているから、{行|い}くに{決|き}まっている。",
+     "{雨|あめ}が{降|ふ}っているから、{寒|さむ}いが{決|き}まっている。",
      "{雨|あめ}が{降|ふ}ったに{決|き}まっている、さあ。",
      "{雨|あめ}が{降|ふ}っているに{決|き}まっているです。"
     ]
@@ -5731,7 +5731,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use plain form + に違いない for a strong judgement based on clues.",
   "examples": [
    {
-    "jp": "でんきがついているから、{彼|かれ}はまだ{会社|かいしゃ}にいるに{違|ちが}いない。",
+    "jp": "{電気|でんき}がついているから、{彼|かれ}はまだ{会社|かいしゃ}にいるに{違|ちが}いない。",
     "ro": "Denki ga tsuite iru kara, kare wa mada kaisha ni iru ni chigainai.",
     "en": "The lights are on, so he must still be at the office."
    },
@@ -5805,12 +5805,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is natural?",
-    "answer": "{足音|あしおと}がするから、だれか{いる}に{違|ちが}いない。",
+    "answer": "{足音|あしおと}がするから、{誰|だれ}かいるに{違|ちが}いない。",
     "options": [
-     "{足音|あしおと}がするから、だれか{いる}に{違|ちが}いない。",
-     "{足音|あしおと}がするから、だれか{いる}と{食|た}べに{違|ちが}いない。",
-     "{足音|あしおと}がするから、だれか{いる}か{違|ちが}いない。",
-     "{足音|あしおと}がするから、だれか{いる}に{違|ちが}わない。"
+     "{足音|あしおと}がするから、{誰|だれ}かいるに{違|ちが}いない。",
+     "{足音|あしおと}がするから、{誰|だれ}かいると{食|た}べに{違|ちが}いない。",
+     "{足音|あしおと}がするから、{誰|だれ}かいるか{違|ちが}いない。",
+     "{足音|あしおと}がするから、{誰|だれ}かいるに{違|ちが}わない。"
     ]
    }
   ]
@@ -5824,11 +5824,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "examples": [
    {
     "jp": "{私|わたし}は、ただのアルバイトにすぎません。",
-    "ro": "Watashi wa, tada no arubaito ni suginai.",
+    "ro": "Watashi wa, tada no arubaito ni sugimasen.",
     "en": "I'm merely a part-timer."
    },
    {
-    "jp": "それは{単|たん}なるうわさにすぎない。",
+    "jp": "それは{単|たん}なる{噂|うわさ}にすぎない。",
     "ro": "Sore wa tan naru uwasa ni suginai.",
     "en": "That is just a rumour."
    },
@@ -5841,7 +5841,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "それはただのうわさ＿＿すぎない。",
+    "jp": "それはただの{噂|うわさ}＿＿すぎない。",
     "answer": "に",
     "options": [
      "と",
@@ -5868,7 +5868,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "tiles": [
      "それは",
      "ただの",
-     "うわさに",
+     "{噂|うわさ}に",
      "すぎない"
     ],
     "en": "That is only a rumour."
@@ -5990,12 +5990,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is natural?",
-    "answer": "けんこうは、{大切|たいせつ}にするに{越|こ}したことはない。",
+    "answer": "{健康|けんこう}は、{大切|たいせつ}にするに{越|こ}したことはない。",
     "options": [
-     "けんこうは、{大切|たいせつ}にするに{越|こ}したことはない。",
-     "けんこうは、{大切|たいせつ}にするに{越|こ}したことになる。",
-     "けんこうは、{大切|たいせつ}にするを{越|こ}したことはない。",
-     "けんこうは、{大切|たいせつ}にするが{越|こ}したことはない。"
+     "{健康|けんこう}は、{大切|たいせつ}にするに{越|こ}したことはない。",
+     "{健康|けんこう}は、{大切|たいせつ}にするに{越|こ}したことになる。",
+     "{健康|けんこう}は、{大切|たいせつ}にするを{越|こ}したことはない。",
+     "{健康|けんこう}は、{大切|たいせつ}にするが{越|こ}したことはない。"
     ]
    }
   ]
@@ -6018,7 +6018,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "It is I who should say that — pleased to meet you."
    },
    {
-    "jp": "{努力|どりょく}したからこそ、せいこうできたのだ。",
+    "jp": "{努力|どりょく}したからこそ、{成功|せいこう}できたのだ。",
     "ro": "Doryoku shita kara koso, seikō dekita no da.",
     "en": "It's precisely because I worked hard that I succeeded."
    }
@@ -6038,7 +6038,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "{努力|どりょく}したから＿＿、せいこうできた。",
+    "jp": "{努力|どりょく}したから＿＿、{成功|せいこう}できた。",
     "answer": "こそ",
     "options": [
      "さえ",
@@ -6100,7 +6100,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use N + さえ for an extreme example that suggests everything else follows.",
   "examples": [
    {
-    "jp": "いそがしくて、{食事|しょくじ}の{時間|じかん}さえない。",
+    "jp": "{忙|いそが}しくて、{食事|しょくじ}の{時間|じかん}さえない。",
     "ro": "Isogashikute, shokuji no jikan sae nai.",
     "en": "I'm so busy I don't even have time to eat."
    },
@@ -6118,7 +6118,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "いそがしくて、{食事|しょくじ}の{時間|じかん}＿＿ない。",
+    "jp": "{忙|いそが}しくて、{食事|しょくじ}の{時間|じかん}＿＿ない。",
     "answer": "さえ",
     "options": [
      "こそ",
@@ -6195,7 +6195,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "Rather than ask someone like that, I'll do it myself."
    },
    {
-    "jp": "あやまるくらいなら、{最初|さいしょ}からやらなければよかった。",
+    "jp": "{謝|あやま}るくらいなら、{最初|さいしょ}からやらなければよかった。",
     "ro": "Ayamaru kurai nara, saisho kara yaranakereba yokatta.",
     "en": "If I'd have to apologise, I shouldn't have done it at all."
    },
@@ -6244,7 +6244,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "あやまる",
+     "{謝|あやま}る",
      "くらいなら",
      "{最初|さいしょ}から",
      "やらない"
@@ -6395,7 +6395,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{日本人|にほんじん}が{全員|ぜんいん}なっとうを{好|す}きだ＿＿{限|かぎ}らない。",
+    "jp": "{日本人|にほんじん}が{全員|ぜんいん}{納豆|なっとう}を{好|す}きだ＿＿{限|かぎ}らない。",
     "answer": "とは",
     "options": [
      "には",
@@ -6561,7 +6561,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use V ます-stem + かねる to say politely that you are unable or unwilling to do or agree to something.",
   "examples": [
    {
-    "jp": "もうしわけありませんが、そのご{依頼|いらい}はお{引|ひ}き{受|う}けしかねます。",
+    "jp": "{申|もう}し{訳|わけ}ありませんが、そのご{依頼|いらい}はお{引|ひ}き{受|う}けしかねます。",
     "ro": "Mōshiwake arimasen ga, sono go-irai wa o-hikiuke shikanemasu.",
     "en": "I'm sorry, but we cannot take on that request."
    },
@@ -6579,7 +6579,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "そのあんには{賛成|さんせい}し＿＿。",
+    "jp": "その{案|あん}には{賛成|さんせい}し＿＿。",
     "answer": "かねる",
     "options": [
      "かねない",
@@ -6604,7 +6604,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "そのあんには",
+     "その{案|あん}には",
      "{賛成|さんせい}し",
      "かねます"
     ],
@@ -6676,7 +6676,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
      "ところが",
      "ばかりが",
      "わけが",
-     "おそれが"
+     "{恐|おそ}れが"
     ],
     "en": "I've never been there, so there's no way I know the road."
    },
@@ -6725,12 +6725,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is natural?",
-    "answer": "{そんな}{話|はなし}が{本当|ほんとう}のわけがない。",
+    "answer": "そんな{話|はなし}が{本当|ほんとう}のわけがない。",
     "options": [
-     "{そんな}{話|はなし}が{本当|ほんとう}のわけがない。",
-     "{そんな}{話|はなし}が{本当|ほんとう}わけがある。",
-     "{そんな}{話|はなし}が{本当|ほんとう}のわけでない。",
-     "{そんな}{話|はなし}が{本当|ほんとう}のわけをない。"
+     "そんな{話|はなし}が{本当|ほんとう}のわけがない。",
+     "そんな{話|はなし}が{本当|ほんとう}わけがある。",
+     "そんな{話|はなし}が{本当|ほんとう}のわけでない。",
+     "そんな{話|はなし}が{本当|ほんとう}のわけをない。"
     ]
    }
   ]
@@ -6748,7 +6748,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "There's no way I'll lose to someone like that."
    },
    {
-    "jp": "だれがそんな{話|はなし}を{信|しん}じるものか。",
+    "jp": "{誰|だれ}がそんな{話|はなし}を{信|しん}じるものか。",
     "ro": "Dare ga sonna hanashi o shinjiru mono ka.",
     "en": "Who on earth would believe a story like that?"
    },
@@ -6773,7 +6773,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "だれがそんな{話|はなし}を{信|しん}じる＿＿。",
+    "jp": "{誰|だれ}がそんな{話|はなし}を{信|しん}じる＿＿。",
     "answer": "ものか",
     "options": [
      "ものだ",
@@ -6835,12 +6835,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use N / V る + どころではない to say the situation is far too serious or busy for that.",
   "examples": [
    {
-    "jp": "いそがしくて、{旅行|りょこう}どころではない。",
+    "jp": "{忙|いそが}しくて、{旅行|りょこう}どころではない。",
     "ro": "Isogashikute, ryokō dokoro de wa nai.",
     "en": "I'm too busy for travel."
    },
    {
-    "jp": "かぜで{熱|ねつ}があって、{勉強|べんきょう}どころではなかった。",
+    "jp": "{風邪|かぜ}で{熱|ねつ}があって、{勉強|べんきょう}どころではなかった。",
     "ro": "Kaze de netsu ga atte, benkyō dokoro de wa nakatta.",
     "en": "I had a fever from a cold and was in no state to study."
    },
@@ -6853,7 +6853,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "いそがしくて、{旅行|りょこう}＿＿ではない。",
+    "jp": "{忙|いそが}しくて、{旅行|りょこう}＿＿ではない。",
     "answer": "どころ",
     "options": [
      "ごろ",
@@ -6878,7 +6878,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "いそがしくて",
+     "{忙|いそが}しくて",
      "{旅行|りょこう}",
      "どころ",
      "ではない"
@@ -6888,7 +6888,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "かぜで",
+     "{風邪|かぜ}で",
      "{勉強|べんきょう}",
      "どころ",
      "ではなかった"
@@ -6927,12 +6927,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use plain form + としても to assume something and say the result still applies.",
   "examples": [
    {
-    "jp": "いまから{急|いそ}いだとしても、{間|ま}に{合|あ}わないだろう。",
+    "jp": "{今|いま}から{急|いそ}いだとしても、{間|ま}に{合|あ}わないだろう。",
     "ro": "Ima kara isoida to shite mo, ma ni awanai darō.",
     "en": "Even if we hurry now, we probably won't make it."
    },
    {
-    "jp": "たとえ{失敗|しっぱい}したとしても、こうかいはしない。",
+    "jp": "たとえ{失敗|しっぱい}したとしても、{後悔|こうかい}はしない。",
     "ro": "Tatoe shippai shita to shite mo, kōkai wa shinai.",
     "en": "Even if I fail, I won't regret it."
    },
@@ -6957,7 +6957,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "たとえ{失敗|しっぱい}した＿＿、こうかいはしない。",
+    "jp": "たとえ{失敗|しっぱい}した＿＿、{後悔|こうかい}はしない。",
     "answer": "としても",
     "options": [
      "ことから",
@@ -6983,7 +6983,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
      "たとえ",
      "{失敗|しっぱい}した",
      "としても",
-     "こうかいしない"
+     "{後悔|こうかい}しない"
     ],
     "en": "Even if I fail, I won't regret it."
    },
@@ -7001,9 +7001,9 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "What often comes before it?",
-    "answer": "たとえ or かりに",
+    "answer": "たとえ or {仮|かり}に",
     "options": [
-     "たとえ or かりに",
+     "たとえ or {仮|かり}に",
      "まるで",
      "ちょうど",
      "いつも"
@@ -7019,17 +7019,17 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use V た + ところで when doing something would be useless or make no difference.",
   "examples": [
    {
-    "jp": "いまから{急|いそ}いだところで、{間|ま}に{合|あ}わない。",
+    "jp": "{今|いま}から{急|いそ}いだところで、{間|ま}に{合|あ}わない。",
     "ro": "Ima kara isoida tokoro de, ma ni awanai.",
     "en": "Even if we hurry now, we won't make it."
    },
    {
-    "jp": "あやまったところで、{許|ゆる}してもらえないだろう。",
+    "jp": "{謝|あやま}ったところで、{許|ゆる}してもらえないだろう。",
     "ro": "Ayamatta tokoro de, yurushite moraenai darō.",
     "en": "Even if I apologise, he won't forgive me."
    },
    {
-    "jp": "いくらがんばったところで、けっかは{変|か}わらない。",
+    "jp": "いくらがんばったところで、{結果|けっか}は{変|か}わらない。",
     "ro": "Ikura ganbatta tokoro de, kekka wa kawaranai.",
     "en": "No matter how hard you try, the result won't change."
    }
@@ -7049,7 +7049,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    },
    {
     "type": "fill",
-    "jp": "いまさらないた＿＿、もう{遅|おそ}い。",
+    "jp": "{今更|いまさら}{泣|な}いた＿＿、もう{遅|おそ}い。",
     "answer": "ところで",
     "options": [
      "ばかりで",
@@ -7065,14 +7065,14 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
      "いくら",
      "{説明|せつめい}した",
      "ところで",
-     "むだだ"
+     "{無駄|むだ}だ"
     ],
     "en": "No matter how I explain, it's useless."
    },
    {
     "type": "order",
     "tiles": [
-     "あやまった",
+     "{謝|あやま}った",
      "ところで",
      "{許|ゆる}して",
      "もらえない"
@@ -7093,12 +7093,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "choose",
     "q": "Which is natural?",
-    "answer": "あやまったところで、{許|ゆる}してもらえない。",
+    "answer": "{謝|あやま}ったところで、{許|ゆる}してもらえない。",
     "options": [
-     "あやまったところで、{許|ゆる}してもらえない。",
-     "あやまったところで、{許|ゆる}してもらいたい。",
-     "あやまったところで、{行|い}こう。",
-     "あやまったところで、{許|ゆる}してください。"
+     "{謝|あやま}ったところで、{許|ゆる}してもらえない。",
+     "{謝|あやま}ったところで、{許|ゆる}してもらいたい。",
+     "{謝|あやま}ったところで、{行|い}こう。",
+     "{謝|あやま}ったところで、{許|ゆる}してください。"
     ]
    }
   ]
@@ -7111,7 +7111,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use plain form / N + にしても to grant a point but then add that something still holds.",
   "examples": [
    {
-    "jp": "いそがしいにしても、れんらくぐらいできるはずだ。",
+    "jp": "{忙|いそが}しいにしても、{連絡|れんらく}ぐらいできるはずだ。",
     "ro": "Isogashii ni shite mo, renraku gurai dekiru hazu da.",
     "en": "Even granting that you're busy, you could at least get in touch."
    },
@@ -7121,7 +7121,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "en": "Whether you go or not, please answer soon."
    },
    {
-    "jp": "じょうだんにしても、{言|い}い{過|す}ぎだ。",
+    "jp": "{冗談|じょうだん}にしても、{言|い}い{過|す}ぎだ。",
     "ro": "Jōdan ni shite mo, iisugi da.",
     "en": "Even as a joke, that was going too far."
    }
@@ -7129,7 +7129,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "じょうだん＿＿、{言|い}い{過|す}ぎだ。",
+    "jp": "{冗談|じょうだん}＿＿、{言|い}い{過|す}ぎだ。",
     "answer": "にしても",
     "options": [
      "にあたって",
@@ -7154,9 +7154,9 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "いそがしい",
+     "{忙|いそが}しい",
      "にしても",
-     "れんらくぐらい",
+     "{連絡|れんらく}ぐらい",
      "できるはずだ"
     ],
     "en": "Even if you're busy, you should contact me."
@@ -7164,7 +7164,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
    {
     "type": "order",
     "tiles": [
-     "じょうだん",
+     "{冗談|じょうだん}",
      "にしても",
      "{言|い}い{過|す}ぎだ"
     ],
@@ -7202,7 +7202,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "explain": "Use V potential + ものなら for a wish that is nearly impossible, or as a challenge or warning.",
   "examples": [
    {
-    "jp": "できるものなら、もう{一度|いちど}{若|わか}いころに{戻|もど}りたい。",
+    "jp": "できるものなら、もう{一度|いちど}{若|わか}い{頃|ころ}に{戻|もど}りたい。",
     "ro": "Dekiru mono nara, mō ichido wakai koro ni modoritai.",
     "en": "If I could, I'd like to go back to my youth once more."
    },
@@ -7312,7 +7312,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
   "drills": [
    {
     "type": "fill",
-    "jp": "{英語|えいご}が{話|はな}せる＿＿、あいさつぐらいです。",
+    "jp": "{英語|えいご}が{話|はな}せる＿＿、{挨拶|あいさつ}ぐらいです。",
     "answer": "といっても",
     "options": [
      "ばかりに",
@@ -7329,7 +7329,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     "options": [
      "にかかわらず",
      "をめぐって",
-     "におうじて",
+     "に{応|おう}じて",
      "といっても"
     ],
     "en": "I'm president, but there are only three staff."
@@ -7382,13 +7382,13 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
 window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
  "L301-1": {
   "formula": [
-   "V ます-stem + しだい",
-   "N + しだいだ"
+   "V ます-stem + 次第",
+   "N + 次第だ"
   ],
   "points": [
    "It means as soon as, with no gap in between.",
    "The second half is your action or plan, not a past event.",
-   "N + しだいだ means it all depends on N.",
+   "N + 次第だ means it all depends on N.",
    "It sounds polite, so it is common in business."
   ],
   "tables": [
@@ -7400,11 +7400,11 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "分かりしだい",
+      "分かり次第",
       "as soon as I know"
      ],
      [
-      "お金しだい",
+      "お金次第",
       "depends on the money"
      ]
     ]
@@ -7412,8 +7412,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "家に着いたしだい、電話します。",
-    "good": "家に着きしだい、電話します。",
+    "bad": "家に着いた次第、電話します。",
+    "good": "家に着き次第、電話します。",
     "why": "Use the ます-stem, not the た-form."
    }
   ],
@@ -7466,7 +7466,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   "points": [
    "After a long, tiring process, an unwelcome result comes.",
    "The result is usually negative or disappointing.",
-   "けっきょく or とうとう often sits in the second half.",
+   "結局 or とうとう often sits in the second half.",
    "It can't be used for a result you are happy about."
   ],
   "tables": [
@@ -7837,8 +7837,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "彼はさびしくてならない。",
-    "good": "私はさびしくてならない。",
+    "bad": "彼は寂しくてならない。",
+    "good": "私は寂しくてならない。",
     "why": "It describes the speaker's own feeling."
    }
   ],
@@ -7869,7 +7869,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
       "worry that rises by itself"
      ],
      [
-      "あつくてたまらない",
+      "暑くてたまらない",
       "heat I cannot bear"
      ]
     ]
@@ -7877,8 +7877,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "彼はうれしくてたまらない。",
-    "good": "私はうれしくてたまらない。",
+    "bad": "彼は嬉しくてたまらない。",
+    "good": "私は嬉しくてたまらない。",
     "why": "Describe your own feeling with this pattern."
    }
   ],
@@ -7953,7 +7953,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
      ],
      [
       "I-adjective",
-      "せまいながらも"
+      "狭いながらも"
      ],
      [
       "Na-adjective",
@@ -7983,7 +7983,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   "points": [
    "It means a slight sign of something.",
    "The thing is usually unwelcome.",
-   "Common words are かぜ気味, 疲れ気味 and きんちょう気味.",
+   "Common words are 風邪気味, 疲れ気味 and 緊張気味.",
    "It is not used for strong or serious states."
   ],
   "tables": [
@@ -7995,7 +7995,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "かぜ気味",
+      "風邪気味",
       "a slight cold"
      ],
      [
@@ -8011,8 +8011,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "ひどいかぜ気味です。",
-    "good": "少しかぜ気味です。",
+    "bad": "ひどい風邪気味です。",
+    "good": "少し風邪気味です。",
     "why": "気味 means slight, so don't pair it with strong words."
    }
   ],
@@ -8058,14 +8058,14 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
  },
  "L305-3": {
   "formula": [
-   "V る + おそれがある",
-   "N の + おそれがある"
+   "V る + 恐れがある",
+   "N の + 恐れがある"
   ],
   "points": [
    "It marks a possible bad event, a risk.",
    "It is formal: weather reports, notices and news.",
    "Use it only for unwelcome events.",
-   "The stronger fear form is 恐れ in writing."
+   "In writing it is usually spelled 恐れ."
   ],
   "tables": [
    {
@@ -8076,15 +8076,15 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "雨になるおそれ",
+      "雨になる恐れ",
       "risk of rain"
      ],
      [
-      "倒産のおそれ",
+      "倒産の恐れ",
       "risk of bankruptcy"
      ],
      [
-      "再発のおそれ",
+      "再発の恐れ",
       "risk of recurrence"
      ]
     ]
@@ -8092,9 +8092,9 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "優勝するおそれがある。",
-    "good": "優勝するかのうせいがある。",
-    "why": "おそれ is only for bad possibilities."
+    "bad": "優勝する恐れがある。",
+    "good": "優勝する可能性がある。",
+    "why": "恐れ is only for bad possibilities."
    }
   ],
   "tip": "You'll hear it in weather forecasts and warnings."
@@ -8313,13 +8313,13 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
  },
  "L307-1": {
   "formula": [
-   "N + におうじて",
-   "N + におうじた + N"
+   "N + に応じて",
+   "N + に応じた + N"
   ],
   "points": [
    "Something changes or is chosen to match a condition.",
    "The condition can be a need, a size or a season.",
-   "Use におうじた + noun to modify a noun.",
+   "Use に応じた + noun to modify a noun.",
    "The second half is usually a change or a choice."
   ],
   "tables": [
@@ -8331,11 +8331,11 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "収入におうじた税金",
+      "収入に応じた税金",
       "tax matched to income"
      ],
      [
-      "必要におうじて連絡する",
+      "必要に応じて連絡する",
       "contact if needed"
      ]
     ]
@@ -8343,22 +8343,22 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "予算をおうじて選ぶ。",
-    "good": "予算におうじて選ぶ。",
-    "why": "Use に before おうじて."
+    "bad": "予算を応じて選ぶ。",
+    "good": "予算に応じて選ぶ。",
+    "why": "Use に before 応じて."
    }
   ],
   "tip": "Think of a dial that turns as the situation changes."
  },
  "L307-2": {
   "formula": [
-   "N + にそって",
-   "N + にそった + N"
+   "N + に沿って",
+   "N + に沿った + N"
   ],
   "points": [
    "It means going along a line, or following a rule or plan.",
    "It suits guidelines, manuals, policies and roads.",
-   "Use にそった + noun before a noun.",
+   "Use に沿った + noun before a noun.",
    "The 'line' can be real or an idea."
   ],
   "tables": [
@@ -8370,11 +8370,11 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "道にそって歩く",
+      "道に沿って歩く",
       "walk along the road"
      ],
      [
-      "指示にそって動く",
+      "指示に沿って動く",
       "act in line with the instructions"
      ]
     ]
@@ -8382,9 +8382,9 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "指示をそって動く。",
-    "good": "指示にそって動く。",
-    "why": "Use に, not を, before そって."
+    "bad": "指示を沿って動く。",
+    "good": "指示に沿って動く。",
+    "why": "Use に, not を, before 沿って."
    }
   ],
   "tip": "Stay on the line, whether it is a river or a rule."
@@ -8398,11 +8398,11 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
    "The noun is the material you start from.",
    "What you make is new: a film, a plan, a book.",
    "Use をもとにした + noun before a noun.",
-   "It is close to にもとづいて but looser."
+   "It is close to に基づいて but looser."
   ],
   "tables": [
    {
-    "title": "もとに or にもとづいて",
+    "title": "もとに or に基づいて",
     "headers": [
      "Pattern",
      "Feeling"
@@ -8413,7 +8413,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
       "a source you build from"
      ],
      [
-      "にもとづいて",
+      "に基づいて",
       "a rule or fact you follow"
      ]
     ]
@@ -8430,13 +8430,13 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
  },
  "L307-4": {
   "formula": [
-   "N + にもとづいて",
-   "N + にもとづく / にもとづいた + N"
+   "N + に基づいて",
+   "N + に基づく / に基づいた + N"
   ],
   "points": [
    "The noun is a firm base: law, facts, data, rules.",
    "It sounds formal and serious.",
-   "Use にもとづいた or にもとづく before a noun.",
+   "Use に基づいた or に基づく before a noun.",
    "It is a base to judge or act on, not a story to retell."
   ],
   "tables": [
@@ -8449,7 +8449,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     "rows": [
      [
       "法律",
-      "にもとづいて"
+      "に基づいて"
      ],
      [
       "実話",
@@ -8457,16 +8457,16 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
      ],
      [
       "マニュアル",
-      "にそって"
+      "に沿って"
      ]
     ]
    }
   ],
   "mistakes": [
    {
-    "bad": "事実をもとづいた話",
-    "good": "事実にもとづいた話",
-    "why": "Use に before もとづく."
+    "bad": "事実を基づいた話",
+    "good": "事実に基づいた話",
+    "why": "Use に before 基づく."
    }
   ],
   "tip": "Firm ground under your feet: law, fact or data."
@@ -8578,7 +8578,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "せいさくをめぐる対立",
+      "政策をめぐる対立",
       "dispute over policy"
      ],
      [
@@ -8656,7 +8656,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "けっこんするにあたって",
+      "結婚するにあたって",
       "yes"
      ],
      [
@@ -8700,7 +8700,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     "rows": [
      [
       "に際して",
-      "けいやくに際して"
+      "契約に際して"
      ],
      [
       "に際し",
@@ -8774,7 +8774,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
    "The result fits the cause and is as expected.",
    "It can be good or bad.",
    "It often adds a feeling of admiration or regret.",
-   "Often written as だけあって for good outcomes."
+   "For good outcomes, the close variant だけあって is also used."
   ],
   "tables": [
    {
@@ -8883,9 +8883,9 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "決める以上は、こうかいしない。",
-    "good": "決めた以上は、こうかいしない。",
-    "why": "Use a finished action (た-form) for the commitment."
+    "bad": "決めたの以上は、後悔しない。",
+    "good": "決めた以上は、後悔しない。",
+    "why": "Put 以上 straight after the plain form, with no の."
    }
   ],
   "tip": "Once it is decided, you play it out."
@@ -8997,7 +8997,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
       "contrary to"
      ],
      [
-      "にそって",
+      "に沿って",
       "in line with"
      ]
     ]
@@ -9019,7 +9019,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "points": [
    "The condition doesn't change the result.",
-   "Pairs of opposites are common: うむ, 好ききらい, 大小.",
+   "Pairs of opposites are common: 有無, 好き嫌い, 大小.",
    "With a verb: 行く行かないにかかわらず.",
    "In writing, kana かかわらず is the norm."
   ],
@@ -9036,7 +9036,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
       "rain or shine"
      ],
      [
-      "経験のうむにかかわらず",
+      "経験の有無にかかわらず",
       "with or without experience"
      ]
     ]
@@ -9074,7 +9074,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
       "day and night"
      ],
      [
-      "きせつを問わず",
+      "季節を問わず",
       "in every season"
      ],
      [
@@ -9226,7 +9226,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
    "It adds one more point to a first point.",
    "The second part often has も or まで.",
    "Plain forms come before it; nouns link directly.",
-   "Use だけでなく in plain speech, ばかりでなく is a little softer."
+   "ばかりでなく is a little stiffer than だけでなく."
   ],
   "tables": [
    {
@@ -9301,7 +9301,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
  },
  "L314-2": {
   "formula": [
-   "V て + はじめて"
+   "V て + 初めて"
   ],
   "points": [
    "It means only after doing, then the realisation comes.",
@@ -9334,9 +9334,9 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "失ったはじめて大切さが分かる。",
-    "good": "失ってはじめて大切さが分かる。",
-    "why": "Use the て-form before はじめて."
+    "bad": "失った初めて大切さが分かる。",
+    "good": "失って初めて大切さが分かる。",
+    "why": "Use the て-form before 初めて."
    }
   ],
   "tip": "First the experience, then the awakening."
@@ -9425,14 +9425,14 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
  },
  "L315-1": {
   "formula": [
-   "N + にともなって",
-   "V る + にともなって"
+   "N + に伴って",
+   "V る + に伴って"
   ],
   "points": [
    "One change comes with another.",
    "Both halves are changes, like 増加 and 変化.",
    "It is more formal than につれて.",
-   "Use にともなう + noun before a noun."
+   "Use に伴う + noun before a noun."
   ],
   "tables": [
    {
@@ -9443,11 +9443,11 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "にともなって",
+      "に伴って",
       "accompanying a change"
      ],
      [
-      "にしたがって",
+      "に従って",
       "in proportion to a change"
      ],
      [
@@ -9459,17 +9459,17 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "人口が増えるをともなって",
-    "good": "人口が増えるにともなって",
-    "why": "Use に before ともなって."
+    "bad": "人口が増えるを伴って",
+    "good": "人口が増えるに伴って",
+    "why": "Use に before 伴って."
    }
   ],
   "tip": "Change A walks in with change B."
  },
  "L315-2": {
   "formula": [
-   "V る + にしたがって",
-   "N + にしたがって"
+   "V る + に従って",
+   "N + に従って"
   ],
   "points": [
    "As A changes, B changes in step.",
@@ -9486,11 +9486,11 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "年を取るにしたがって",
+      "年を取るに従って",
       "as one gets older"
      ],
      [
-      "指示にしたがって",
+      "指示に従って",
       "in accordance with the instructions"
      ]
     ]
@@ -9498,8 +9498,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "年を取るにしたがって、食べよう。",
-    "good": "年を取るにしたがって、食欲が落ちる。",
+    "bad": "年を取るに従って、食べよう。",
+    "good": "年を取るに従って、食欲が落ちる。",
     "why": "Don't end in a plan or request."
    }
   ],
@@ -9546,8 +9546,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
  },
  "L316-1": {
   "formula": [
-   "V ない + かぎり",
-   "なA / N で + ないかぎり"
+   "V ない + 限り",
+   "なA / N で + ない限り"
   ],
   "points": [
    "The result continues unless the condition is met.",
@@ -9564,7 +9564,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "ないかぎり",
+      "ない限り",
       "unless — strong, firm"
      ],
      [
@@ -9576,9 +9576,9 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "練習しなかぎり上手にならない。",
-    "good": "練習しないかぎり上手にならない。",
-    "why": "Use ない before かぎり."
+    "bad": "練習しな限り上手にならない。",
+    "good": "練習しない限り上手にならない。",
+    "why": "Use ない before 限り."
    }
   ],
   "tip": "The door stays shut unless that one condition is met."
@@ -9811,7 +9811,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "だれにも負けない",
+      "誰にも負けない",
       "yes"
      ],
      [
@@ -9828,7 +9828,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   "mistakes": [
    {
     "bad": "料理にかけては、苦手だ。",
-    "good": "料理にかけては、だれにも負けない。",
+    "good": "料理にかけては、誰にも負けない。",
     "why": "The second half should be praise."
    }
   ],
@@ -9908,8 +9908,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "なきたいほどを悲しい。",
-    "good": "なきたいほど悲しい。",
+    "bad": "泣きたいほどを悲しい。",
+    "good": "泣きたいほど悲しい。",
     "why": "Don't add a particle between ほど and the adjective."
    }
   ],
@@ -10025,7 +10025,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     ],
     "rows": [
      [
-      "ただのうわさにすぎない",
+      "ただの噂にすぎない",
       "just a rumour"
      ],
      [
@@ -10037,8 +10037,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "それはうわさにすぎる。",
-    "good": "それはうわさにすぎない。",
+    "bad": "それは噂にすぎる。",
+    "good": "それは噂にすぎない。",
     "why": "Use ない, not する-forms, in this pattern."
    }
   ],
@@ -10162,9 +10162,9 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "子どもさえ知っている。",
-    "good": "子どもでさえ知っている。",
-    "why": "Add で when the noun is the subject of an active clause."
+    "bad": "友だちさえに言わなかった。",
+    "good": "友だちにさえ言わなかった。",
+    "why": "Put に before さえ, not after it."
    }
   ],
   "tip": "If even this fails, imagine the rest."
@@ -10201,8 +10201,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "あやまるくらいに、やらない。",
-    "good": "あやまるくらいなら、やらない。",
+    "bad": "謝るくらいに、やらない。",
+    "good": "謝るくらいなら、やらない。",
     "why": "Use なら, not に, after くらい."
    }
   ],
@@ -10417,7 +10417,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
  "L322-2": {
   "formula": [
    "plain form + ものか",
-   "V ます-stem + ものか (casual)"
+   "plain form + ものですか (polite)"
   ],
   "points": [
    "It means I would never, or no way that.",
@@ -10460,7 +10460,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
  "L322-3": {
   "formula": [
    "N / V る + どころではない",
-   "V る + どころか"
+   "N / V る + どころではなかった"
   ],
   "points": [
    "It says no time or mood for something.",
@@ -10489,8 +10489,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "いそがしくて、旅行どころない。",
-    "good": "いそがしくて、旅行どころではない。",
+    "bad": "忙しくて、旅行どころない。",
+    "good": "忙しくて、旅行どころではない。",
     "why": "Always finish with ではない."
    }
   ],
@@ -10532,8 +10532,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "たとえ失敗したとしたも、こうかいしない。",
-    "good": "たとえ失敗したとしても、こうかいしない。",
+    "bad": "たとえ失敗したとしたも、後悔しない。",
+    "good": "たとえ失敗したとしても、後悔しない。",
     "why": "Keep し in としても."
    }
   ],
@@ -10574,8 +10574,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "あやまるところで許されない。",
-    "good": "あやまったところで許されない。",
+    "bad": "謝るところで許されない。",
+    "good": "謝ったところで許されない。",
     "why": "Use the た-form before ところで."
    }
   ],
@@ -10613,8 +10613,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   ],
   "mistakes": [
    {
-    "bad": "じょうだんしても言いすぎだ。",
-    "good": "じょうだんにしても言いすぎだ。",
+    "bad": "冗談しても言いすぎだ。",
+    "good": "冗談にしても言いすぎだ。",
     "why": "Don't drop に before しても."
    }
   ],

@@ -141,7 +141,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "{子|こ}ども＿＿くせに、{大人|おとな}みたいなことを{言|い}うね。", answer: "の", options: ["の","な","だ","に"], en: "You're just a kid, yet you talk like a grown-up." },
       { type: "order", tiles: ["{料理|りょうり}が","{下手|へた}な","くせに","{人|ひと}に{教|おし}えたがる"], en: "He's bad at cooking, yet he loves teaching others." },
       { type: "order", tiles: ["{何|なに}も","{知|し}らない","くせに","もんくを{言|い}わないで"], en: "You don't know anything, so don't complain." },
-      { type: "choose", q: "Which sentence is correct?", answer: "{弟|おとうと}は{学生|がくせい}のくせに、{全然|ぜんぜん}{勉強|べんきょう}しない。", options: ["{弟|おとうと}は{学生|がくせい}のくせに、{全然|ぜんぜん}{勉強|べんきょう}しない。","{私|わたし}は{学生|がくせい}のくせに、{全然|ぜんぜん}{勉強|べんきょう}しない。","{夏|なつ}のくせに、{今日|きょう}は{寒|さむ}い。","{弟|おとうと}は{学生|がくせい}なくせに、{全然|ぜんぜん}{勉強|べんきょう}しない。"] },
+      { type: "choose", q: "Which sentence is correct?", answer: "{弟|おとうと}は{学生|がくせい}のくせに、{全然|ぜんぜん}{勉強|べんきょう}しない。", options: ["{弟|おとうと}は{学生|がくせい}のくせに、{全然|ぜんぜん}{勉強|べんきょう}しない。","{弟|おとうと}は{学生|がくせい}がくせに、{全然|ぜんぜん}{勉強|べんきょう}しない。","{弟|おとうと}は{学生|がくせい}くせに、{全然|ぜんぜん}{勉強|べんきょう}しない。","{弟|おとうと}は{学生|がくせい}なくせに、{全然|ぜんぜん}{勉強|べんきょう}しない。"] },
       { type: "choose", q: "When is くせに safe to use?", answer: "Complaining to a close friend", options: ["Complaining to a close friend","Speaking to your boss","Writing a formal letter","Talking about yourself"] }
     ]
   },
@@ -442,7 +442,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     examples: [
       { jp: "{駅前|えきまえ}に{新|あたら}しいビルができるらしい。", ro: "Ekimae ni atarashii biru ga dekiru rashii.", en: "Apparently a new building is going up in front of the station." },
       { jp: "あの{店|みせ}は{先月|せんげつ}{閉店|へいてん}したらしいよ。", ro: "Ano mise wa sengetsu heiten shita rashii yo.", en: "I heard that shop closed last month." },
-      { jp: "この{町|まち}は{夜|よる}{静|しず}からしい。", ro: "Kono machi wa yoru shizuka rashii.", en: "This town is apparently quiet at night." }
+      { jp: "この{町|まち}は{夜|よる}は{静|しず}からしい。", ro: "Kono machi wa yoru wa shizuka rashii.", en: "This town is apparently quiet at night." }
     ],
     drills: [
       { type: "fill", jp: "{来月|らいげつ}、この{道|みち}で{工事|こうじ}が{始|はじ}まる＿＿よ。", answer: "らしい", options: ["らしい","べき","たび","うち"], en: "Apparently road work starts here next month." },
@@ -511,7 +511,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "この{店|みせ}は{品物|しなもの}がいい＿＿、{値段|ねだん}が{高|たか}い。", answer: "{反面|はんめん}", options: ["{反面|はんめん}","おかげで","ついでに","たびに"], en: "This shop's goods are good, but on the other hand they're pricey." },
       { type: "order", tiles: ["セールは","{安|やす}い","{反面|はんめん}","{人|ひと}が{多|おお}くて{疲|つか}れる"], en: "Sales are cheap, but they're crowded and tiring." },
       { type: "order", tiles: ["{収入|しゅうにゅう}が","{増|ふ}えた","{反面|はんめん}","{自由|じゆう}な{時間|じかん}がなくなった"], en: "My income rose, but I lost my free time." },
-      { type: "choose", q: "Which sentence is correct?", answer: "この{車|くるま}は{速|はや}い{反面|はんめん}、ガソリンをたくさん{使|つか}う。", options: ["この{車|くるま}は{速|はや}い{反面|はんめん}、ガソリンをたくさん{使|つか}う。","{兄|あに}は{背|せ}が{高|たか}い{反面|はんめん}、{弟|おとうと}は{背|せ}がひくい。","この{車|くるま}は{速|はや}く{反面|はんめん}、ガソリンをたくさん{使|つか}う。","この{車|くるま}は{速|はや}いの{反面|はんめん}、ガソリンをたくさん{使|つか}う。"] },
+      { type: "choose", q: "Which sentence is correct?", answer: "この{車|くるま}は{速|はや}い{反面|はんめん}、ガソリンをたくさん{使|つか}う。", options: ["この{車|くるま}は{速|はや}い{反面|はんめん}、ガソリンをたくさん{使|つか}う。","この{車|くるま}は{速|はや}いが{反面|はんめん}、ガソリンをたくさん{使|つか}う。","この{車|くるま}は{速|はや}く{反面|はんめん}、ガソリンをたくさん{使|つか}う。","この{車|くるま}は{速|はや}いの{反面|はんめん}、ガソリンをたくさん{使|つか}う。"] },
       { type: "choose", q: "Which means 'cheap, but the quality is bad'?", answer: "{安|やす}い{反面|はんめん}、{品質|ひんしつ}が{悪|わる}い。", options: ["{安|やす}い{反面|はんめん}、{品質|ひんしつ}が{悪|わる}い。","{安|やす}いおかげで、{品質|ひんしつ}がいい。","{安|やす}いので、{品質|ひんしつ}もいい。","{安|やす}いうちに、{買|か}おう。"] }
     ]
   },

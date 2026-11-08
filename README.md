@@ -1,6 +1,6 @@
 # Minna Line
 
-A study game for Japanese from JLPT N5 to N2: *Minna no Nihongo* Lessons 1–50, then 24 themed units each for N3 and N2, with a Reading Academy at both levels. Each lesson is a station on a train line. Mochi, the cat conductor, rides along with you. Beat a station's yokai to collect its stamp.
+A study game for Japanese from JLPT N5 to N1: *Minna no Nihongo* Lessons 1–50, then 24 themed units each for N3, N2 and N1 (the Autumn, Winter and Starlight Lines), with a Reading Academy at each of those levels. Each lesson is a station on a train line. Mochi, the cat conductor, rides along with you. Beat a station's yokai to collect its stamp.
 
 ## What's inside
 
@@ -8,7 +8,7 @@ A study game for Japanese from JLPT N5 to N2: *Minna no Nihongo* Lessons 1–50,
 - **N5 Express:** grammar from Lessons 21–25, an N5 word bank, Numbers Depot (numbers, prices, clock times, dates, counters, ages), Kanji Hall (all 105 N5 kanji), Verb Forge and an N5 mock exam.
 - **Verb forms:** 29 drillable forms: the polite ます family from Lesson 4, plain forms, and every N5 pattern built on them, plus adjectives. Answers are generated from the verb's group.
 - **Reading room:** an original conversation and an N5-style text for each lesson, with audio and comprehension questions.
-- **Handwriting:** stroke-order animations and a writing pad that checks each stroke's shape, order and direction, for all kana and N5 kanji.
+- **Handwriting:** stroke-order animations and a writing pad that checks each stroke's shape, order and direction, for all kana and every kanji in the app (N5–N1 plus the extra kanji used in words).
 - **Guidebook:** cheat sheets for particles, question words, こそあど, verbs, adjectives, polite and casual speech, time, family, set phrases, opposites, kana tips and how the exam works.
 - **Game layer:** yen, a shop (hats, colour themes, omamori streak savers), a capsule machine with a sticker album, daily tickets, trophies, train-class ranks and streaks.
 - **Spaced repetition:** every word, grammar drill, kanji and verb form is scheduled for review. The home screen shows what's due.

@@ -71,13 +71,13 @@ window.ML = (() => {
   const VOCAB = uniqBy([...CORE, ...EXTRA], (v) => v.id);
   const VBY = new Map(VOCAB.map((v) => [v.id, v]));
   const KANA = window.KANA || [];
-  const levelOfL = (L) => (L < 100 ? 'N5' : L < 200 ? 'N4' : L < 300 ? 'N3' : 'N2');
+  const levelOfL = (L) => (L < 100 ? 'N5' : L < 200 ? 'N4' : L < 300 ? 'N3' : L < 400 ? 'N2' : 'N1');
   // Each N4/N3 kanji sits at the first lesson of its level whose words use it, so it turns up alongside them.
   const KANJI = (() => {
     const first = {};
     for (const v of VOCAB) if (v.L > 100) for (const c of v.kanji || '') if (hasKanji(c) && !(first[c] <= v.L)) first[c] = v.L;
     const place = (k, i) => {
-      const [lo, hi] = k.level === 'N4' ? [126, 150] : k.level === 'N2' ? [301, 324] : [201, 224];
+      const [lo, hi] = k.level === 'N4' ? [126, 150] : k.level === 'N2' ? [301, 324] : k.level === 'N1' ? [401, 424] : [201, 224];
       const f = first[k.k];
       return f >= lo && f <= hi ? f : lo + (i % (hi - lo + 1));
     };
@@ -135,13 +135,15 @@ window.ML = (() => {
   const N4_TITLES = { 126: ['Explaining Why', '～んです'], 127: ['Can Do', 'できます・かのうけい'], 128: ['Doing Two Things', '～ながら'], 129: ['Finished and Sorry', '～て しまいました'], 130: ['Getting Ready', '～て おきます'], 131: ['Plans and Intentions', '～ようと おもいます'], 132: ['Advice and Guessing', '～ほうが いいです'], 133: ['Commands and Signs', 'めいれいけい'], 134: ['Following Instructions', '～とおりに'], 135: ['If, the ば Way', '～ば'], 136: ['So That', '～ように'], 137: ['The Passive', 'うけみ'], 138: ['Nominalising', '～のは・～のが'], 139: ['Because, Softly', '～ので'], 140: ['Whether or Not', '～か どうか'], 141: ['Favours with Respect', '～て いただきます'], 142: ['In Order To', '～ために'], 143: ['Looks Like', '～そうです'], 144: ['Too Much, Easy, Hard', '～すぎます'], 145: ['In Case Of', '～ばあいは'], 146: ['Just About To', '～ところです'], 147: ['I Heard', '～そうです・～ようです'], 148: ['Making Someone Do', 'しえき'], 149: ['Honorific Speech', 'そんけいご'], 150: ['Humble Speech', 'けんじょうご'] };
   const N3_TITLES = { 201: ['Time and Schedules', 'じかん・よてい'], 202: ['Family and Relationships', 'かぞく・にんげんかんけい'], 203: ['Food and Cooking', 'しょく・りょうり'], 204: ['Daily Life and Home', 'くらし・すまい'], 205: ['Transport and Travel', 'こうつう・りょこう'], 206: ['Town and Directions', 'まち・みちあんない'], 207: ['Money and Shopping', 'おかね・かいもの'], 208: ['Clothes, Colours, Shapes', 'ふく・いろ・かたち'], 209: ['Numbers and Quantity', 'かず・りょう'], 210: ['Hobbies and Events', 'しゅみ・ぎょうじ'], 211: ['Post, Phone, Services', 'ゆうびん・でんわ'], 212: ['Life Stages', 'じんせい'], 213: ['Society and News', 'しゃかい・ニュース'], 214: ['Industry and Materials', 'さんぎょう・ざいりょう'], 215: ['Nature and Weather', 'しぜん・てんき'], 216: ['Body and Health', 'からだ・けんこう'], 217: ['Feelings and Personality', 'きもち・せいかく'], 218: ['School and University', 'がっこう・だいがく'], 219: ['Work and Careers', 'しごと・キャリア'], 220: ['Computers and Internet', 'パソコン・ネット'], 221: ['Sound and Manner Words', 'ぎおんご・ぎたいご'], 222: ['Compound Verbs', 'ふくごうどうし'], 223: ['Core Verbs', 'きほんどうし'], 224: ['Katakana and Idioms', 'カタカナご・かんようく'] };
   const N2_TITLES = { 301: ['Time and Change', 'じかん・へんか'], 302: ['People and Relationships', 'ひと・かんけい'], 303: ['Personality and Attitude', 'せいかく・たいど'], 304: ['Emotions and the Mind', 'かんじょう・こころ'], 305: ['Health and Medicine', 'けんこう・いりょう'], 306: ['Home and Daily Life', 'せいかつ'], 307: ['Food and Culture', 'しょく・ぶんか'], 308: ['Town and Environment', 'まち・かんきょう'], 309: ['Transport and Travel', 'こうつう・りょこう'], 310: ['Work and Business', 'しごと・ビジネス'], 311: ['Economy and Money', 'けいざい'], 312: ['Politics and Law', 'せいじ・ほうりつ'], 313: ['Society and Issues', 'しゃかい・もんだい'], 314: ['Education and Research', 'きょういく・けんきゅう'], 315: ['Science and Technology', 'かがく・ぎじゅつ'], 316: ['Nature and Disasters', 'しぜん・さいがい'], 317: ['Media and Communication', 'メディア'], 318: ['Arts, Sport, Leisure', 'げいじゅつ・スポーツ'], 319: ['Abstract Ideas', 'ちゅうしょうご'], 320: ['Adverbs and Degree', 'ふくし'], 321: ['Easily Confused Verbs', 'まぎらわしい どうし'], 322: ['Compound Verbs', 'ふくごうどうし'], 323: ['Katakana Words', 'カタカナご'], 324: ['Idioms and Proverbs', 'かんようく・ことわざ'] };
+  const N1_TITLES = { 401: ['History and Tradition', 'れきし・でんとう'], 402: ['Relations and Manners', 'にんげんかんけい'], 403: ['Character and Behaviour', 'じんかく'], 404: ['Psychology', 'しんり'], 405: ['Medicine and Welfare', 'いりょう・ふくし'], 406: ['Lifestyle and Consumption', 'しょうひ'], 407: ['Culture and the Arts', 'ぶんか・げいじゅつ'], 408: ['Land and Environment', 'こくど・かんきょう'], 409: ['Infrastructure', 'インフラ'], 410: ['Corporate and Management', 'けいえい'], 411: ['Finance and Markets', 'きんゆう'], 412: ['Government and Justice', 'せいじ・しほう'], 413: ['International Affairs', 'こくさい'], 414: ['Academia and Research', 'がくじゅつ'], 415: ['Science and Engineering', 'かがく・こうがく'], 416: ['Natural Science', 'しぜんかがく'], 417: ['Journalism and Rhetoric', 'ほうどう'], 418: ['Philosophy and Thought', 'しそう'], 419: ['Formal Nouns', 'かたい ことば'], 420: ['Literary Adverbs', 'ぶんしょうご'], 421: ['Nuanced Verbs', 'どうし'], 422: ['Formal Set Phrases', 'かんようひょうげん'], 423: ['Four-character Idioms', 'よじじゅくご'], 424: ['Proverbs and Sayings', 'ことわざ'] };
   const LEVELS = [
     { id: 'N5', name: 'N5', title: 'Spring Line', jp: 'はるの せん', season: 'spring', blurb: 'Minna no Nihongo I · Lessons 1–25' },
     { id: 'N4', name: 'N4', title: 'Summer Line', jp: 'なつの せん', season: 'summer', blurb: 'Minna no Nihongo II · Lessons 26–50' },
     { id: 'N3', name: 'N3', title: 'Autumn Line', jp: 'あきの せん', season: 'autumn', blurb: '24 themed units and the Reading Academy' },
     { id: 'N2', name: 'N2', title: 'Winter Line', jp: 'ふゆの せん', season: 'winter', blurb: '24 themed units and the N2 Reading Academy' },
+    { id: 'N1', name: 'N1', title: 'Starlight Line', jp: 'ほしの せん', season: 'night', blurb: '24 themed units and the N1 Reading Academy' },
   ];
-  const lessonName = (L) => (L >= 1 && L <= 25 ? `Lesson ${L}` : L >= 126 && L <= 150 ? `Lesson ${L - 100}` : L >= 201 && L <= 224 ? `Unit ${L - 200}` : L >= 301 && L <= 324 ? `Unit ${L - 300}` : '');
+  const lessonName = (L) => (L >= 1 && L <= 25 ? `Lesson ${L}` : L >= 126 && L <= 150 ? `Lesson ${L - 100}` : L >= 201 && L <= 224 ? `Unit ${L - 200}` : L >= 301 && L <= 324 ? `Unit ${L - 300}` : L >= 401 && L <= 424 ? `Unit ${L - 400}` : '');
   const STATIONS = [];
   for (let L = 0; L <= 20; L++) STATIONS.push({ id: 'L' + L, L, line: 'M', code: String(L).padStart(2, '0'), name: TITLES[L][0], jp: TITLES[L][1], kind: L === 0 ? 'kana' : 'lesson' });
   STATIONS.push({ id: 'numbers', line: 'X', code: '数', name: 'Numbers Depot', jp: 'かずと じかん', kind: 'numbers' });
@@ -161,7 +163,11 @@ window.ML = (() => {
   STATIONS.push({ id: 'read2', line: 'WX', code: '読', name: 'N2 Reading Academy', jp: 'どっかい アカデミー', kind: 'academy' });
   STATIONS.push({ id: 'kanji2', line: 'WX', code: '漢', name: 'N2 Kanji Hall', jp: 'かんじの ひろば', kind: 'kanji' });
   STATIONS.push({ id: 'exam2', line: 'WX', code: '試', name: 'N2 Mock Exam', jp: 'もぎしけん', kind: 'exam' });
-  for (const st of STATIONS) st.level = { M: 'N5', X: 'N5', S: 'N4', SX: 'N4', K: 'N3', KX: 'N3', W: 'N2', WX: 'N2' }[st.line];
+  for (let L = 401; L <= 424; L++) STATIONS.push({ id: 'L' + L, L, line: 'Y', code: String(L - 400).padStart(2, '0'), name: N1_TITLES[L][0], jp: N1_TITLES[L][1], kind: 'lesson' });
+  STATIONS.push({ id: 'read1', line: 'YX', code: '読', name: 'N1 Reading Academy', jp: 'どっかい アカデミー', kind: 'academy' });
+  STATIONS.push({ id: 'kanji1', line: 'YX', code: '漢', name: 'N1 Kanji Hall', jp: 'かんじの ひろば', kind: 'kanji' });
+  STATIONS.push({ id: 'exam1', line: 'YX', code: '試', name: 'N1 Mock Exam', jp: 'もぎしけん', kind: 'exam' });
+  for (const st of STATIONS) st.level = { M: 'N5', X: 'N5', S: 'N4', SX: 'N4', K: 'N3', KX: 'N3', W: 'N2', WX: 'N2', Y: 'N1', YX: 'N1' }[st.line];
   const SBY = new Map(STATIONS.map((s) => [s.id, s]));
 
   // ---------------------------------------------------------------- conjugation

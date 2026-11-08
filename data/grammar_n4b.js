@@ -76,7 +76,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "モチが {駅長|えきちょう}に なった＿＿ {知|し}って いますか。", answer: "のを", options: ["のを", "のが", "のへ", "のと"], en: "Do you know that Mochi became the stationmaster?" },
-      { type: "fill", jp: "A: {明日|あした} {試験|しけん}が あります。 B: えっ、＿＿。", answer: "{知|し}りませんでした", options: ["{知|し}りませんでした", "{知|し}りません", "{知|し}って いません", "{知|し}りました"], en: "A: There's a test tomorrow. B: What? I didn't know that." },
+      { type: "fill", jp: "A: {明日|あした} {試験|しけん}が あります。 B: えっ、＿＿。", answer: "{知|し}りませんでした", options: ["{知|し}りませんでした", "{知|し}っていました", "{知|し}って いません", "{知|し}りました"], en: "A: There's a test tomorrow. B: What? I didn't know that." },
       { type: "fill", jp: "{明日|あした}が {休|やす}み＿＿ {知|し}って いますか。", answer: "なのを", options: ["なのを", "のを", "だのを", "がのを"], en: "Do you know that tomorrow is a day off?" },
       { type: "choose", q: "Which sentence means 'Do you know that Tanaka moved house?'", answer: "たなかさんが ひっこしたのを {知|し}って いますか。", options: ["たなかさんが ひっこしたのを {知|し}って いますか。", "たなかさんが ひっこしましたのを {知|し}って いますか。", "たなかさんが ひっこしたのが {知|し}って いますか。", "たなかさんを ひっこしたのを {知|し}って いますか。"] },
       { type: "order", tiles: ["カランさんが", "{大学|だいがく}に", "{入|はい}ったのを", "{知|し}って いますか"], en: "Do you know that Karan got into university?" },
@@ -138,7 +138,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "じこ＿＿ バスが おくれました。", answer: "で", options: ["で", "に", "を", "へ"], en: "The bus was late because of an accident." },
-      { type: "fill", jp: "＿＿で ひこうきが とびませんでした。", answer: "{台風|たいふう}", options: ["{台風|たいふう}", "じしん", "{火事|かじ}", "じこ"], en: "The planes didn't fly because of the typhoon." },
+      { type: "fill", jp: "＿＿で ひこうきが とびませんでした。", answer: "{台風|たいふう}", options: ["{台風|たいふう}", "ペン", "くつ", "ぼうし"], en: "The planes didn't fly because of the typhoon." },
       { type: "fill", jp: "{病気|びょうき}＿＿ {旅行|りょこう}に {行|い}けませんでした。", answer: "で", options: ["で", "を", "に", "と"], en: "I couldn't go on the trip because of illness." },
       { type: "choose", q: "Which word can't take で to give a cause?", answer: "{先生|せんせい}", options: ["{先生|せんせい}", "じしん", "かぜ", "{台風|たいふう}"] },
       { type: "choose", q: "Which sentence is correct?", answer: "ゆきで {電車|でんしゃ}が おくれました。", options: ["ゆきで {電車|でんしゃ}が おくれました。", "ゆきで {出|で}かけないで ください。", "ゆきで {家|いえ}に いましょう。", "ゆきで {早|はや}く {帰|かえ}りたいです。"] },
@@ -385,7 +385,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     drills: [
       { type: "fill", jp: "{子|こ}ども＿＿ ために、{本|ほん}を {買|か}いました。", answer: "の", options: ["の", "が", "を", "に"], en: "I bought a book for my children." },
       { type: "fill", jp: "{試験|しけん}の ＿＿、{今週|こんしゅう}は {毎日|まいにち} {勉強|べんきょう}します。", answer: "ために", options: ["ために", "ように", "ほうに", "ことに"], en: "I'll study every day this week for the exam." },
-      { type: "fill", jp: "＿＿の ために、たばこを やめました。", answer: "けんこう", options: ["けんこう", "びょうき", "{火事|かじ}", "じしん"], en: "I gave up smoking for my health." },
+      { type: "fill", jp: "＿＿の ために、たばこを やめました。", answer: "けんこう", options: ["けんこう", "えいが", "{火事|かじ}", "じしん"], en: "I gave up smoking for my health." },
       { type: "choose", q: "What does 「かぞくの ために はたらきます」 mean?", answer: "I work for my family's sake.", options: ["I work for my family's sake.", "I work with my family.", "I work at my family's house.", "I work instead of my family."] },
       { type: "choose", q: "Which one means 'for my friend'?", answer: "{友|とも}だちの ために", options: ["{友|とも}だちの ために", "{友|とも}だちに ために", "{友|とも}だちを ために", "{友|とも}だちが ために"] },
       { type: "order", tiles: ["{友|とも}だちの", "ために", "ケーキを", "{作|つく}りました"], en: "I made a cake for my friend." }
@@ -895,8 +895,8 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { jp: "この {電話|でんわ}を {使|つか}わせて いただけませんか。", ro: "Kono denwa o tsukawasete itadakemasen ka.", en: "Could you please let me use this phone?" }
     ],
     drills: [
-      { type: "fill", jp: "{今日|きょう}は {早|はや}く ＿＿ いただけませんか。", answer: "{帰|かえ}らせて", options: ["{帰|かえ}らせて", "{帰|かえ}って", "{帰|かえ}れて", "{帰|かえ}られて"], en: "Could you let me go home early today?" },
-      { type: "fill", jp: "{少|すこ}し {考|かんが}え＿＿ いただけませんか。", answer: "させて", options: ["させて", "せて", "られて", "て"], en: "Could you let me think about it a little?" },
+      { type: "fill", jp: "{今日|きょう}は {早|はや}く ＿＿ いただけませんか。", answer: "{帰|かえ}らせて", options: ["{帰|かえ}らせて", "{帰|かえ}らせ", "{帰|かえ}れて", "{帰|かえ}られて"], en: "Could you let me go home early today?" },
+      { type: "fill", jp: "{少|すこ}し {考|かんが}え＿＿ いただけませんか。", answer: "させて", options: ["させて", "せて", "られて", "ない"], en: "Could you let me think about it a little?" },
       { type: "fill", jp: "{一度|いちど} {社長|しゃちょう}に {会|あ}わせて ＿＿。", answer: "いただけませんか", options: ["いただけませんか", "くださいましたか", "やりませんか", "さしあげませんか"], en: "Could you let me meet the company president once?" },
       { type: "choose", q: "Which sentence asks your boss to let YOU speak?", answer: "{話|はな}させて いただけませんか。", options: ["{話|はな}させて いただけませんか。", "{話|はな}して いただけませんか。", "{話|はな}させて やりませんか。", "{話|はな}されて いただけませんか。"] },
       { type: "choose", q: "How is ～て いただけませんか different from ～させて いただけませんか?", answer: "The first: you do it. The second: let me do it.", options: ["The first: you do it. The second: let me do it.", "The first is past. The second is future.", "The first is casual. The second is rude.", "There is no difference."] },
@@ -918,9 +918,9 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "{社長|しゃちょう}は {毎朝|まいあさ} {新聞|しんぶん}を ＿＿。", answer: "{読|よ}まれます", options: ["{読|よ}まれます", "{読|よ}まります", "{読|よ}まれて", "{読|よ}みられます"], en: "The company president reads the newspaper every morning." },
-      { type: "fill", jp: "{先生|せんせい}は {明日|あした} {来|こ}＿＿ます。", answer: "られ", options: ["られ", "れ", "させ", "せ"], en: "The teacher will come tomorrow." },
+      { type: "fill", jp: "{先生|せんせい}は {明日|あした} {来|こ}＿＿ます。", answer: "られ", options: ["られ", "ろ", "させ", "せ"], en: "The teacher will come tomorrow." },
       { type: "fill", jp: "{先生|せんせい}は {今朝|けさ} パンを ＿＿。", answer: "{食|た}べられました", options: ["{食|た}べられました", "{食|た}べれました", "{食|た}べせました", "{食|た}べらせました"], en: "The teacher ate bread this morning." },
-      { type: "choose", q: "What is the honorific れます form of します?", answer: "されます", options: ["されます", "しられます", "せられます", "しれます"] },
+      { type: "choose", q: "What is the honorific れます form of します?", answer: "されます", options: ["されます", "しられます", "さられます", "しれます"] },
       { type: "choose", q: "Who can you use this form for?", answer: "Your teacher", options: ["Your teacher", "Yourself", "Your younger brother", "Your dog"] },
       { type: "order", tiles: ["{社長|しゃちょう}は", "{先週|せんしゅう}", "インドへ", "{行|い}かれました"], en: "The company president went to India last week." }
     ]
@@ -1592,7 +1592,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
         headers: ["Group", "Verb", "そう form"],
         rows: [
           ["Group 1", "ふります", "ふりそうです"],
-          ["Group 1", "おちます", "おちそうです"],
+          ["Group 2", "おちます", "おちそうです"],
           ["Group 2", "たおれます", "たおれそうです"],
           ["Group 2", "できます", "できそうです"],
           ["Group 3", "きます", "きそうです"],

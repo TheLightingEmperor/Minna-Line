@@ -146,9 +146,9 @@ window.ART = (() => {
     snow: `<path d="M60 26v44M41 37l38 22M41 59l38-22M54 29l6 5 6-5M54 67l6-5 6 5M42 45l7-1-2-7M78 51l-7 1 2 7M42 51l7 1-2 7M78 45l-7-1 2-7"/>`,
     persimmon: `<circle cx="60" cy="50" r="16"/><path d="M48 37q12 6 24 0-6-2-8-6-4 3-8 0-2 4-8 6zM60 31v-5M50 46q2-4 6-5"/>`,
   };
-  const MOTIFS = { M: ['sakura', 'fuji', 'torii', 'pagoda', 'train', 'lantern', 'castle'], X: ['train', 'fuji', 'castle', 'wave'], S: ['sun', 'wave', 'fan', 'fireworks', 'goldfish', 'lantern'], SX: ['fireworks', 'train'], K: ['maple', 'moon', 'temple', 'persimmon', 'pagoda', 'fuji'], KX: ['maple', 'train'], W: ['snow', 'moon', 'temple', 'fuji', 'lantern', 'pagoda'], WX: ['snow', 'train'] };
-  const INK = { M: '#c03f7a', X: '#2a7fb8', S: '#16907f', SX: '#16907f', K: '#c2531f', KX: '#c2531f', W: '#3b6fd1', WX: '#3b6fd1' };
-  const LABEL = { M: 'MINNA LINE', X: 'N5 EXPRESS', S: 'SUMMER LINE', SX: 'N4 TERMINAL', K: 'AUTUMN LINE', KX: 'N3 TERMINAL', W: 'WINTER LINE', WX: 'N2 TERMINAL' };
+  const MOTIFS = { M: ['sakura', 'fuji', 'torii', 'pagoda', 'train', 'lantern', 'castle'], X: ['train', 'fuji', 'castle', 'wave'], S: ['sun', 'wave', 'fan', 'fireworks', 'goldfish', 'lantern'], SX: ['fireworks', 'train'], K: ['maple', 'moon', 'temple', 'persimmon', 'pagoda', 'fuji'], KX: ['maple', 'train'], W: ['snow', 'moon', 'temple', 'fuji', 'lantern', 'pagoda'], WX: ['snow', 'train'], Y: ['moon', 'lantern', 'temple', 'pagoda', 'castle', 'fuji'], YX: ['moon', 'train'] };
+  const INK = { M: '#c03f7a', X: '#2a7fb8', S: '#16907f', SX: '#16907f', K: '#c2531f', KX: '#c2531f', W: '#3b6fd1', WX: '#3b6fd1', Y: '#6b4fc4', YX: '#6b4fc4' };
+  const LABEL = { M: 'MINNA LINE', X: 'N5 EXPRESS', S: 'SUMMER LINE', SX: 'N4 TERMINAL', K: 'AUTUMN LINE', KX: 'N3 TERMINAL', W: 'WINTER LINE', WX: 'N2 TERMINAL', Y: 'STARLIGHT LINE', YX: 'N1 TERMINAL' };
   function stamp(st, code, date) {
     const list = MOTIFS[st.line] || MOTIFS.M, h = hash(st.id);
     const motif = M[list[h % list.length]], frame = h % 3;
@@ -184,6 +184,7 @@ window.ART = (() => {
       spring: { sky: ['#bfe6ff', '#ffe6ef'], far: '#c9c6ee', mid: '#b9e39b', near: '#8fd07c', sun: '#fff3b0', stripe: '#ff8fb1' },
       summer: { sky: ['#7fd3ff', '#d9f6ff'], far: '#9fc8e8', mid: '#7fd8b4', near: '#4fc3a0', sun: '#ffe066', stripe: '#29b6a8' },
       winter: { sky: ['#cfe3ff', '#f4f8ff'], far: '#c3cfe8', mid: '#eef4fb', near: '#ffffff', sun: '#fffdf0', stripe: '#5b8def' },
+      night: { sky: ['#2a2a6e', '#7b5ea8'], far: '#4b4486', mid: '#3e3a72', near: '#2f2c5c', sun: '#fff6c8', stripe: '#a78bfa' },
       autumn: { sky: ['#ffd9a8', '#ffe9d6'], far: '#d2a9c2', mid: '#f0b56a', near: '#d98a4a', sun: '#fff0c0', stripe: '#e8703a' },
     }[season] || {};
     const id = 'sky' + season;
@@ -196,6 +197,8 @@ window.ART = (() => {
       fore = `<path d="M0 214q225-16 450 0t450 0v46H0z" fill="#58c7e8"/><path d="M60 228q30-6 60 0M300 236q40-8 80 0M600 226q30-6 60 0M780 238q40-8 80 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>` +
         [660, 720, 800].map((x, i) => `<g transform="translate(${x} ${208 + i * 6}) scale(${1 + i * 0.12})"><path d="M0 0q-2-16 0-30" stroke="#4f9f5c" stroke-width="4" fill="none"/>${Array.from({ length: 10 }, (_, k) => `<ellipse cx="0" cy="-41" rx="3.6" ry="9" transform="rotate(${k * 36} 0 -32)" fill="#ffcf33"/>`).join('')}<circle cy="-32" r="6" fill="#8a5a2c"/></g>`).join('') +
         `<g class="sc-fire" opacity=".0"></g>`;
+    } else if (season === 'night') {
+      fore = `<g fill="#fff">${[[40, 30], [120, 70], [260, 24], [330, 90], [470, 40], [560, 20], [640, 75], [760, 34], [860, 60], [700, 110]].map(([x, y], i) => `<circle cx="${x}" cy="${y}" r="${i % 3 ? 1.6 : 2.6}"/>`).join('')}</g>` + [620, 700, 780, 860].map((x, i) => `<g transform="translate(${x} ${200 - (i % 2) * 8})"><path d="M0 -26v10" stroke="#c9a998" stroke-width="1.5"/><ellipse cy="-8" rx="9" ry="11" fill="#ff7a5c"/><ellipse cy="-8" rx="16" ry="18" fill="#ffb36b" opacity=".25"/></g>`).join('');
     } else if (season === 'winter') {
       const c = ['#7fa98a', '#ffffff', '#e8f0fa'];
       fore = tree(650, 216, 1.15, c) + tree(800, 224, 1.35, c) + tree(90, 218, 0.9, c) + `<g class="sc-petals" fill="#fff">${[[90, 40], [220, 90], [380, 30], [520, 80], [700, 50], [840, 100], [300, 140], [620, 120]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3.2"/>`).join('')}</g>`;
@@ -227,6 +230,7 @@ window.ART = (() => {
     spring: `<svg viewBox="-16 -16 32 32" aria-hidden="true">${[0, 72, 144, 216, 288].map((a) => `<path d="M0 0c-6-4-8-11-3-14l3 2 3-2c5 3 3 10-3 14z" transform="rotate(${a})" fill="#ff9fbd" stroke="${OUT}" stroke-width=".9"/>`).join('')}<circle r="2.4" fill="#ffd25c"/></svg>`,
     summer: `<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="22" cy="11" r="6" fill="#ffd25c" stroke="${OUT}" stroke-width=".9"/><path d="M2 22q6-14 15-9 3 2 3 5-3-2-6-1 5 1 6 6-3-2-5-1 3 2 2 5H2z" fill="#4fc3b0" stroke="${OUT}" stroke-width=".9" stroke-linejoin="round"/></svg>`,
     autumn: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2l3 7 5-2-1 6 6 1-4 5 2 3-7-1 1 6-5-3-5 3 1-6-7 1 2-3-4-5 6-1-1-6 5 2z" fill="#f0905a" stroke="${OUT}" stroke-width=".9" stroke-linejoin="round"/><path d="M16 30V14" stroke="${OUT}" stroke-width="1"/></svg>`,
+    night: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M20 4a12 12 0 1 0 8 19 10 10 0 0 1-8-19z" fill="#a78bfa" stroke="#4a3a5e" stroke-width=".9"/><circle cx="8" cy="7" r="1.6" fill="#ffd25c"/><circle cx="13" cy="13" r="1" fill="#ffd25c"/></svg>`,
     winter: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3v26M5 9.5l22 13M5 22.5l22-13M12 5l4 3 4-3M12 27l4-3 4 3" stroke="#6f9be8" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg>`,
   }[s] || '');
   const machine = () => `<svg viewBox="0 0 200 240" aria-hidden="true">

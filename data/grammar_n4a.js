@@ -1210,7 +1210,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "{来年|らいねん} {国|くに}へ {帰|かえ}＿＿と {思|おも}って います。", answer: "ろう", options: ["ろう", "りよう", "らよう", "ります"], en: "I'm thinking of going back to my country next year." },
       { type: "fill", jp: "{今年|ことし}の {夏|なつ}は {海|うみ}で ＿＿と {思|おも}って います。", answer: "およごう", options: ["およごう", "およぐよう", "およぎよう", "およがよう"], en: "I'm thinking of swimming in the sea this summer." },
       { type: "fill", jp: "カランさんは {東京|とうきょう}で はたらこうと {思|おも}って ＿＿。", answer: "います", options: ["います", "あります", "ください", "おきます"], en: "Karan is thinking of working in Tokyo." },
-      { type: "choose", q: "Which sentence about Maria's plan is correct?", answer: "マリアさんは {国|くに}へ {帰|かえ}ろうと {思|おも}って います。", options: ["マリアさんは {国|くに}へ {帰|かえ}ろうと {思|おも}って います。", "マリアさんは {国|くに}へ {帰|かえ}ろうと {思|おも}います。", "マリアさんは {国|くに}へ {帰|かえ}ろと {思|おも}って います。", "マリアさんは {国|くに}へ {帰|かえ}りと {思|おも}って います。"] },
+      { type: "choose", q: "Which sentence about Maria's plan is correct?", answer: "マリアさんは {国|くに}へ {帰|かえ}ろうと {思|おも}って います。", options: ["マリアさんは {国|くに}へ {帰|かえ}ろうと {思|おも}って います。", "マリアさんは {国|くに}へ {帰|かえ}るうと {思|おも}って います。", "マリアさんは {国|くに}へ {帰|かえ}ろと {思|おも}って います。", "マリアさんは {国|くに}へ {帰|かえ}りと {思|おも}って います。"] },
       { type: "choose", q: "What does ～と おもって います suggest?", answer: "You have been thinking about it for some time", options: ["You have been thinking about it for some time", "You finished it yesterday", "Someone ordered you to do it", "You are not able to do it"] },
       { type: "order", tiles: ["{大学院|だいがくいん}で", "{勉強|べんきょう}しようと", "{思|おも}って", "います"], en: "I'm thinking of studying at graduate school." }
     ]

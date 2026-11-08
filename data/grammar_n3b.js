@@ -76,7 +76,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "{大雨|おおあめ}＿＿、{試合|しあい}が{中止|ちゅうし}になった。", answer: "により", options: ["により","について","をはじめ","にとって"], en: "The match was cancelled because of heavy rain." },
-      { type: "fill", jp: "じしん＿＿ひがいは{大|おお}きかった。", answer: "による", options: ["による","により","について","にとって"], en: "The damage from the earthquake was great." },
+      { type: "fill", jp: "じしん＿＿ひがいは{大|おお}きかった。", answer: "による", options: ["による","をはじめ","について","にとって"], en: "The damage from the earthquake was great." },
       { type: "order", tiles: ["{会議|かいぎ}は","{社長|しゃちょう}により","{中止|ちゅうし}された"], en: "The meeting was cancelled by the president." },
       { type: "order", tiles: ["じこによる","{遅|おく}れは","{三十分|さんじゅっぷん}","だった"], en: "The delay caused by the accident was thirty minutes." },
       { type: "choose", q: "What does 国により習慣は違う mean?", answer: "Customs differ depending on the country.", options: ["Customs differ depending on the country.","The government changed the customs.","Every country has the same customs.","Customs are not important to the country."] },
@@ -466,7 +466,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "「きゅうこう」＿＿、じゅぎょうが{休|やす}みになることです。", answer: "というのは", options: ["というのは","にとって","というより","として"], en: "\"Kyūkō\" means a class being cancelled." },
-      { type: "fill", jp: "「{予習|よしゅう}」というのは、じゅぎょうの{前|まえ}に{勉強|べんきょう}する＿＿です。", answer: "こと", options: ["こと","もの","ため","わけ"], en: "\"Yoshū\" means studying before class." },
+      { type: "fill", jp: "「{予習|よしゅう}」というのは、じゅぎょうの{前|まえ}に{勉強|べんきょう}する＿＿です。", answer: "こと", options: ["こと","ばかり","ため","わけ"], en: "\"Yoshū\" means studying before class." },
       { type: "fill", jp: "そつろん＿＿、{大学|だいがく}の{最後|さいご}に{書|か}く{論文|ろんぶん}のことである。", answer: "とは", options: ["とは","ほど","ばかり","こそ"], en: "A \"sotsuron\" is the paper you write at the end of university." },
       { type: "order", tiles: ["{学割|がくわり}","というのは","{学生|がくせい}の","{割引|わりびき}","のことです"], en: "\"Gakuwari\" means a student discount." },
       { type: "order", tiles: ["{文法|ぶんぽう}","とは","{言葉|ことば}の","きそく","のことである"], en: "Grammar means the rules of a language." },
@@ -793,9 +793,9 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { jp: "{彼|かれ}の{話|はなし}が{本当|ほんとう}だとすれば、{計画|けいかく}を{立|た}て{直|なお}す{必要|ひつよう}がある。", ro: "Kare no hanashi ga hontō da to sureba, keikaku o tatenaosu hitsuyō ga aru.", en: "If what he says is true, we need to rework the plan." }
     ],
     drills: [
-      { type: "fill", jp: "もし{外国|がいこく}に{住|す}む＿＿、どこがいいですか。", answer: "としたら", options: ["としたら","としても","として","にとって"], en: "If you were to live abroad, where would be good?" },
+      { type: "fill", jp: "もし{外国|がいこく}に{住|す}む＿＿、どこがいいですか。", answer: "としたら", options: ["としたら","にくらべて","ほど","にとって"], en: "If you were to live abroad, where would be good?" },
       { type: "fill", jp: "これが{本物|ほんもの}＿＿、{値段|ねだん}は{高|たか}いだろう。", answer: "だとすれば", options: ["だとすれば","なとすれば","のとすれば","にとすれば"], en: "If this is the real thing, it must be expensive." },
-      { type: "fill", jp: "{彼|かれ}が{来|こ}ない＿＿、{予定|よてい}を{変|か}えなければならない。", answer: "とすれば", options: ["とすれば","ほど","として","くらい"], en: "If he isn't coming, we will have to change the plans." },
+      { type: "fill", jp: "{彼|かれ}が{来|こ}ない＿＿、{予定|よてい}を{変|か}えなければならない。", answer: "とすれば", options: ["とすれば","ほど","にとって","くらい"], en: "If he isn't coming, we will have to change the plans." },
       { type: "order", tiles: ["もし","{生|う}まれ{変|か}わる","としたら","{何|なに}に","なりたいですか"], en: "If you were to be reborn, what would you want to be?" },
       { type: "order", tiles: ["{彼|かれ}の{話|はなし}が","{本当|ほんとう}だ","とすれば","{大変|たいへん}だ"], en: "If what he says is true, that's serious." },
       { type: "choose", q: "What do としたら and とすれば do?", answer: "Suppose something for the sake of argument", options: ["Suppose something for the sake of argument","Report a past fact","Give a firm order","Say something happened by chance"] }
