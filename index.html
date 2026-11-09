@@ -3,14 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Minna Line</title>
+<title>Minna Line · Learn Japanese free, N5 to N1</title>
+<meta name="description" content="A free Japanese study game from your first kana to JLPT N1: spaced-repetition reviews, kanji handwriting, grammar drills, graded reading, mock exams and a weekly league.">
+<meta name="theme-color" content="#fff5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1730" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Minna Line · Learn Japanese free, N5 to N1">
+<meta property="og:description" content="Every lesson is a station. Collect stamps, battle yokai and ride from your first あ to JLPT N1. No ads, no paywall.">
+<meta property="og:image" content="https://minna-line.netlify.app/icons/icon-512.png">
+<meta property="og:type" content="website">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Minna Line">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<div id="app"></div>
+<div id="app"><div class="splash" role="status"><img src="icons/icon.svg" alt="" width="96" height="96"><b>Minna Line</b><span>まもなく はっしゃします… boarding</span><i></i></div></div>
 <script src="data/vocab.js"></script>
 <script src="data/vocab_n5extra.js"></script>
 <script src="data/vocab_overlay.js"></script>
@@ -45,12 +58,17 @@
 <script src="data/reading_b.js"></script>
 <script src="data/reading_n4.js"></script>
 <script src="data/guide.js"></script>
+<script src="data/guide_extra.js"></script>
 <script src="data/reading_n3.js"></script>
 <script src="data/reading_n2.js"></script>
 <script src="data/reading_n1.js"></script>
 <script src="data/strokes.js"></script>
 <script src="core.js"></script>
 <script src="art.js"></script>
+<script src="config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="cloud.js"></script>
 <script src="app.js"></script>
+<script src="social.js"></script>
 </body>
 </html>

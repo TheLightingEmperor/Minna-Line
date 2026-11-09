@@ -1,0 +1,89 @@
+# Switching on accounts, sync and the leaderboard
+
+Minna Line works with no backend at all: progress is saved in the browser. To turn on **email + password accounts, sync across devices, the weekly league, login tracking, feedback and the admin dashboard**, connect it to a free [Supabase](https://supabase.com) project. It takes about five minutes and costs nothing.
+
+Want to see every screen first? Open the site with `?demo=1` on the end (for example `http://localhost:4390/?demo=1`). That runs a pretend backend inside your browser with sample learners. It only works while no real backend is connected.
+
+## 1. Create the project
+
+1. Go to [supabase.com](https://supabase.com) and sign up (GitHub sign-in is quickest).
+2. **New project** → name it `minna-line` → pick the region nearest your learners → set a database password (save it somewhere; the app never needs it).
+3. Wait a minute for it to finish setting up.
+
+## 2. Create the tables
+
+1. In the project, open **SQL Editor** → **New query**.
+2. Paste the whole of [`supabase/schema.sql`](supabase/schema.sql) and press **Run**. You should see "Success. No rows returned".
+
+Running it again later is safe. It never deletes data.
+
+## 3. Let people in without an email round-trip (recommended for the beta)
+
+**Authentication → Sign In / Providers → Email** → turn **Confirm email** off → Save.
+
+Why: Supabase's built-in mail sender is meant for testing and only delivers a handful of emails. With confirmation off, a new learner is in the moment they press the button. The app copes with either setting.
+
+Also set **Authentication → URL Configuration → Site URL** to `https://minna-line.netlify.app` so password-reset links come back to the app.
+
+## 4. Give the app its keys
+
+In **Project Settings → API Keys** (and **Data API** for the URL) copy:
+
+- the **Project URL**, like `https://abcdefgh.supabase.co`
+- the **publishable** key (older projects call it the `anon` `public` key)
+
+Paste both into [`config.js`](config.js):
+
+```js
+window.MINNA_CONFIG = {
+  SUPABASE_URL: 'https://abcdefgh.supabase.co',
+  SUPABASE_KEY: 'sb_publishable_…',
+  REQUIRE_LOGIN: true,
+  APP_VERSION: '6.0',
+};
+```
+
+These two values are safe to publish. The rules in `schema.sql` decide what each person may read and write. **Never** put the `secret` / `service_role` key in the app or the repo.
+
+Commit and push. Netlify redeploys on its own.
+
+## 5. Make yourself the admin
+
+1. Open the site and create your own account.
+2. Back in **SQL Editor**, run this with your email:
+
+```sql
+insert into public.admins (user_id) select id from auth.users where email = 'you@example.com' on conflict do nothing;
+```
+
+3. Reload the app → **Me** → **Admin dashboard**.
+
+## Where the data lives
+
+| You want to see | In the app | In Supabase |
+|---|---|---|
+| Everyone who signed up | Me → Admin dashboard → Learners | Table Editor → `user_overview` (or `profiles`) |
+| Every login, with device and time zone | Admin → Recent logins | Table Editor → `login_events` |
+| Each person's progress in detail | Admin → click a learner | `profiles.summary`, and the full save in `progress.data` |
+| Day-by-day activity | Admin → charts, and each learner's last 30 days | `daily_activity` |
+| Feedback from the beta | Admin → Latest feedback | `feedback` |
+| Spreadsheet exports | Admin → Learners / Logins / Activity CSV | any table → Export |
+
+`login_events.event` is `signup` the first time, `login` when someone types their password, and `resume` when they come back on a new day still signed in.
+
+## What learners can and can't see
+
+- Their own profile, progress, activity and login history. Nobody else's.
+- The leaderboard shows only name, Mochi avatar, JLPT level, app level, streak and score, and only for people who left "Show me on the public leaderboard" ticked. Email is never exposed.
+- You can remove anyone from the board: Admin → click the learner → **Hide from the leaderboard**.
+- Anyone can erase their account and all their data from **Me → Delete my account**.
+
+## Free-plan notes
+
+- Supabase pauses a free project after a week with no activity at all. Any learner opening the app counts as activity. If it does pause, press **Restore** in the dashboard; nothing is lost.
+- **Password-reset emails** use Supabase's test mail sender, which is heavily limited. Before a wider launch, add a free SMTP provider (Resend, Brevo) under **Authentication → Emails → SMTP Settings**, and you can then turn **Confirm email** back on too.
+- The leaderboard trusts scores sent by each learner's browser. That's fine for a friendly beta; a determined cheat could inflate their own XP. Daily XP is capped and old days can't be back-filled.
+
+## Options
+
+- `REQUIRE_LOGIN: false` in `config.js` lets visitors study as guests and offers account creation from the home page instead of gating the app.

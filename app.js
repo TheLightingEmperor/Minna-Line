@@ -19,6 +19,11 @@
     gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>',
     book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5Z"/><path d="M4 19a2 2 0 0 1 2-2h13"/><circle cx="11.5" cy="9.5" r="3"/></svg>',
     bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+    home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5V20h-5.5v-5.5h-5V20H4z"/></svg>',
+    rank: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5M12 14v4M8 20h8"/></svg>',
+    chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></svg>',
+    user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c1-4 4-5.5 7.5-5.5s6.500 1.500 7.500 5.500"/></svg>',
+    cloud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18.500a4.500 4.500 0 0 1-.6-8.960 6 6 0 0 1 11.500 1.700A3.700 3.700 0 0 1 17.500 18.500Z"/></svg>',
     back: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
     coin: '<svg class="coin-i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="var(--coin)" stroke="#b07a10" stroke-width="1.5"/><circle cx="12" cy="12" r="7.5" fill="none" stroke="#fff3c4" stroke-width="1.2"/><path d="M8.5 7.5 12 12l3.5-4.5M12 12v5M9 12.5h6M9 15h6" fill="none" stroke="#7a4f00" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     lantern: (on) => `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="1.5" width="6" height="2.5" rx="1" fill="${INK}"/><ellipse cx="12" cy="12" rx="7.5" ry="8" fill="${on ? '#ff6b6b' : 'var(--rule)'}" stroke="${INK}" stroke-width="1.5"/><path d="M5 9.5h14M5 14.5h14" stroke="${INK}" stroke-opacity=".3" stroke-width="1.3"/><rect x="9" y="20" width="6" height="2.5" rx="1" fill="${INK}"/></svg>`,
@@ -453,34 +458,50 @@
     read: (id) => go({ name: 'read', id }),
     guide: (id) => go({ name: 'guide', id }),
   };
-  function applySkin() { document.documentElement.dataset.skin = S.equip.skin; }
+  function applySkin() {
+    const el = document.documentElement, th = S.settings.theme;
+    el.dataset.skin = S.equip.skin;
+    if (th === 'light' || th === 'dark') el.dataset.theme = th; else delete el.dataset.theme;
+  }
+  // Extension points filled in by social.js (accounts, leaderboard, stats). Everything works without them.
+  const X = { homeSide: null, homeFoot: null, homeActions: null, navItems: null };
   function topbar() {
     const l = level(), lo = lvlFloor(l), hi = lvlFloor(l + 1), streak = liveStreak();
     return `<header class="topbar"><div class="wrap">
-      <button class="brand" data-act="home" aria-label="Home">${mascotSVG('calm', { cls: 'face', face: true })}<span><b>Minna Line</b><span class="brand-sub">みんなの せん · N5</span></span></button>
+      <button class="brand" data-act="home" aria-label="Home">${mascotSVG('calm', { cls: 'face', face: true })}<span><b>Minna Line</b><span class="brand-sub">みんなの せん · ${curLevel()}</span></span></button>
       <div class="topstats">
         <span class="chipstat" title="Day streak${S.omamori ? ` · ${S.omamori} omamori` : ''}">${ICON.lantern(streak > 0)}${streak}</span>
         <span class="chipstat" title="Yen">${ICON.coin}<span id="coinct">${S.coins.toLocaleString('en-US')}</span></span>
         <span class="chipstat hide-sm" title="${S.xp} XP · ${rank()[3]}">Lv ${l}<span class="lvbar"><i style="width:${Math.round(((S.xp - lo) / (hi - lo)) * 100)}%"></i></span></span>
-        <button class="iconbtn" data-act="collection" aria-label="Collection" title="Stamps, stickers and trophies">${ICON.book}</button>
+        ${navItems().filter((n) => n[0] !== 'home').map(([act, label, , icon]) => `<button class="iconbtn nav-d" data-act="${act}" aria-label="${label}" title="${label}"${view.name === act ? ' aria-current="page"' : ''}>${icon}</button>`).join('')}
         <button class="iconbtn" data-act="shop" aria-label="Shop" title="Shop">${ICON.bag}</button>
         <button class="iconbtn" data-act="settings" aria-label="Settings" title="Settings">${ICON.gear}</button>
       </div></div></header>`;
   }
+  // [action, label, Japanese label, icon]: the icon row on wide screens, the tab bar on phones.
+  const navItems = () => (X.navItems ? X.navItems() : [['home', 'Home', 'ホーム', ICON.home], ['collection', 'Collection', 'コレクション', ICON.book]]);
+  function tabbar() {
+    if (view.name === 'session') return '';
+    const cur = view.name === 'station' || view.name === 'read' || view.name === 'reading' || view.name === 'guide' || view.name === 'dict' || view.name === 'mix' ? 'home' : view.name;
+    return `<nav class="tabbar" aria-label="Main">${navItems().map(([act, label, jp, icon]) => `<button data-act="${act}"${cur === act ? ' aria-current="page"' : ''}>${icon}<span>${label}</span></button>`).join('')}</nav>`;
+  }
   function render(body, actions = {}, onMount) {
     keyHandler = null;
     A = { ...G, ...actions };
-    root.innerHTML = topbar() + `<main><div class="wrap">${body}</div></main>`;
+    root.innerHTML = topbar() + `<main class="${view.name === 'session' ? 'in-session' : ''}"><div class="wrap${animateNext ? ' view-in' : ''}">${body}</div></main>` + tabbar();
+    animateNext = false;
     if (onMount) onMount();
   }
+  let animateNext = false; // fade a screen in only when it's a different screen, not on every re-render
   function go(v) {
     speech.stop();
+    animateNext = !view || view.name !== v.name || view.id !== v.id;
     view = v;
-    const map = { home: renderHome, station: () => renderStation(SBY.get(v.id) || STATIONS[1], v.tab), collection: () => renderCollection(v.tab), shop: renderShop, gacha: renderGacha, dict: renderDict, mix: renderMix, reading: renderReadingRoom, read: () => renderReader(RBY.get(v.id)), guide: () => renderGuide(v.id) };
-    (map[v.name] || renderHome)();
+    (ROUTES[v.name] || renderHome)(v);
     window.scrollTo(0, 0);
   }
-  function refresh() { if (view.name !== 'session') go(view); }
+  const ROUTES = { home: () => renderHome(), station: (v) => renderStation(SBY.get(v.id) || STATIONS[1], v.tab), collection: (v) => renderCollection(v.tab), shop: () => renderShop(), gacha: () => renderGacha(), dict: () => renderDict(), mix: () => renderMix(), reading: () => renderReadingRoom(), read: (v) => renderReader(RBY.get(v.id)), guide: (v) => renderGuide(v.id) };
+  function refresh() { if (view.name !== 'session' && !document.querySelector('.modal')) go(view); }
 
   // ---------------------------------------------------------------- home
   function nextStation(l = curLevel()) { return STATIONS.find((s) => s.level === l && isLine(s) && !S.stamps[s.id]) || STATIONS.filter((s) => s.level === l).pop(); }
@@ -566,8 +587,10 @@
         </div>
         <div class="muted small" style="margin-top:22px">${esc(lv.blurb)}</div>
         ${lines.map(([t, id, sub, cls]) => `<h2 class="section-h" style="margin-top:12px">${t} <span class="pill ${cls === 'express' ? 'express' : ''}">${sub}</span></h2>${railHTML(STATIONS.filter((s) => s.line === id), cls)}`).join('')}
+        ${X.homeFoot ? X.homeFoot() : ''}
       </div>
       <aside class="side">
+        ${X.homeSide ? X.homeSide() : ''}
         <div class="card" style="--c:${lineColor(nx)}"><div class="eyebrow">Next stop</div>
           <div style="display:flex;gap:12px;align-items:center">${badgeHTML(nx)}<div><h3>${esc(nx.name)}</h3><div class="muted small">${esc(nx.jp)}</div></div></div>
           <button class="btn primary" data-act="station" data-arg="${nx.id}">Go to ${codeOf(nx)}</button></div>
@@ -583,6 +606,7 @@
           <div class="row-between"><span>Trophies</span><b class="num">${Object.keys(S.trophies).length}/${TROPHIES.length}</b></div>
           <button class="btn" data-act="collection">Open the collection</button></div>
       </aside></div>`, {
+      ...(X.homeActions || {}),
       review: startReview,
       level: (l) => { S.settings = { ...S.settings, level: l }; save(); sfx.play('tap'); renderHome(); },
       claim: (id, el) => {
@@ -1602,6 +1626,7 @@
         <div class="field"><label>Read words aloud automatically</label>${seg('audio', [[true, 'On'], [false, 'Off']])}${speech.ok ? '' : '<div class="muted small">This browser has no Japanese voice, so listening drills fall back to reading.</div>'}</div>
         <div class="field"><label>Voice speed</label>${seg('rate', [[0.7, 'Slow'], [0.9, 'Normal'], [1.05, 'Fast']])}</div>
         <div class="field"><label>Sound effects</label>${seg('sound', [[true, 'On'], [false, 'Off']])}</div>
+        <div class="field"><label>Colours</label>${seg('theme', [['auto', 'Match my device'], ['light', 'Light'], ['dark', 'Dark']])}</div>
         <div class="field"><label for="bk">Backup</label><div class="muted small">Progress saves automatically${ML.isRemote() ? ' to your account' : ' in this browser'}. Copy this text to move it somewhere else, or paste a backup and press Restore.</div>
           <textarea id="bk" rows="3"></textarea>
           <div class="seg"><button class="chip" data-op="copy">Copy backup</button><button class="chip" data-op="restore">Restore from text</button><button class="chip" data-op="reset" style="color:var(--bad)">${armed ? 'Press again to erase everything' : 'Reset all progress'}</button></div></div>
@@ -1616,6 +1641,7 @@
         let v = s.dataset.val;
         v = v === 'true' ? true : v === 'false' ? false : isNaN(+v) ? v : +v;
         S.settings = { ...S.settings, [s.dataset.set]: v }; save(); draw();
+        if (s.dataset.set === 'theme') applySkin();
         if (s.dataset.set === 'rate') speech.say('こんにちは');
         if (s.dataset.set === 'sound') sfx.play('ok');
       }
@@ -1632,9 +1658,23 @@
   // ---------------------------------------------------------------- boot
   ART.install();
   applySkin();
-  const hash = (location.hash || '').slice(1);
-  go(SBY.has(hash) ? { name: 'station', id: hash } : { name: 'home' });
-  window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (SBY.has(h)) go({ name: 'station', id: h }); });
-  setTimeout(() => ML.connectRemote(() => { applySkin(); refresh(); }), 0);
+  let started = false;
+  function start() {
+    applySkin();
+    const hash = (location.hash || '').slice(1);
+    go(SBY.has(hash) ? { name: 'station', id: hash } : ROUTES[hash] && hash !== 'read' && hash !== 'station' ? { name: hash } : { name: 'home' });
+    if (started) return;
+    started = true;
+    window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (SBY.has(h)) go({ name: 'station', id: h }); });
+    setTimeout(() => ML.connectRemote(() => { applySkin(); refresh(); }), 0);
+  }
+  // Shared with social.js, which adds accounts, the leaderboard, stats and the admin dashboard.
+  window.MLUI = {
+    ML, S, X, G, ROUTES, ICON, ART, root, render, go, refresh, start, modal, toast, petals, celebrate, applySkin, openSettings, mascotSVG, meter, coins, esc,
+    readiness, curLevel, weekHTML, sayBtn, rubyHTML, stationKeys, keyToQ, quizSession, weakKeys, prioritize, lineColor, nextStation,
+    get view() { return view; }, set view(v) { view = v; }, setActions(a) { A = { ...G, ...a }; }, setKeys(fn) { keyHandler = fn; },
+  };
   window.__minna = { ML, keyToQ, numQ, stationKeys, conjKey, go, quizSession, writeSession, VOCAB, KANJI, GRAMMAR, STATIONS };
+  // social.js (loaded next) decides whether to show the log-in gate first; without it, go straight in.
+  window.addEventListener('DOMContentLoaded', () => { if (window.SOCIAL) window.SOCIAL.boot(); else start(); });
 })();

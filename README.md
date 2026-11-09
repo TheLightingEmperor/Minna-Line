@@ -13,7 +13,10 @@ A study game for Japanese from JLPT N5 to N1: *Minna no Nihongo* Lessons 1–50,
 - **Game layer:** yen, a shop (hats, colour themes, omamori streak savers), a capsule machine with a sticker album, daily tickets, trophies, train-class ranks and streaks.
 - **Spaced repetition:** every word, grammar drill, kanji and verb form is scheduled for review. The home screen shows what's due.
 
-Progress is saved in the browser (localStorage). Settings → Backup copies it to move between devices.
+- **Accounts and sync (optional):** email + password sign-up, progress synced across devices, a weekly league with public leaderboards, a stats report, beta feedback and an admin dashboard. Runs on a free Supabase project: see [SETUP.md](SETUP.md).
+- **Installable:** add it to a phone's home screen and it works offline.
+
+With no backend configured, progress is saved in the browser (localStorage) and Settings → Backup copies it between devices. Add `?demo=1` to the address to try the account screens with sample data.
 
 ## Run it locally
 
@@ -37,6 +40,13 @@ It's a static site, so any static host works. `netlify.toml` publishes the repo 
 | `core.js` | Data prep, kana/romaji tools, conjugation, number readings, saved state, spaced repetition, yen, quests, shop, trophies, sound |
 | `app.js` | Screens and game sessions: quiz, yokai battle, sprint, flashcards, match, shop, capsule machine, dictionary |
 | `app.css` | The look: pastel colours, light and dark themes |
+| `config.js` | Backend keys and options (empty = local-only) |
+| `cloud.js` | Accounts, sync engine, leaderboard and admin data (Supabase, or the `?demo=1` pretend backend) |
+| `social.js` | Welcome gate, Me page, league, stats, feedback, admin dashboard |
+| `supabase/schema.sql` | Database tables, access rules and functions |
+| `sw.js`, `manifest.webmanifest`, `icons/` | Installable app shell and offline support |
+| `vendor/supabase.js` | Supabase client library (MIT) |
+| `data/guide_extra.js` | Guidebook pages for travel Japanese and sound words |
 | `data/vocab.js` | Lessons 0–20 vocab, built from my lesson notes |
 | `data/vocab_n5extra.js` | Extra N5 words (Lessons 21–25 and general N5) |
 | `data/grammar_a.js`, `data/grammar_b.js` | Grammar points with explanations, examples and drills (Lessons 1–25) |

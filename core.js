@@ -336,9 +336,10 @@ window.ML = (() => {
   const defaults = () => ({
     v: 1, xp: 0, coins: 0, items: {}, stamps: {}, streak: { days: 0, last: '' }, daily: { date: '', n: 0 }, updatedAt: 0,
     today: { date: '' }, quests: { date: '', claimed: [], bonus: false }, history: {}, flags: {},
-    stats: { answers: 0, correct: 0, bestCombo: 0, perfects: 0, sprintBest: 0, yokai: 0, sessions: 0, written: 0, readDone: 0 },
+    stats: { answers: 0, correct: 0, bestCombo: 0, perfects: 0, sprintBest: 0, yokai: 0, sessions: 0, written: 0, readDone: 0, secs: 0, bestStreak: 0 },
+    days: {}, uid: '',
     trophies: {}, stickers: {}, tickets: 1, omamori: 0, owned: ['cap', 'none', 'skin-sakura'], equip: { hat: 'cap', acc: 'none', skin: 'skin-sakura' }, best: {}, numStats: { ok: 0, n: 0 },
-    settings: { script: 'kanji', romaji: 'after', audio: true, sound: true, rate: 0.9, goal: 60, kanaSets: ['basic'], flashDir: 'jp', level: 'N5' },
+    settings: { script: 'kanji', romaji: 'after', audio: true, sound: true, rate: 0.9, goal: 60, kanaSets: ['basic'], flashDir: 'jp', level: 'N5', theme: 'auto' },
   });
   let S = defaults();
   const NESTED = ['settings', 'streak', 'daily', 'stats', 'equip', 'quests', 'numStats', 'flags'];
@@ -352,11 +353,48 @@ window.ML = (() => {
   }
   try { adopt(JSON.parse(localStorage.getItem(LS_KEY))); } catch (e) { /* storage unavailable */ }
   let remote = null, pushTimer = null, onRemote = null;
+  const saveLocal = () => { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) { /* storage unavailable */ } };
   function save() {
     S.updatedAt = Date.now();
-    try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) { /* storage unavailable */ }
+    saveLocal();
+    if (window.CLOUD && window.CLOUD.schedulePush) window.CLOUD.schedulePush(); // account sync (cloud.js)
     clearTimeout(pushTimer);
     pushTimer = setTimeout(push, 2500);
+  }
+  // Joins two saved games so that playing on two devices never loses anything: review cards keep whichever copy
+  // has seen more answers, collections are unioned, counters take the larger value, and wallet/settings follow the newer save.
+  function mergeStates(a, b) {
+    if (!a || a.v !== 1) return b;
+    if (!b || b.v !== 1) return a;
+    const [n, o] = (a.updatedAt || 0) >= (b.updatedAt || 0) ? [a, b] : [b, a];
+    if (n.resetAt && n.resetAt > (o.updatedAt || 0)) return n; // "Reset all progress" was pressed after the older save
+    const d = defaults();
+    const out = JSON.parse(JSON.stringify({ ...d, ...n }));
+    for (const k of NESTED) out[k] = { ...d[k], ...(out[k] || {}) };
+    const obj = (x) => (x && typeof x === 'object' ? x : {});
+    const seen = (it) => (it.ok || 0) + (it.bad || 0);
+    for (const [k, x] of Object.entries(obj(o.items))) { const y = out.items[k]; if (!y || seen(x) > seen(y) || (seen(x) === seen(y) && (x.due || 0) > (y.due || 0))) out.items[k] = x; }
+    for (const f of ['stamps', 'trophies']) for (const [k, v] of Object.entries(obj(o[f]))) if (!out[f][k]) out[f][k] = v;
+    for (const [k, v] of Object.entries(obj(o.stickers))) out.stickers[k] = Math.max(out.stickers[k] || 0, v || 0);
+    for (const [k, v] of Object.entries(obj(o.flags))) if (v && !out.flags[k]) out.flags[k] = v;
+    for (const [k, v] of Object.entries(obj(o.history))) out.history[k] = Math.max(out.history[k] || 0, v || 0);
+    for (const [k, v] of Object.entries(obj(o.days))) { const y = out.days[k] || []; out.days[k] = [0, 1, 2].map((i) => Math.max(y[i] || 0, (v || [])[i] || 0)); }
+    for (const f of ['stats', 'numStats']) for (const [k, v] of Object.entries(obj(o[f]))) if (typeof v === 'number') out[f][k] = Math.max(out[f][k] || 0, v);
+    for (const [k, v] of Object.entries(obj(o.best))) out.best[k] = out.best[k] == null ? v : k.startsWith('sprint:') ? Math.max(out.best[k], v) : Math.min(out.best[k], v);
+    out.owned = [...new Set([...(out.owned || []), ...(o.owned || [])])];
+    out.xp = Math.max(n.xp || 0, o.xp || 0);
+    const sa = obj(n.streak), sb = obj(o.streak);
+    if ((sb.last || '') > (sa.last || '') || (sb.last === sa.last && (sb.days || 0) > (sa.days || 0))) out.streak = { ...sb };
+    const ta = obj(n.today), tb = obj(o.today);
+    if (tb.date && tb.date === ta.date) { for (const [k, v] of Object.entries(tb)) if (typeof v === 'number') out.today[k] = Math.max(out.today[k] || 0, v); }
+    else if ((tb.date || '') > (ta.date || '')) out.today = { ...tb };
+    const qa = obj(n.quests), qb = obj(o.quests);
+    if (qb.date && qb.date === qa.date) out.quests = { date: qa.date, claimed: [...new Set([...(qa.claimed || []), ...(qb.claimed || [])])], bonus: !!(qa.bonus || qb.bonus) };
+    else if ((qb.date || '') > (qa.date || '')) out.quests = { ...qb };
+    const hd = Object.keys(out.history).sort().pop();
+    if (hd) out.daily = { date: hd, n: out.history[hd] };
+    out.updatedAt = Math.max(a.updatedAt || 0, b.updatedAt || 0);
+    return out;
   }
   async function push() { if (remote) try { await remote.set({ data: JSON.stringify(S), updatedAt: S.updatedAt }); } catch (e) { /* offline */ } }
   async function connectRemote(cb) {
@@ -423,6 +461,7 @@ window.ML = (() => {
     else if (gap > 1 && gap - 1 <= S.omamori && S.streak.days > 0) { S.omamori -= gap - 1; S.streak.days++; S.flags.omamoriUsed = gap - 1; }
     else S.streak.days = 1;
     S.streak.last = t;
+    S.stats.bestStreak = Math.max(S.stats.bestStreak || 0, S.streak.days);
   }
   const liveStreak = () => { if (!S.streak.last) return 0; const gap = daysBetween(S.streak.last, dayStr()); return gap <= 1 + S.omamori ? S.streak.days : 0; };
   function ensureToday() {
@@ -465,10 +504,22 @@ window.ML = (() => {
     const d = dayStr();
     S.history[d] = (S.history[d] || 0) + 1;
     S.daily = { date: d, n: S.history[d] };
+    // study time: the gap since the last answer, capped so a tea break doesn't count
+    const now = Date.now(), secs = lastAnswerAt ? Math.min(45, Math.max(1, Math.round((now - lastAnswerAt) / 1000))) : 6;
+    lastAnswerAt = now;
+    S.stats.secs = (S.stats.secs || 0) + secs;
+    dayAdd(ok ? 1 : 0, xp, secs);
     return { xp, coins, levelUp: lv1 > lv0 ? lv1 : 0 };
+  }
+  let lastAnswerAt = 0;
+  // S.days[date] = [correct answers, XP earned, seconds studied]; S.history[date] holds the answer count
+  function dayAdd(correct, xp, secs) {
+    const d = dayStr(), row = (S.days = S.days || {})[d] || [0, 0, 0];
+    S.days[d] = [row[0] + correct, row[1] + xp, row[2] + secs];
   }
   function bonus(xp, coins) {
     const lv0 = level();
+    dayAdd(0, xp, 0);
     S.xp += xp; S.coins += coins;
     const lv1 = level();
     if (lv1 > lv0) S.coins += 100;
@@ -678,9 +729,10 @@ window.ML = (() => {
     VOCAB, VBY, KANA, KANJI, KBY, GRAMMAR, GBY, EXAMPLES, EBY, quizzable, posGroup, vKey, exampleFor, TITLES, STATIONS, SBY, LEVELS, levelOfL, lessonName,
     verbForms, adjForms, FORMS, CONJ_BY_LESSON, conjVerbs, conjAdjs, conjAnswer, canForm, I2A, READING, RBY, GUIDE, STROKES, rubyToKana, rubyToKanji, LESSON_GUIDE, GROUPS, groupOf,
     numKana, timeKana, HOURS, funKana, MONTHS, dayKana, COUNTERS, ageKana, D1,
-    get S() { return S; }, defaults, adopt, save, connectRemote, isRemote: () => !!remote,
+    get S() { return S; }, defaults, adopt, save, saveLocal, mergeStates, connectRemote, isRemote: () => !!remote || !!(window.CLOUD && window.CLOUD.user),
     stage, grade, mastery, keyValid, dueKeys, weakKeys, level, lvlFloor, rank, RANKS, liveStreak, ensureToday, record, bonus,
     QUESTS, todaysQuests, claimQuest, SHOP, SHOP_BY, buy, STICKERS, GACHA_PRICE, spin, TROPHIES, checkTrophies, speech, sfx,
-    resetAll(keepSettings) { const k = S.settings; S = defaults(); if (keepSettings) S.settings = k; save(); },
+    resetAll(keepSettings) { const k = S.settings, uid = S.uid; S = defaults(); if (keepSettings) S.settings = k; S.uid = uid; S.resetAt = Date.now(); save(); },
+    wipeLocal() { S = defaults(); try { localStorage.removeItem(LS_KEY); } catch (e) { /* ignore */ } },
   };
 })();
