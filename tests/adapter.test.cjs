@@ -1,0 +1,98 @@
+// Runs the real core.js + vendor/supabase.js + cloud.js in Node against a fake Supabase HTTP API,
+// to check the adapter calls real SDK methods and sends the requests the schema expects.
+const fs = require('fs'), vm = require('vm'), path = require('path');
+const root = path.join(__dirname, '..');
+const store = new Map();
+const mem = { getItem: (k) => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)), removeItem: (k) => store.delete(k) };
+global.window = global; global.self = global;
+global.localStorage = mem; global.sessionStorage = { getItem: () => null, setItem() {}, removeItem() {} };
+global.location = { search: '', origin: 'https://minna-line.netlify.app', pathname: '/', hostname: 'minna-line.netlify.app', host: 'minna-line.netlify.app', href: 'https://minna-line.netlify.app/', protocol: 'https:', hash: '' };
+global.document = { addEventListener() {}, removeEventListener() {}, referrer: '', visibilityState: 'visible' };
+global.addEventListener = () => {}; global.removeEventListener = () => {};
+global.screen = { width: 390, height: 844 };
+Object.defineProperty(global, 'navigator', { value: { language: 'en-GB', platform: 'TestOS', userAgent: 'node-test', onLine: true }, configurable: true });
+const calls = [];
+const UID = '11111111-2222-3333-4444-555555555555';
+const b64 = (o) => Buffer.from(JSON.stringify(o)).toString('base64url');
+const jwt = `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ sub: UID, email: 'a@b.co', exp: Math.floor(Date.now() / 1000) + 3600, role: 'authenticated', aud: 'authenticated' })}.sig`;
+const session = { access_token: jwt, refresh_token: 'r1', token_type: 'bearer', expires_in: 3600, expires_at: Math.floor(Date.now() / 1000) + 3600, user: { id: UID, email: 'a@b.co', aud: 'authenticated', identities: [{ id: 'x' }], user_metadata: {} } };
+let remote = null;
+global.fetch = async (url, opt = {}) => {
+  const u = new URL(String(url)), method = (opt.method || 'GET').toUpperCase();
+  let body = null; try { body = opt.body ? JSON.parse(opt.body) : null; } catch (e) { body = opt.body; }
+  const h = new Headers(opt.headers || {});
+  calls.push({ method, path: u.pathname, q: u.search, body, apikey: h.get('apikey'), auth: (h.get('authorization') || '').slice(0, 14), prefer: h.get('prefer') });
+  const json = (o, status = 200) => new Response(JSON.stringify(o), { status, headers: { 'content-type': 'application/json' } });
+  if (u.pathname === '/auth/v1/signup') return json(session);
+  if (u.pathname === '/auth/v1/token') return body && body.password === 'bad' ? json({ code: 400, error_code: 'invalid_credentials', msg: 'Invalid login credentials' }, 400) : json(session);
+  if (u.pathname === '/auth/v1/logout') return new Response(null, { status: 204 });
+  if (u.pathname === '/auth/v1/recover') return json({});
+  if (u.pathname === '/auth/v1/user') return json(session.user);
+  if (u.pathname === '/rest/v1/rpc/log_login') return json({ admin: true, profile: { id: UID, display_name: 'Aiko', is_public: true, created_at: new Date().toISOString(), login_count: 1 } });
+  if (u.pathname === '/rest/v1/rpc/leaderboard') return json([{ pos: 1, display_name: 'Aiko', avatar: {}, jlpt: 'N5', user_level: 2, rank_name: 'Local', streak: 1, stamps: 0, xp: 50, score: 50, is_me: true, total: 1 }]);
+  if (u.pathname === '/rest/v1/rpc/delete_my_account' || u.pathname === '/rest/v1/rpc/admin_set_hidden') return new Response(null, { status: 204 });
+  if (u.pathname === '/rest/v1/progress' && method === 'GET') return (h.get('accept') || '').includes('vnd.pgrst.object') ? (remote ? json(remote) : json({ code: 'PGRST116', message: 'no rows' }, 406)) : json(remote ? [remote] : []);
+  if (u.pathname === '/rest/v1/progress' && method === 'POST') { remote = { data: body.data, client_ts: body.client_ts, updated_at: new Date().toISOString() }; return new Response(null, { status: 201 }); }
+  if (u.pathname.startsWith('/rest/v1/') && method === 'GET') return json([]);
+  if (u.pathname.startsWith('/rest/v1/')) return new Response(null, { status: method === 'POST' ? 201 : 204 });
+  return json({ message: 'unexpected ' + u.pathname }, 404);
+};
+const run = (f) => vm.runInThisContext(fs.readFileSync(path.join(root, f), 'utf8'), { filename: f });
+for (const m of fs.readFileSync(path.join(root, 'index.html'), 'utf8').matchAll(/<script src="(data\/[^"]+)"><\/script>/g)) run(m[1]);
+run('core.js');
+global.MINNA_CONFIG = { SUPABASE_URL: 'https://fake.supabase.co', SUPABASE_KEY: 'sb_publishable_test', REQUIRE_LOGIN: true, APP_VERSION: '6.0' };
+run('vendor/supabase.js');
+run('cloud.js');
+let pass = 0, fail = 0;
+const ok = (n, c, x = '') => { c ? pass++ : fail++; console.log((c ? 'PASS ' : 'FAIL ') + n + (x ? '  → ' + x : '')); };
+const find = (m, p) => calls.filter((c) => c.method === m && c.path === p);
+(async () => {
+  ok('configured, login required', CLOUD.configured && CLOUD.enabled && CLOUD.requireLogin);
+  ok('init with no saved session → signed out', (await CLOUD.init()) === null);
+  // guest progress made before signing up must be uploaded
+  ML.S.xp = 120; ML.S.items['v|x'] = { s: 2, due: 1, ok: 2, bad: 0 }; ML.S.history[ML.dayStr()] = 12; ML.S.days[ML.dayStr()] = [10, 120, 90]; ML.save();
+  const r = await CLOUD.signUp(' a@b.co ', 'password1', { display_name: 'Aiko', is_public: true, start_level: 'new', jlpt: 'N5' });
+  const su = find('POST', '/auth/v1/signup')[0];
+  ok('signUp posts email/password/metadata', su && su.body.email === 'a@b.co' && su.body.data.display_name === 'Aiko' && su.apikey === 'sb_publishable_test', JSON.stringify(su && su.body).slice(0, 110));
+  ok('signUp signs in', r.user && r.user.id === UID && !r.needsConfirm && CLOUD.user.id === UID);
+  const ll = find('POST', '/rest/v1/rpc/log_login')[0];
+  ok('log_login rpc sent with event + device meta', ll && ll.body.p_event === 'signup' && ll.body.p_meta.timezone !== undefined && ll.body.p_meta.app_version === '6.0' && ll.body.p_meta.display_name === 'Aiko' && ll.auth.startsWith('Bearer ey'), JSON.stringify(ll && ll.body).slice(0, 140));
+  ok('profile + admin flag loaded', CLOUD.profile.display_name === 'Aiko' && CLOUD.isAdmin === true);
+  const pg = find('GET', '/rest/v1/progress')[0];
+  ok('progress fetched for this user', pg && pg.q.includes('user_id=eq.' + UID), pg && pg.q);
+  const up = find('POST', '/rest/v1/progress')[0];
+  ok('guest progress uploaded as upsert', up && up.body.user_id === UID && up.body.data.xp === 120 && up.q.includes('on_conflict=user_id') && /merge-duplicates/.test(up.prefer || ''), up && up.q + ' ' + up.prefer);
+  const pf = find('PATCH', '/rest/v1/profiles')[0];
+  const allowed = new Set('display_name is_public avatar jlpt xp user_level rank_name streak best_streak last_study_day stamps trophies stickers items_seen words_mastered kanji_mastered grammar_mastered answers correct study_secs days_studied coins summary timezone locale platform user_agent screen app_version'.split(' '));
+  const badCols = pf ? Object.keys(pf.body).filter((k) => !allowed.has(k)) : ['(no request)'];
+  ok('profile update only touches granted columns', pf && pf.q.includes('id=eq.' + UID) && badCols.length === 0, 'extra: ' + badCols.join(',') + ' | xp=' + (pf && pf.body.xp));
+  const da = find('POST', '/rest/v1/daily_activity')[0];
+  ok('daily activity upserted', da && da.q.includes('on_conflict=user_id%2Cday') && da.body[0].user_id === UID && da.body[0].xp === 120 && da.body[0].answers === 12, JSON.stringify(da && da.body[0]));
+  ok('status synced', CLOUD.status === 'synced');
+  const lb = await CLOUD.leaderboard('week', 50);
+  ok('leaderboard rpc', lb[0].score === 50 && find('POST', '/rest/v1/rpc/leaderboard')[0].body.p_board === 'week');
+  await CLOUD.updateProfile({ is_public: false });
+  ok('updateProfile patches', find('PATCH', '/rest/v1/profiles').some((c) => c.body.is_public === false));
+  await CLOUD.sendFeedback({ kind: 'idea', message: 'hello', page: 'home' });
+  const fb = find('POST', '/rest/v1/feedback')[0];
+  ok('feedback insert', fb && fb.body.user_id === UID && fb.body.message === 'hello' && fb.body.email === 'a@b.co');
+  const all = await CLOUD.admin.all();
+  ok('admin.all reads four tables', ['profiles', 'daily_activity', 'login_events', 'feedback'].every((t) => find('GET', '/rest/v1/' + t).length) && Array.isArray(all.profiles));
+  await CLOUD.admin.user(UID); await CLOUD.admin.setHidden(UID, true); await CLOUD.admin.setFeedbackStatus(1, 'done');
+  ok('admin detail + moderation calls', find('POST', '/rest/v1/rpc/admin_set_hidden')[0].body.p_hidden === true && find('PATCH', '/rest/v1/feedback')[0].body.status === 'done');
+  await CLOUD.sendReset('a@b.co');
+  ok('password reset request', find('POST', '/auth/v1/recover')[0].body.email === 'a@b.co');
+  await CLOUD.setPassword('newpassword1');
+  ok('set password', find('PUT', '/auth/v1/user')[0].body.password === 'newpassword1');
+  await CLOUD.signOut();
+  ok('sign out clears user + local game', CLOUD.user === null && ML.S.xp === 0 && mem.getItem('minna-line-progress-v1') === null);
+  let msg = ''; try { await CLOUD.signIn('a@b.co', 'bad'); } catch (e) { msg = e.message; }
+  ok('wrong password → friendly message', /don't match/.test(msg), msg);
+  await CLOUD.signIn('a@b.co', 'password1');
+  ok('log in restores progress from the account', ML.S.xp === 120 && !!ML.S.items['v|x'] && ML.S.uid === UID, 'xp=' + ML.S.xp);
+  ok('login event is "login"', find('POST', '/rest/v1/rpc/log_login').pop().body.p_event === 'login');
+  await CLOUD.deleteAccount();
+  ok('delete account', find('POST', '/rest/v1/rpc/delete_my_account').length === 1 && CLOUD.user === null);
+  console.log(`\n${pass} passed, ${fail} failed`);
+  process.exit(fail ? 1 : 0);
+})().catch((e) => { console.error('CRASH', e); process.exit(1); });

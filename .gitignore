@@ -3,3 +3,5 @@ dist/
 tools/*.json
 .netlify/
 node_modules/
+tests/node_modules/
+tests/package*.json
