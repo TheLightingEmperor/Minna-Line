@@ -5,10 +5,10 @@
 // the database rules in supabase/schema.sql decide what each person can read and write.
 // Never put the secret / service_role key in this file.
 //
-// While both are empty the app runs exactly as before: no accounts, progress saved in the browser only.
+// If both are emptied the app runs without accounts: progress saved in the browser only.
 window.MINNA_CONFIG = {
-  SUPABASE_URL: '',
-  SUPABASE_KEY: '',
+  SUPABASE_URL: 'https://rzfxxxsfsbynvbvqtjzl.supabase.co',
+  SUPABASE_KEY: 'sb_publishable_zYJ30fAfwlsy1AZMnt1CbQ_8kzeZugj',
   REQUIRE_LOGIN: true,   // true: visitors must create an account or log in before they can study
   APP_VERSION: '6.0',
 };
