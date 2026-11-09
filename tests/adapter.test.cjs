@@ -31,6 +31,12 @@ global.fetch = async (url, opt = {}) => {
   if (u.pathname === '/rest/v1/rpc/log_login') return json({ admin: true, profile: { id: UID, display_name: 'Aiko', is_public: true, created_at: new Date().toISOString(), login_count: 1 } });
   if (u.pathname === '/rest/v1/rpc/leaderboard') return json([{ pos: 1, display_name: 'Aiko', avatar: {}, jlpt: 'N5', user_level: 2, rank_name: 'Local', streak: 1, stamps: 0, xp: 50, score: 50, is_me: true, total: 1 }]);
   if (u.pathname === '/rest/v1/rpc/delete_my_account' || u.pathname === '/rest/v1/rpc/admin_set_hidden') return new Response(null, { status: 204 });
+  if (u.pathname === '/rest/v1/rpc/community_feed') return json([{ id: 7, title: 'Hello', like_count: 1 }]);
+  if (u.pathname === '/rest/v1/rpc/community_thread') return json({ post: { id: 7, title: 'Hello' }, comments: [] });
+  if (u.pathname === '/rest/v1/rpc/community_like') return json({ liked: true, count: 2 });
+  if (u.pathname === '/rest/v1/rpc/community_unread') return json(3);
+  if (u.pathname === '/rest/v1/rpc/community_missing') return json({ code: 'PGRST202', message: 'Could not find the function public.community_missing in the schema cache' }, 404);
+  if (u.pathname === '/rest/v1/community_posts' && method === 'POST') return json({ id: 42 }, 201);
   if (u.pathname === '/rest/v1/progress' && method === 'GET') return (h.get('accept') || '').includes('vnd.pgrst.object') ? (remote ? json(remote) : json({ code: 'PGRST116', message: 'no rows' }, 406)) : json(remote ? [remote] : []);
   if (u.pathname === '/rest/v1/progress' && method === 'POST') { remote = { data: body.data, client_ts: body.client_ts, updated_at: new Date().toISOString() }; return new Response(null, { status: 201 }); }
   if (u.pathname.startsWith('/rest/v1/') && method === 'GET') return json([]);
@@ -80,6 +86,25 @@ const find = (m, p) => calls.filter((c) => c.method === m && c.path === p);
   ok('admin.all reads four tables', ['profiles', 'daily_activity', 'login_events', 'feedback'].every((t) => find('GET', '/rest/v1/' + t).length) && Array.isArray(all.profiles));
   await CLOUD.admin.user(UID); await CLOUD.admin.setHidden(UID, true); await CLOUD.admin.setFeedbackStatus(1, 'done');
   ok('admin detail + moderation calls', find('POST', '/rest/v1/rpc/admin_set_hidden')[0].body.p_hidden === true && find('PATCH', '/rest/v1/feedback')[0].body.status === 'done');
+  // community
+  const C = CLOUD.community;
+  const feed = await C.feed({ category: 'question', sort: 'new', jlpt: 'N5' });
+  const fq = find('POST', '/rest/v1/rpc/community_feed')[0];
+  ok('community feed rpc', feed[0].id === 7 && fq.body.p_category === 'question' && fq.body.p_sort === 'new' && fq.body.p_jlpt === 'N5' && fq.body.p_limit === 30);
+  const newId = await C.createPost({ category: 'win', jlpt: null, title: 'Yay', body: 'Passed' });
+  const cp = find('POST', '/rest/v1/community_posts')[0];
+  const okCols = new Set(['author_id', 'category', 'jlpt', 'title', 'body']);
+  ok('create post sends only granted columns', newId === 42 && cp.body.author_id === UID && Object.keys(cp.body).every((k) => okCols.has(k)) && /return=representation/.test(cp.prefer || ''), JSON.stringify(Object.keys(cp.body)));
+  await C.addComment({ post_id: 42, parent_id: 5, body: 'nice' });
+  const cc = find('POST', '/rest/v1/community_comments')[0];
+  ok('add comment', cc.body.post_id === 42 && cc.body.parent_id === 5 && cc.body.author_id === UID && Object.keys(cc.body).length === 4);
+  const lk = await C.like({ post: 42 });
+  ok('like rpc', lk.liked === true && find('POST', '/rest/v1/rpc/community_like')[0].body.p_post === 42 && find('POST', '/rest/v1/rpc/community_like')[0].body.p_comment === null);
+  await C.report({ post: 42, reason: 'spam' }); await C.moderate('post', 42, 'pin'); await C.updatePost(42, { category: 'win', title: 'Yay!', body: 'Passed' }); await C.deletePost(42);
+  ok('report, moderate, edit, delete', find('POST', '/rest/v1/community_reports')[0].body.reporter_id === UID && find('POST', '/rest/v1/rpc/community_moderate')[0].body.p_id === '42' && find('PATCH', '/rest/v1/community_posts')[0].q.includes('id=eq.42') && find('DELETE', '/rest/v1/community_posts')[0].q.includes('id=eq.42'));
+  ok('unread count', (await C.unread()) === 3);
+  let miss = null; try { await C.thread(1); await CLOUD.community.feed({}); } catch (e) { miss = e; }
+  ok('thread + feed still fine', miss === null);
   await CLOUD.sendReset('a@b.co');
   ok('password reset request', find('POST', '/auth/v1/recover')[0].body.email === 'a@b.co');
   await CLOUD.setPassword('newpassword1');

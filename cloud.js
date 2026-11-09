@@ -99,6 +99,22 @@ window.CLOUD = (() => {
       async leaderboard(board, limit) { return need(await sb.rpc('leaderboard', { p_board: board, p_limit: limit })) || []; },
       async sendFeedback(row) { need(await sb.from('feedback').insert({ ...row, user_id: uid })); },
       async deleteAccount() { need(await sb.rpc('delete_my_account')); try { await sb.auth.signOut({ scope: 'local' }); } catch (e) { /* session already invalid */ } uid = null; },
+      community: {
+        async feed(o) { return need(await sb.rpc('community_feed', { p_category: o.category || null, p_sort: o.sort || 'hot', p_limit: o.limit || 30, p_offset: o.offset || 0, p_jlpt: o.jlpt || null })) || []; },
+        async thread(id) { return need(await sb.rpc('community_thread', { p_post: id })); },
+        async createPost(r) { return need(await sb.from('community_posts').insert({ author_id: uid, category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body }).select('id').single()).id; },
+        async updatePost(id, r) { need(await sb.from('community_posts').update({ category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body }).eq('id', id)); },
+        async deletePost(id) { need(await sb.from('community_posts').delete().eq('id', id)); },
+        async addComment(r) { need(await sb.from('community_comments').insert({ post_id: r.post_id, parent_id: r.parent_id || null, author_id: uid, body: r.body })); },
+        async deleteComment(id) { need(await sb.from('community_comments').delete().eq('id', id)); },
+        async like(o) { return need(await sb.rpc('community_like', { p_post: o.post || null, p_comment: o.comment || null })); },
+        async report(r) { need(await sb.from('community_reports').insert({ reporter_id: uid, post_id: r.post || null, comment_id: r.comment || null, reason: r.reason })); },
+        async moderate(kind, id, action) { need(await sb.rpc('community_moderate', { p_kind: kind, p_id: String(id), p_action: action })); },
+        async unread() { return need(await sb.rpc('community_unread')) || 0; },
+        async markSeen() { need(await sb.rpc('community_mark_seen')); },
+        async reports() { return need(await sb.from('community_reports').select('*').eq('status', 'open').order('created_at', { ascending: false }).limit(100)) || []; },
+        async resolveReport(id) { need(await sb.from('community_reports').update({ status: 'done' }).eq('id', id)); },
+      },
       admin: {
         async all() {
           const since = new Date(Date.now() - 90 * 864e5).toISOString().slice(0, 10);
@@ -160,7 +176,34 @@ window.CLOUD = (() => {
       db.feedback.push({ id: db.nextId++, user_id: 'demo-3', email: 'mina@example.com', display_name: 'Mina', kind: 'love', message: 'The yokai battles are so cute. Studying every day now!', page: 'station', app_version: VERSION, status: 'new', created_at: iso(Date.now() - 864e5) });
       return db;
     }
-    const read = () => { try { return JSON.parse(ls.get(KEY)) || seed(); } catch (e) { return seed(); } };
+    function seedCommunity(db) {
+      const ago = (h) => iso(Date.now() - h * 36e5);
+      let pid = 1, cid = 1;
+      const post = (author, category, jlpt, title, body, h, likes, pinned) => ({ id: pid++, author_id: author, category, jlpt, title, body, like_count: likes, comment_count: 0, pinned: !!pinned, locked: false, hidden: false, created_at: ago(h), updated_at: ago(h), last_activity_at: ago(h) });
+      db.cposts = [
+        post('demo-1', 'news', null, 'Welcome to the ひろば', 'This is the station plaza: a place to ask questions, share wins and swap study tips.\n\nThree house rules: be kind, stay on Japanese, and no spoilers for the yokai battles.', 70, 14, true),
+        post('demo-4', 'question', 'N5', 'When do I use は and when が?', 'I keep mixing them up in the Lesson 9 drills. わたしは すしが すきです makes sense, but why not すしは?\n\nIs there a rule of thumb that works most of the time?', 5, 9),
+        post('demo-2', 'win', 'N4', 'Passed the N4 mock exam on my third try', 'Stuck at 58% twice, then spent a week on nothing but the Verb Forge and weak spots. 71% today. The umbrella yokai never stood a chance.', 9, 21),
+        post('demo-7', 'tips', null, 'What finally made kanji stick for me', '1. Write each new kanji five times on the handwriting pad before the quiz.\n2. Do the review pile first thing in the morning, before anything new.\n3. Say the reading out loud. Sounds silly, works.\n\nMore here: https://kanjivg.tagaini.net', 26, 17),
+        post('demo-9', 'intro', 'N5', 'こんにちは from Berlin', 'Started two weeks ago because I am visiting Osaka in spring. Kana are done, Lesson 3 is next. Anyone else brand new?', 31, 6),
+        post('demo-5', 'lounge', null, 'Which hat is your Mochi wearing?', 'Saved up for the fox mask and I have no regrets. Show me your conductors.', 44, 8),
+        post('demo-3', 'question', 'N3', 'ようにする vs ことにする', 'The N3 unit 7 drills treat these as different but my textbook explains them almost the same way. Can someone give two example sentences where swapping them changes the meaning?', 50, 4),
+      ];
+      const com = (post, author, body, h, parent) => ({ id: cid++, post_id: post, parent_id: parent || null, author_id: author, body, like_count: 0, hidden: false, created_at: ago(h) });
+      db.ccomments = [
+        com(2, 'demo-2', 'は sets the topic, が points at the thing the feeling or ability is about. With すき, わかる, ある the thing you like/understand/have takes が.', 4.5),
+        com(2, 'demo-6', 'The Guidebook → Particles page has a table for exactly this. It cleared it up for me.', 4),
+        com(2, 'demo-4', 'That helps, thank you! Off to the particle dojo.', 3.5, 1),
+        com(3, 'demo-8', 'おめでとう！ Third try for me too.', 8),
+        com(4, 'demo-9', 'Number 3 is so true. My neighbours think I am rehearsing a play.', 20),
+        com(5, 'demo-1', 'ようこそ！ You will love Osaka. Learn おおきに before you go.', 30),
+        com(6, 'demo-7', 'Straw hat forever.', 40),
+      ];
+      for (const c of db.ccomments) { const p = db.cposts.find((x) => x.id === c.post_id); p.comment_count++; }
+      db.clikes = {}; db.creports = [];
+      return db;
+    }
+    const read = () => { let db; try { db = JSON.parse(ls.get(KEY)) || seed(); } catch (e) { db = seed(); } if (!db.cposts) seedCommunity(db); return db; };
     const write = (db) => ls.set(KEY, JSON.stringify(db));
     const sha = async (t) => {
       try { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('minna:' + t)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join(''); } catch (e) { return 'h' + ML.hashStr(t); }
@@ -224,6 +267,56 @@ window.CLOUD = (() => {
       },
       async sendFeedback(row) { await wait(); const db = read(); db.feedback.unshift({ id: db.nextId++, user_id: uid, status: 'new', created_at: iso(Date.now()), ...row }); write(db); },
       async deleteAccount() { const db = read(), u = byId(db, uid); if (u) delete db.users[u.email]; delete db.profiles[uid]; delete db.progress[uid]; delete db.days[uid]; db.logins = db.logins.filter((l) => l.user_id !== uid); db.session = null; write(db); uid = null; },
+      community: (() => {
+        const author = (db, id) => { const p = db.profiles[id] || {}; return { author_name: p.display_name || 'Conductor', author_avatar: p.avatar || {}, author_level: p.user_level || 1, author_rank: p.rank_name || null, author_jlpt: p.jlpt || null, author_staff: id === 'demo-1' || id === uid }; };
+        const lk = (kind, id) => `${uid}|${kind}|${id}`;
+        return {
+          async feed(o) {
+            await wait(150);
+            const db = read(), now = Date.now();
+            const hot = (c) => (c.like_count * 2 + c.comment_count * 3 + 1) / Math.pow((now - new Date(c.created_at)) / 36e5 + 2, 1.3);
+            let rows = db.cposts.filter((c) => (!c.hidden || c.author_id === uid) && (!o.category || c.category === o.category) && (!o.jlpt || c.jlpt === o.jlpt));
+            rows.sort((a, b) => (b.pinned - a.pinned) || (o.sort === 'new' ? new Date(b.created_at) - new Date(a.created_at) : o.sort === 'top' ? b.like_count - a.like_count : hot(b) - hot(a)));
+            return rows.slice(0, o.limit || 30).map((c) => ({ ...c, excerpt: c.body.slice(0, 320), body: undefined, author_id: undefined, ...author(db, c.author_id), is_mine: c.author_id === uid, liked: !!db.clikes[lk('p', c.id)] }));
+          },
+          async thread(id) {
+            await wait(150);
+            const db = read(), c = db.cposts.find((x) => x.id === +id);
+            if (!c) return null;
+            return { post: { ...c, ...author(db, c.author_id), is_mine: c.author_id === uid, liked: !!db.clikes[lk('p', c.id)] },
+              comments: db.ccomments.filter((m) => m.post_id === c.id).map((m) => ({ ...m, author_id: undefined, ...author(db, m.author_id), is_op: m.author_id === c.author_id, is_mine: m.author_id === uid, liked: !!db.clikes[lk('c', m.id)] })) };
+          },
+          async createPost(r) { await wait(); const db = read(), id = Math.max(0, ...db.cposts.map((x) => x.id)) + 1, t = iso(Date.now()); db.cposts.push({ id, author_id: uid, category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body, like_count: 0, comment_count: 0, pinned: false, locked: false, hidden: false, created_at: t, updated_at: t, last_activity_at: t }); write(db); return id; },
+          async updatePost(id, r) { const db = read(), c = db.cposts.find((x) => x.id === +id); Object.assign(c, { category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body, updated_at: iso(Date.now()) }); write(db); },
+          async deletePost(id) { const db = read(); db.cposts = db.cposts.filter((x) => x.id !== +id); db.ccomments = db.ccomments.filter((m) => m.post_id !== +id); write(db); },
+          async addComment(r) {
+            await wait();
+            const db = read(), c = db.cposts.find((x) => x.id === +r.post_id), par = r.parent_id ? db.ccomments.find((m) => m.id === +r.parent_id) : null;
+            if (c.locked) throw new Error('This post is closed to new comments.');
+            db.ccomments.push({ id: Math.max(0, ...db.ccomments.map((x) => x.id)) + 1, post_id: c.id, parent_id: par ? par.parent_id || par.id : null, author_id: uid, body: r.body, like_count: 0, hidden: false, created_at: iso(Date.now()) });
+            c.comment_count++; c.last_activity_at = iso(Date.now()); write(db);
+          },
+          async deleteComment(id) { const db = read(), m = db.ccomments.find((x) => x.id === +id); if (!m) return; const gone = db.ccomments.filter((x) => x.id === m.id || x.parent_id === m.id); db.ccomments = db.ccomments.filter((x) => !gone.includes(x)); const c = db.cposts.find((x) => x.id === m.post_id); if (c) c.comment_count = Math.max(0, c.comment_count - gone.length); write(db); },
+          async like(o) {
+            const db = read(), kind = o.post ? 'p' : 'c', id = o.post || o.comment, row = (kind === 'p' ? db.cposts : db.ccomments).find((x) => x.id === +id), k = lk(kind, id);
+            const liked = !db.clikes[k];
+            if (liked) db.clikes[k] = 1; else delete db.clikes[k];
+            row.like_count = Math.max(0, row.like_count + (liked ? 1 : -1)); write(db);
+            return { liked, count: row.like_count };
+          },
+          async report(r) { const db = read(); db.creports.push({ id: db.nextId++, reporter_id: uid, post_id: r.post || null, comment_id: r.comment || null, reason: r.reason, status: 'open', created_at: iso(Date.now()) }); write(db); },
+          async moderate(kind, id, action) {
+            const db = read();
+            if (kind === 'post') { if (action === 'delete') { db.cposts = db.cposts.filter((x) => x.id !== +id); db.ccomments = db.ccomments.filter((m) => m.post_id !== +id); } else { const c = db.cposts.find((x) => x.id === +id); if (c) Object.assign(c, { pin: { pinned: true }, unpin: { pinned: false }, lock: { locked: true }, unlock: { locked: false }, hide: { hidden: true }, show: { hidden: false } }[action] || {}); } }
+            else if (kind === 'comment') db.ccomments = db.ccomments.filter((x) => x.id !== +id && x.parent_id !== +id);
+            write(db);
+          },
+          async unread() { const db = read(); const mine = new Set(db.cposts.filter((c) => c.author_id === uid).map((c) => c.id)); const seen = db.cseen && db.cseen[uid] ? new Date(db.cseen[uid]).getTime() : 0; return db.ccomments.filter((m) => mine.has(m.post_id) && m.author_id !== uid && new Date(m.created_at).getTime() > seen).length; },
+          async markSeen() { const db = read(); db.cseen = db.cseen || {}; db.cseen[uid] = iso(Date.now()); write(db); },
+          async reports() { return read().creports.filter((r) => r.status === 'open'); },
+          async resolveReport(id) { const db = read(); const r = db.creports.find((x) => x.id === id); if (r) r.status = 'done'; write(db); },
+        };
+      })(),
       admin: {
         async all() {
           await wait();
@@ -425,6 +518,17 @@ window.CLOUD = (() => {
       try { await be.deleteAccount(); clearTimeout(pushTimer); user = null; profile = null; isAdmin = false; dirty = false; ls.del('minna-line-profile'); ML.wipeLocal(); setStatus('idle'); } catch (e) { throw new Error(nice(e)); } finally { busy = false; }
     },
     schedulePush, pushNow, pull,
+    // Community calls. If the tables are not installed yet (supabase/community.sql not run) the error has .missing = true.
+    community: new Proxy({}, {
+      get: (_, name) => async (...args) => {
+        if (!be || !be.community || !user) throw new Error('Log in to use the community.');
+        try { return await be.community[name](...args); } catch (e) {
+          const raw = String((e && (e.message || e.msg)) || e || ''), err = new Error(nice(e));
+          err.missing = (e && (e.code === 'PGRST202' || e.code === 'PGRST205' || e.code === '42P01' || e.code === '42883')) || /could not find the (function|table)|does not exist|schema cache/i.test(raw);
+          throw err;
+        }
+      },
+    }),
   };
   return api;
 })();

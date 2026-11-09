@@ -473,7 +473,7 @@
         <span class="chipstat" title="Day streak${S.omamori ? ` · ${S.omamori} omamori` : ''}">${ICON.lantern(streak > 0)}${streak}</span>
         <span class="chipstat" title="Yen">${ICON.coin}<span id="coinct">${S.coins.toLocaleString('en-US')}</span></span>
         <span class="chipstat hide-sm" title="${S.xp} XP · ${rank()[3]}">Lv ${l}<span class="lvbar"><i style="width:${Math.round(((S.xp - lo) / (hi - lo)) * 100)}%"></i></span></span>
-        ${navItems().filter((n) => n[0] !== 'home').map(([act, label, , icon]) => `<button class="iconbtn nav-d" data-act="${act}" aria-label="${label}" title="${label}"${view.name === act ? ' aria-current="page"' : ''}>${icon}</button>`).join('')}
+        ${navItems().filter((n) => n[0] !== 'home').map(([act, label, , icon]) => `<button class="iconbtn nav-d" data-act="${act}" aria-label="${label}" title="${label}"${view.name === act || (act === 'community' && view.name === 'post') ? ' aria-current="page"' : ''}>${icon}</button>`).join('')}
         <button class="iconbtn" data-act="shop" aria-label="Shop" title="Shop">${ICON.bag}</button>
         <button class="iconbtn" data-act="settings" aria-label="Settings" title="Settings">${ICON.gear}</button>
       </div></div></header>`;
@@ -482,8 +482,8 @@
   const navItems = () => (X.navItems ? X.navItems() : [['home', 'Home', 'ホーム', ICON.home], ['collection', 'Collection', 'コレクション', ICON.book]]);
   function tabbar() {
     if (view.name === 'session') return '';
-    const cur = view.name === 'station' || view.name === 'read' || view.name === 'reading' || view.name === 'guide' || view.name === 'dict' || view.name === 'mix' ? 'home' : view.name;
-    return `<nav class="tabbar" aria-label="Main">${navItems().map(([act, label, jp, icon]) => `<button data-act="${act}"${cur === act ? ' aria-current="page"' : ''}>${icon}<span>${label}</span></button>`).join('')}</nav>`;
+    const cur = view.name === 'station' || view.name === 'read' || view.name === 'reading' || view.name === 'guide' || view.name === 'dict' || view.name === 'mix' ? 'home' : view.name === 'post' ? 'community' : view.name;
+    return `<nav class="tabbar" aria-label="Main">${navItems().filter((n) => n[4] !== 'wide').map(([act, label, jp, icon]) => `<button data-act="${act}"${cur === act ? ' aria-current="page"' : ''}>${icon}<span>${label}</span></button>`).join('')}</nav>`;
   }
   function render(body, actions = {}, onMount) {
     keyHandler = null;
@@ -1662,7 +1662,7 @@
   function start() {
     applySkin();
     const hash = (location.hash || '').slice(1);
-    go(SBY.has(hash) ? { name: 'station', id: hash } : ROUTES[hash] && hash !== 'read' && hash !== 'station' ? { name: hash } : { name: 'home' });
+    go(SBY.has(hash) ? { name: 'station', id: hash } : ROUTES[hash] && hash !== 'read' && hash !== 'station' && hash !== 'post' ? { name: hash } : { name: 'home' });
     if (started) return;
     started = true;
     window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (SBY.has(h)) go({ name: 'station', id: h }); });

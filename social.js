@@ -369,6 +369,7 @@ window.SOCIAL = (() => {
         <section class="card"><div class="eyebrow">App</div>
           ${CLOUD.isAdmin ? row('admin', 'Admin dashboard', 'Everyone’s progress, logins and feedback') : ''}
           ${row('stats', 'Your stats', 'Calendar, memory, accuracy, review forecast')}
+          ${row('collection', 'Collection', 'Stamps, stickers and trophies')}
           ${row('shop', 'Shop', 'Dress up Mochi and change the colours')}
           ${row('settings', 'Settings', 'Script, audio, colours, backup')}
           ${row('install', 'Install the app', 'Home-screen icon, works offline')}

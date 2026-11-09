@@ -14,6 +14,7 @@ A study game for Japanese from JLPT N5 to N1: *Minna no Nihongo* Lessons 1–50,
 - **Spaced repetition:** every word, grammar drill, kanji and verb form is scheduled for review. The home screen shows what's due.
 
 - **Accounts and sync (optional):** email + password sign-up, progress synced across devices, a weekly league with public leaderboards, a stats report, beta feedback and an admin dashboard. Runs on a free Supabase project: see [SETUP.md](SETUP.md).
+- **Community (optional):** a members-only plaza with categories, Hot / New / Top sorting, threaded comments, likes, reports and staff moderation.
 - **Installable:** add it to a phone's home screen and it works offline.
 
 With no backend configured, progress is saved in the browser (localStorage) and Settings → Backup copies it between devices. Add `?demo=1` to the address to try the account screens with sample data.
@@ -51,6 +52,8 @@ It's a static site, so any static host works. `netlify.toml` publishes the repo 
 | `config.js` | Backend keys and options (empty = local-only) |
 | `cloud.js` | Accounts, sync engine, leaderboard and admin data (Supabase, or the `?demo=1` pretend backend) |
 | `social.js` | Welcome gate, Me page, league, stats, feedback, admin dashboard |
+| `community.js` | The community: feed, posts, comments, likes, reports, staff tools |
+| `supabase/community.sql` | Community tables, access rules and functions |
 | `supabase/schema.sql` | Database tables, access rules and functions |
 | `sw.js`, `manifest.webmanifest`, `icons/` | Installable app shell and offline support |
 | `vendor/supabase.js` | Supabase client library (MIT) |

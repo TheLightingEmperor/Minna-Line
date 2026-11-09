@@ -56,7 +56,20 @@ Commit and push. Netlify redeploys on its own.
 insert into public.admins (user_id) select id from auth.users where email = 'you@example.com' on conflict do nothing;
 ```
 
-3. Reload the app → **Me** → **Admin dashboard**.
+3. Reload the app → **Me** → **Admin dashboard**. (On a computer, **Me** is the person icon at the top right; on a phone it is the last tab.) The row only appears for admins.
+
+## 6. Switch on the community (ひろば)
+
+The Community tab is a members-only space for posts, comments and likes, with categories (Announcements, Introductions, Questions, Wins, Study tips, Lounge), Hot / New / Top sorting and level tags.
+
+1. **SQL Editor → New query** → paste the whole of [`supabase/community.sql`](supabase/community.sql) → **Run**.
+2. Reload the app. Until you do this, the tab shows a "still being built" notice.
+
+What you can do as an admin, from inside any post: **Pin**, **Close comments**, **Hide**, **Delete**, and **Mute author**. Only admins can post in Announcements. Reports from members appear in a "Reports to review" card on the Community page. To unmute someone, set `community_banned` to false on their row in `profiles`.
+
+Limits built in: 8 posts and 100 comments per person per day; titles up to 140 characters; posts up to 8,000.
+
+Tables: `community_posts`, `community_comments`, `community_likes`, `community_reports`.
 
 ## Where the data lives
 
