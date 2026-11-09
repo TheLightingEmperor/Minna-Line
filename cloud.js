@@ -5,20 +5,24 @@ window.CLOUD = (() => {
   'use strict';
   const ML = window.ML, cfg = window.MINNA_CONFIG || {};
   const VERSION = cfg.APP_VERSION || '6.0';
-  const configured = !!(cfg.SUPABASE_URL && cfg.SUPABASE_KEY && window.supabase && window.supabase.createClient);
+  const hasKeys = !!(cfg.SUPABASE_URL && cfg.SUPABASE_KEY && window.supabase && window.supabase.createClient);
+  const onLocalhost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
   const ls = {
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage unavailable */ } },
     del(k) { try { localStorage.removeItem(k); } catch (e) { /* storage unavailable */ } },
   };
+  // ?demo=1 swaps in the pretend backend. It works when no real backend is connected, and always on a developer's
+  // own machine, so local testing never writes test accounts into the real database.
   let demo = false;
-  if (!configured && !window.claude) {
+  if ((!hasKeys || onLocalhost) && !window.claude) {
     try {
       if (/[?&]demo=1\b/.test(location.search)) sessionStorage.setItem('minna-demo', '1');
       if (/[?&]demo=0\b/.test(location.search)) sessionStorage.removeItem('minna-demo');
       demo = sessionStorage.getItem('minna-demo') === '1';
     } catch (e) { /* no session storage */ }
   }
+  const configured = hasKeys && !demo;
   const enabled = configured || demo;
   const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, Math.round(+n || 0)));
 

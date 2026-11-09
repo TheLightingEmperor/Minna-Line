@@ -1,6 +1,6 @@
 # Minna Line
 
-A study game for Japanese from JLPT N5 to N1: *Minna no Nihongo* Lessons 1–50, then 24 themed units each for N3, N2 and N1 (the Autumn, Winter and Starlight Lines), with a Reading Academy at each of those levels. Each lesson is a station on a train line. Mochi, the cat conductor, rides along with you. Beat a station's yokai to collect its stamp.
+A study game for Japanese from JLPT N5 to N1: *Minna no Nihongo* Lessons 1–50, then 24 themed units each for N3, N2 and N1 (the Autumn, Winter and Starlight Lines), with a Reading Academy at each of those levels. Each lesson is a station on a train line. Mochi, the black cat conductor, rides along with you. Beat a station's yokai to collect its stamp.
 
 ## What's inside
 
@@ -17,6 +17,12 @@ A study game for Japanese from JLPT N5 to N1: *Minna no Nihongo* Lessons 1–50,
 - **Installable:** add it to a phone's home screen and it works offline.
 
 With no backend configured, progress is saved in the browser (localStorage) and Settings → Backup copies it between devices. Add `?demo=1` to the address to try the account screens with sample data.
+
+## Art direction
+
+Everything is drawn in code in `art.js`, in one style: Shōwa-era print. Flat colour from a fixed ink set (sumi black, washi cream, vermilion, indigo, verdigris, mustard) under a bold black keyline, halftone dots for shading, paper grain, vertical title cartouches and red seals on the landscapes. Mochi is a black-sesame cat in a conductor's cap; the yokai are the red lantern ghost, blue oni, kappa, tanuki, white shrine fox and umbrella. `app.css` carries the same rules into the interface (ink borders, hard offset shadows, seal-shaped labels, Dela Gothic One headings).
+
+Open `/artboard.html` to see every drawing on one page after changing `art.js`.
 
 ## Run it locally
 
@@ -39,7 +45,9 @@ It's a static site, so any static host works. `netlify.toml` publishes the repo 
 | `index.html` | Page shell, fonts and script order |
 | `core.js` | Data prep, kana/romaji tools, conjugation, number readings, saved state, spaced repetition, yen, quests, shop, trophies, sound |
 | `app.js` | Screens and game sessions: quiz, yokai battle, sprint, flashcards, match, shop, capsule machine, dictionary |
-| `app.css` | The look: pastel colours, light and dark themes |
+| `app.css` | The look: washi paper, ink keylines, light and dark themes |
+| `art.js` | All artwork (mascot, yokai, landscapes, stamps), drawn as SVG |
+| `artboard.html` | Design reference page showing every drawing |
 | `config.js` | Backend keys and options (empty = local-only) |
 | `cloud.js` | Accounts, sync engine, leaderboard and admin data (Supabase, or the `?demo=1` pretend backend) |
 | `social.js` | Welcome gate, Me page, league, stats, feedback, admin dashboard |
