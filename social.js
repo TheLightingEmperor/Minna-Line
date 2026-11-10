@@ -72,7 +72,7 @@ window.SOCIAL = (() => {
     sumCache = {
       readiness, stages: memoryStages(), skills: skillStats(), stampsBy, last14, due: ML.dueKeys().length, weak: ML.weakKeys().length,
       next: (UI.nextStation() || {}).id, stats: S.stats, tickets: S.tickets, omamori: S.omamori, owned: S.owned.length,
-      settings: { script: S.settings.script, romaji: S.settings.romaji, theme: S.settings.theme, audio: S.settings.audio }, at: Date.now(),
+      settings: { script: S.settings.script, romaji: S.settings.romaji, audio: S.settings.audio }, placement: S.flags.placement || null, at: Date.now(),
     };
     sumAt = Date.now();
     return sumCache;
@@ -99,7 +99,6 @@ window.SOCIAL = (() => {
       ${field('dname', 'Conductor name', 'type="text" maxlength="24" autocomplete="nickname" placeholder="What should Mochi call you?" required')}
       ${field('email', 'Email', 'type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required')}
       ${field('password', 'Password', 'type="password" autocomplete="new-password" minlength="8" placeholder="8 characters or more" required')}
-      <div class="field"><label id="lvlab">Where are you starting?</label><div class="seg" role="group" aria-labelledby="lvlab">${LEVEL_CHOICES.map(([v, l], i) => `<button type="button" class="chip" data-lvl="${v}" aria-pressed="${i === 0}">${l}</button>`).join('')}</div><input type="hidden" name="lvl" value="new"></div>
       <label class="check"><input type="checkbox" name="pub" checked> <span>Show my name and level on the public leaderboard</span></label>
       <div class="formerr" role="alert" hidden></div>
       <button class="btn primary block" type="submit">しゅっぱつ！ Create my free account</button>
@@ -171,12 +170,11 @@ window.SOCIAL = (() => {
     btn.disabled = true; btn.textContent = 'One moment…';
     try {
       if (gateMode === 'signup') {
-        const lvl = el.lvl.value, jlpt = lvl === 'new' ? 'N5' : lvl, fresh = !S.stats.answers;
-        const r = await CLOUD.signUp(email, pw, { display_name: el.dname.value.trim().slice(0, 24), is_public: el.pub.checked, start_level: lvl, jlpt });
+        const fresh = !S.stats.answers;
+        const r = await CLOUD.signUp(email, pw, { display_name: el.dname.value.trim().slice(0, 24), is_public: el.pub.checked, start_level: 'unset', jlpt: 'N5' });
         if (r.needsConfirm) return showGate('confirm', email);
-        if (fresh && !S.stats.answers) { S.settings = { ...S.settings, level: jlpt }; ML.save(); }
         UI.start();
-        welcome(lvl);
+        if (fresh) placement(true); else welcome();   // someone who already studied here as a guest keeps their place
       } else if (gateMode === 'login') {
         await CLOUD.signIn(email, pw);
         UI.start();
@@ -192,13 +190,85 @@ window.SOCIAL = (() => {
   }
   function welcome(lvl) {
     UI.petals(24);
-    const line = lvl === 'new' ? 'Start at station M00 to learn kana and your first greetings.' : `Your map is set to ${lvl}. You can change level any time from the tabs at the top.`;
+    const line = lvl === 'new' ? 'Start at station M00 to learn kana and your first greetings.' : lvl ? `Your map is set to ${lvl}. You can change level any time from the tabs at the top.` : 'Pick up where you left off.';
     modal(`<div class="center-stack">${myAvatar(104, 'cheer')}
       <h2>ようこそ、${esc(myName())}さん！</h2>
       <p class="muted" style="margin:0">Your account is ready and your progress now saves to it, so you can pick up on any device.</p>
       <div class="tip" style="text-align:left">${esc(line)} Answer questions to earn XP and yen, punch three daily tickets, and climb this week's league.</div>
       <button class="btn primary" data-x>しゅっぱつ しんこう！ Let's go</button></div>`);
   }
+  // ---------------------------------------------------------------- placement: find the right station to board at
+  // Up to 20 questions, four per level from N5 upward (two words, two grammar gaps). It stops as soon as a level
+  // proves too hard, so a beginner answers four questions, not twenty. Skipping is always one tap away.
+  let pl = null;
+  const rubyTags = (t) => esc(t).replace(/\{([^|}]+)\|([^}]+)\}/g, '<ruby>$1<rt>$2</rt></ruby>');
+  function placementQuestions(lv) {
+    const words = ML.shuffle(ML.VOCAB.filter((v) => ML.quizzable(v) && ML.levelOfL(v.L) === lv && v.pos !== 'exp' && v.en && v.en.length < 40 && v.kana.length <= 9));
+    const out = words.slice(0, 2).map((v) => {
+      const wrong = ML.uniqBy(words.filter((x) => x.en !== v.en), (x) => x.en).slice(2, 5).map((x) => x.en);
+      return { kind: 'Word', prompt: esc(lv === 'N5' || !v.kanji ? v.kana : v.kanji), sub: 'What does this mean?', options: ML.shuffle([v.en, ...wrong]), answer: v.en };
+    });
+    const gaps = ML.shuffle(ML.GRAMMAR.filter((g) => ML.levelOfL(g.lesson) === lv).flatMap((g) => g.drills.filter((d) => d.type === 'fill' && d.options && d.options.length >= 3 && d.answer)));
+    for (const d of gaps.slice(0, 2)) out.push({ kind: 'Grammar', prompt: rubyTags(d.jp), sub: d.en ? esc(d.en) : 'Fill the gap', options: ML.shuffle([d.answer, ...[...new Set(d.options)].filter((o) => o !== d.answer).slice(0, 3)]), answer: d.answer });
+    return out;
+  }
+  function placement(first) {
+    pl = { step: 'intro', first: !!first, li: 0, qi: 0, qs: [], scores: {} };
+    UI.go({ name: 'placement' });
+  }
+  function finishPlacement(level, how) {
+    const jl = level === 'new' ? 'N5' : level, first = pl && pl.first;
+    S.settings = { ...S.settings, level: jl };
+    S.flags.placement = { level, how, scores: (pl && pl.scores) || {}, at: dayStr() };
+    ML.save(); sumCache = null; pl = null;
+    go(level === 'new' ? { name: 'station', id: 'L0' } : { name: 'home' });
+    if (first) welcome(level); else toast(`Your map is set to ${jl}`);
+  }
+  function renderPlacement() {
+    if (!pl) return go({ name: 'home' });
+    const mochi = (mood) => mascotSVG(mood, { cls: 'bob' }).replace('<svg', '<svg style="width:120px;height:120px"');
+    const NAMES = { N5: ['Spring Line', 'Beginner. Kana, first sentences, everyday basics.'], N4: ['Summer Line', 'You know ます-form and て-form and want plain forms, potential, passive.'], N3: ['Autumn Line', 'You can chat and read simple texts; time for nuance.'], N2: ['Winter Line', 'Comfortable with daily Japanese; working on written and business language.'], N1: ['Starlight Line', 'Advanced. Newspapers, essays, formal speech.'] };
+    let body;
+    if (pl.step === 'intro') body = `<div class="qcard result">${mochi('happy')}<h2>Where should you board?</h2>
+        <p class="muted" style="margin:0;max-width:46ch">A short quiz finds the right station for you. It starts easy and stops as soon as it gets hard, so it takes one to three minutes.</p>
+        <div class="stack" style="width:100%;max-width:380px"><button class="btn primary block" data-act="plstart">Take the placement quiz</button><button class="btn block" data-act="plnew">I can't read kana yet: start from zero</button><button class="btn block" data-act="plchoose">Skip the quiz, I'll choose</button></div></div>`;
+    else if (pl.step === 'choose') body = `<div class="qcard"><div class="eyebrow">Choose where to start</div><h2>Pick your line</h2>
+        <div class="stack"><button class="setrow" data-act="plset" data-arg="new"><span><b>Brand new · station 00</b><small>Learn hiragana and katakana first, then your first greetings.</small></span>${ICON.back}</button>
+        ${JLPTS.map((l) => `<button class="setrow" data-act="plset" data-arg="${l}"><span><b>${l} · ${NAMES[l][0]}</b><small>${NAMES[l][1]}</small></span>${ICON.back}</button>`).join('')}</div>
+        <button class="linkbtn" data-act="plback">Take the quiz instead</button><p class="muted small" style="margin:0;text-align:center">You can switch level any time from the tabs on the home page.</p></div>`;
+    else if (pl.step === 'quiz') {
+      const lv = JLPTS[pl.li], q = pl.qs[pl.qi], n = pl.li * 4 + pl.qi + 1;
+      body = `<div class="progress" aria-hidden="true"><i style="width:${Math.round(((n - 1) / 20) * 100)}%"></i></div>
+        <div class="qcard"><div class="row-between"><div class="eyebrow">${q.kind} · ${lv}</div><span class="small muted num">Question ${n}</span></div>
+        <div class="plprompt jp">${q.prompt}</div><div class="muted" style="text-align:center">${q.sub}</div>
+        <div class="opts">${q.options.map((o, i) => `<button class="opt" data-act="plans" data-arg="${i}"><span class="key">${i + 1}</span><span>${esc(o)}</span></button>`).join('')}</div>
+        <div class="row-between"><button class="btn ghost" data-act="plans" data-arg="-1">I don't know</button><button class="linkbtn" data-act="plchoose">Skip the quiz</button></div></div>`;
+    } else {
+      const lv = pl.result, jl = lv === 'new' ? 'N5' : lv;
+      body = `<div class="qcard result">${mochi('cheer')}<div class="eyebrow">Your station</div><h2>${lv === 'new' ? 'N5 · start at station 00' : `${jl} · ${NAMES[jl][0]}`}</h2>
+        <p class="muted" style="margin:0;max-width:46ch">${lv === 'new' ? 'We will begin with kana and first greetings, then build up from there.' : NAMES[jl][1]}</p>
+        <div class="gains">${Object.entries(pl.scores).map(([l, sc]) => `<span class="pill ${sc >= 3 ? 'good' : ''}">${l}: ${sc}/4</span>`).join('')}</div>
+        <div class="stack" style="width:100%;max-width:380px"><button class="btn primary block" data-act="plset" data-arg="${lv}">Board here</button><button class="btn block" data-act="plchoose">Choose a different line</button></div></div>`;
+    }
+    render(`<div class="session placement">${body}</div>`, {
+      plstart: () => { pl.step = 'quiz'; pl.li = 0; pl.qi = 0; pl.scores = {}; pl.qs = placementQuestions('N5'); renderPlacement(); },
+      plnew: () => finishPlacement('new', 'zero'),
+      plchoose: () => { pl.step = 'choose'; renderPlacement(); },
+      plback: () => { pl.step = 'intro'; renderPlacement(); },
+      plset: (l) => finishPlacement(l, pl.step === 'result' ? 'quiz' : 'chosen'),
+      plans: (i) => {
+        const lv = JLPTS[pl.li], q = pl.qs[pl.qi];
+        pl.scores[lv] = (pl.scores[lv] || 0) + (+i >= 0 && q.options[+i] === q.answer ? 1 : 0);
+        ML.sfx.play('tap');
+        if (++pl.qi < pl.qs.length) return renderPlacement();
+        const sc = pl.scores[lv];
+        if (sc >= 3 && pl.li < JLPTS.length - 1) { pl.li++; pl.qi = 0; pl.qs = placementQuestions(JLPTS[pl.li]); return renderPlacement(); }
+        pl.result = sc >= 3 ? lv : lv === 'N5' && sc <= 1 ? 'new' : lv;   // passed N1, or this is the level to work on
+        pl.step = 'result'; renderPlacement();
+      },
+    });
+  }
+
   function newPassword() {
     if (document.getElementById('newpw')) return;
     const m = modal(`<form id="newpw" class="stack-form"><h2>Set a new password</h2>
@@ -371,6 +441,7 @@ window.SOCIAL = (() => {
           ${CLOUD.isAdmin ? row('admin', 'Admin dashboard', 'Everyone’s progress, logins and feedback') : ''}
           ${u ? row('classes', 'Classes', 'Join your teacher’s class, or run your own') : ''}
           ${row('stats', 'Your stats', 'Calendar, memory, accuracy, review forecast')}
+          ${row('placement', 'Placement quiz', 'Find the right line again, or switch by hand')}
           ${row('collection', 'Collection', 'Stamps, stickers and trophies')}
           ${row('shop', 'Shop', 'Dress up Mochi and change the colours')}
           ${row('settings', 'Settings', 'Script, audio, colours, backup')}
@@ -548,8 +619,8 @@ window.SOCIAL = (() => {
   UI.X.homeFoot = () => `<footer class="homefoot"><span class="pill coin">Beta</span><span>Minna Line is free at every stop: no ads, no paywall.</span>
     <span class="seg">${CLOUD.user ? '<button class="chip" data-act="feedback">Send feedback</button>' : ''}<button class="chip" data-act="install">Install the app</button><button class="chip" data-act="share">Invite a friend</button></span></footer>`;
   UI.X.homeActions = { signin: () => showGate('signup'), install, share };
-  Object.assign(UI.ROUTES, { board: renderBoard, stats: renderStats, me: renderMe, admin: renderAdmin });
-  Object.assign(UI.G, { board: (tab) => go({ name: 'board', tab }), stats: () => go({ name: 'stats' }), me: () => go({ name: 'me' }), admin: () => go({ name: 'admin' }), feedback });
+  Object.assign(UI.ROUTES, { board: renderBoard, stats: renderStats, me: renderMe, admin: renderAdmin, placement: renderPlacement });
+  Object.assign(UI.G, { board: (tab) => go({ name: 'board', tab }), stats: () => go({ name: 'stats' }), me: () => go({ name: 'me' }), admin: () => go({ name: 'admin' }), feedback, placement: () => placement(false) });
   CLOUD.summaryFn = summary;
 
   function registerSW() {
@@ -574,5 +645,5 @@ window.SOCIAL = (() => {
     else if (CLOUD.requireLogin) showGate();
     else UI.start();
   }
-  return { boot, showGate, avatar, summary };
+  return { boot, showGate, avatar, summary, placement };
 })();

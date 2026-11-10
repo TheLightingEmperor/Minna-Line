@@ -94,7 +94,7 @@ for w in out:
   if w['kana'] in POS_FIX: w['pos']=POS_FIX[w['kana']]
   if w['kana']=='こうしえん': w['en']=w['en'].replace('in Osaka','near Osaka')
 for i,w in enumerate(out): w['id']='%d:%s'%(w['L'],w['kana'])
-open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'vocab.js'),'w').write('// Minna no Nihongo L1–20 vocab, built from the "Learning Japanese" notes (+ L0 greetings, L11 counters, L20 filled in)\nwindow.VOCAB = '+json.dumps(out,ensure_ascii=False,indent=0)+';\n')
+open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'vocab.js'),'w').write('// Core N5 vocab (stations 1–20), built from the "Learning Japanese" notes (+ L0 greetings, L11 counters, L20 filled in)\nwindow.VOCAB = '+json.dumps(out,ensure_ascii=False,indent=0)+';\n')
 from collections import Counter
 print(len(out),Counter(w['L'] for w in out))
 print(Counter(w['pos'] for w in out))

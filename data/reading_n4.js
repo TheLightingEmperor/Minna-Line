@@ -1,4 +1,4 @@
-// Reading and conversation practice for Minna Line, N4 (Lessons 26–50, internal L126–150).
+// Reading and conversation practice for Minna Line, N4 (Lessons 1–50, internal L126–150).
 // All texts are original (not taken from any textbook). Kanji are written {漢字|かな}.
 window.READING = (window.READING || []).concat([
 

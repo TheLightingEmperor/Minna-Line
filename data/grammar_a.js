@@ -1,4 +1,4 @@
-// Grammar data — Minna no Nihongo I, Lessons 1–10
+// Grammar data — Lessons 1–10
 window.GRAMMAR = (window.GRAMMAR || []).concat([
 
   // ───────────────────────── LESSON 1 ─────────────────────────
@@ -9,16 +9,16 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "N1 is N2",
     explain: "は marks the topic of the sentence and is read 'wa', not 'ha'. です at the end makes the sentence polite and works like 'am / is / are'. Japanese has no words for 'a' or 'the', and the topic is often dropped when it is obvious.",
     examples: [
-      { jp: "わたしは マイク・ミラーです。", ro: "Watashi wa Maiku Mirā desu.", en: "I am Mike Miller." },
-      { jp: "ワンさんは いしゃです。", ro: "Wan-san wa isha desu.", en: "Mr. Wang is a doctor." },
-      { jp: "サントスさんは ブラジルじんです。", ro: "Santosu-san wa Burajiru-jin desu.", en: "Mr. Santos is Brazilian." }
+      { jp: "わたしは ノア・ベイカーです。", ro: "Watashi wa Noa Beikā desu.", en: "I am Noah Baker." },
+      { jp: "リンさんは いしゃです。", ro: "Rin-san wa isha desu.", en: "Mr. Lin is a doctor." },
+      { jp: "ロペスさんは ブラジルじんです。", ro: "Ropesu-san wa Burajiru-jin desu.", en: "Mr. Lopez is Brazilian." }
     ],
     drills: [
       { type: "fill", jp: "わたしは がくせい＿＿。", answer: "です", options: ["です", "か", "の", "も"], en: "I am a student." },
       { type: "fill", jp: "わたし＿＿ かいしゃいんです。", answer: "は", options: ["は", "の", "か", "を"], en: "I am an office worker." },
       { type: "order", tiles: ["わたしは", "インドじん", "です"], en: "I am Indian." },
-      { type: "order", tiles: ["カリナさんは", "インドネシアじん", "です"], en: "Ms. Karina is Indonesian." },
-      { type: "choose", q: "How is the particle は read in 'わたしは ミラーです'?", answer: "wa", options: ["wa", "ha", "o", "e"] },
+      { type: "order", tiles: ["サリさんは", "インドネシアじん", "です"], en: "Ms. Sari is Indonesian." },
+      { type: "choose", q: "How is the particle は read in 'わたしは ベイカーです'?", answer: "wa", options: ["wa", "ha", "o", "e"] },
       { type: "choose", q: "How do you say: 'Mr. Yamada is an office worker.'?", answer: "やまださんは かいしゃいんです。", options: ["やまださんの かいしゃいんです。", "やまださんは かいしゃいんです。", "やまださんは かいしゃいんですか。", "かいしゃいんは やまださんじゃ ありません。"] }
     ]
   },
@@ -29,14 +29,14 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "N1 is not N2",
     explain: "じゃ ありません is the negative of です. では ありません means the same but is more formal (では is read 'dewa'). Both attach directly to the noun.",
     examples: [
-      { jp: "サントスさんは がくせいじゃ ありません。", ro: "Santosu-san wa gakusei ja arimasen.", en: "Mr. Santos is not a student." },
+      { jp: "ロペスさんは がくせいじゃ ありません。", ro: "Ropesu-san wa gakusei ja arimasen.", en: "Mr. Lopez is not a student." },
       { jp: "わたしは せんせいでは ありません。", ro: "Watashi wa sensei dewa arimasen.", en: "I am not a teacher." },
-      { jp: "ミラーさんは にほんじんじゃ ありません。", ro: "Mirā-san wa Nihon-jin ja arimasen.", en: "Mr. Miller is not Japanese." }
+      { jp: "ベイカーさんは にほんじんじゃ ありません。", ro: "Beikā-san wa Nihon-jin ja arimasen.", en: "Mr. Baker is not Japanese." }
     ],
     drills: [
-      { type: "fill", jp: "ワンさんは かいしゃいん＿＿ ありません。", answer: "じゃ", options: ["じゃ", "です", "か", "の"], en: "Mr. Wang is not an office worker." },
+      { type: "fill", jp: "リンさんは かいしゃいん＿＿ ありません。", answer: "じゃ", options: ["じゃ", "です", "か", "の"], en: "Mr. Lin is not an office worker." },
       { type: "fill", jp: "わたしは アメリカじんじゃ ＿＿。", answer: "ありません", options: ["ありません", "あります", "です", "か"], en: "I am not American." },
-      { type: "order", tiles: ["カリナさんは", "せんせいじゃ", "ありません"], en: "Ms. Karina is not a teacher." },
+      { type: "order", tiles: ["サリさんは", "せんせいじゃ", "ありません"], en: "Ms. Sari is not a teacher." },
       { type: "choose", q: "Which is the more formal way to say 'is not'?", answer: "では ありません", options: ["では ありません", "じゃ ありません", "です", "ですか"] },
       { type: "choose", q: "How do you say: 'I am not a doctor.'?", answer: "わたしは いしゃじゃ ありません。", options: ["わたしは いしゃです。", "わたしは いしゃですか。", "わたしは いしゃじゃ ありません。", "わたしも いしゃです。"] },
       { type: "choose", q: "'じゃ ありません' is the negative of which word?", answer: "です", options: ["です", "か", "も", "の"] }
@@ -49,16 +49,16 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "Adding か turns a sentence into a question",
     explain: "Put か at the end of a sentence to make a question; the word order does not change. Answer yes/no questions with はい (yes) or いいえ (no) and repeat the noun. In Japanese, a question mark is not needed — か does the job.",
     examples: [
-      { jp: "ミラーさんは アメリカじんですか。", ro: "Mirā-san wa Amerika-jin desu ka.", en: "Is Mr. Miller American?" },
+      { jp: "ベイカーさんは アメリカじんですか。", ro: "Beikā-san wa Amerika-jin desu ka.", en: "Is Mr. Baker American?" },
       { jp: "はい、アメリカじんです。", ro: "Hai, Amerika-jin desu.", en: "Yes, he is American." },
       { jp: "いいえ、いしゃじゃ ありません。けんきゅうしゃです。", ro: "Iie, isha ja arimasen. Kenkyūsha desu.", en: "No, she is not a doctor. She is a researcher." }
     ],
     drills: [
-      { type: "fill", jp: "サントスさんは かいしゃいんです＿＿。", answer: "か", options: ["か", "の", "は", "も"], en: "Is Mr. Santos an office worker?" },
+      { type: "fill", jp: "ロペスさんは かいしゃいんです＿＿。", answer: "か", options: ["か", "の", "は", "も"], en: "Is Mr. Lopez an office worker?" },
       { type: "fill", jp: "ターワーさんは がくせいですか。…＿＿、がくせいです。", answer: "はい", options: ["はい", "いいえ", "だれ", "なん"], en: "Is Thawaa a student? — Yes, he is a student." },
-      { type: "fill", jp: "ワンさんは エンジニアですか。…いいえ、エンジニア＿＿ ありません。", answer: "じゃ", options: ["じゃ", "です", "か", "の"], en: "Is Mr. Wang an engineer? — No, he is not an engineer." },
+      { type: "fill", jp: "リンさんは エンジニアですか。…いいえ、エンジニア＿＿ ありません。", answer: "じゃ", options: ["じゃ", "です", "か", "の"], en: "Is Mr. Lin an engineer? — No, he is not an engineer." },
       { type: "order", tiles: ["あのかたは", "せんせい", "ですか"], en: "Is that person a teacher?" },
-      { type: "choose", q: "Mr. Miller is American. Someone asks 'ミラーさんは イギリスじんですか。' Which answer is correct?", answer: "いいえ、イギリスじんじゃ ありません。", options: ["はい、イギリスじんです。", "いいえ、イギリスじんです。", "はい、イギリスじんじゃ ありません。", "いいえ、イギリスじんじゃ ありません。"] },
+      { type: "choose", q: "Mr. Baker is American. Someone asks 'ベイカーさんは イギリスじんですか。' Which answer is correct?", answer: "いいえ、イギリスじんじゃ ありません。", options: ["はい、イギリスじんです。", "いいえ、イギリスじんです。", "はい、イギリスじんじゃ ありません。", "いいえ、イギリスじんじゃ ありません。"] },
       { type: "choose", q: "Turn 'やまださんは ぎんこういんです。' into a question.", answer: "やまださんは ぎんこういんですか。", options: ["やまださんは ぎんこういんですか。", "やまださんか ぎんこういんです。", "ぎんこういんは やまださんです。", "やまださんは ぎんこういんか。"] }
     ]
   },
@@ -69,15 +69,15 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "N also / too",
     explain: "も means 'also / too' and REPLACES は — never say はも. Use it when the same thing is true of another person or thing. With a negative it means 'not … either'.",
     examples: [
-      { jp: "ミラーさんは かいしゃいんです。グプタさんも かいしゃいんです。", ro: "Mirā-san wa kaishain desu. Guputa-san mo kaishain desu.", en: "Mr. Miller is an office worker. Mr. Gupta is also an office worker." },
+      { jp: "ベイカーさんは かいしゃいんです。シャルマさんも かいしゃいんです。", ro: "Beikā-san wa kaishain desu. Sharuma-san mo kaishain desu.", en: "Mr. Baker is an office worker. Mr. Sharma is also an office worker." },
       { jp: "わたしも がくせいです。", ro: "Watashi mo gakusei desu.", en: "I am a student too." },
-      { jp: "サントスさんも にほんじんじゃ ありません。", ro: "Santosu-san mo Nihon-jin ja arimasen.", en: "Mr. Santos isn't Japanese either." }
+      { jp: "ロペスさんも にほんじんじゃ ありません。", ro: "Ropesu-san mo Nihon-jin ja arimasen.", en: "Mr. Lopez isn't Japanese either." }
     ],
     drills: [
-      { type: "fill", jp: "カリナさんは がくせいです。ターワーさん＿＿ がくせいです。", answer: "も", options: ["も", "の", "か", "を"], en: "Karina is a student. Thawaa is also a student." },
-      { type: "fill", jp: "ミラーさんは にほんじんじゃ ありません。サントスさん＿＿ にほんじんじゃ ありません。", answer: "も", options: ["も", "の", "か", "を"], en: "Mr. Miller isn't Japanese. Mr. Santos isn't Japanese either." },
+      { type: "fill", jp: "サリさんは がくせいです。ターワーさん＿＿ がくせいです。", answer: "も", options: ["も", "の", "か", "を"], en: "Sari is a student. Thawaa is also a student." },
+      { type: "fill", jp: "ベイカーさんは にほんじんじゃ ありません。ロペスさん＿＿ にほんじんじゃ ありません。", answer: "も", options: ["も", "の", "か", "を"], en: "Mr. Baker isn't Japanese. Mr. Lopez isn't Japanese either." },
       { type: "order", tiles: ["わたしも", "かいしゃいん", "です"], en: "I am also an office worker." },
-      { type: "choose", q: "How do you say: 'Mr. Wang is also a doctor.'?", answer: "ワンさんも いしゃです。", options: ["ワンさんはも いしゃです。", "ワンさんの いしゃです。", "ワンさんも いしゃです。", "ワンさんは いしゃもです。"] },
+      { type: "choose", q: "How do you say: 'Mr. Lin is also a doctor.'?", answer: "リンさんも いしゃです。", options: ["リンさんはも いしゃです。", "リンさんの いしゃです。", "リンさんも いしゃです。", "リンさんは いしゃもです。"] },
       { type: "choose", q: "A says 'わたしは アメリカじんです。' B is American too. What does B say?", answer: "わたしも アメリカじんです。", options: ["わたしも アメリカじんです。", "わたしは アメリカじんですか。", "わたしも アメリカじんじゃ ありません。", "あなたも アメリカじんです。"] },
       { type: "choose", q: "も takes the place of which particle?", answer: "は", options: ["は", "の", "か", "です"] }
     ]
@@ -86,20 +86,20 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     id: "L1-5",
     lesson: 1,
     title: "N1 の N2 (belonging to)",
-    meaning: "N2 of / at N1 — e.g. IMCの しゃいん (an IMC employee)",
-    explain: "の joins two nouns; the first noun describes the second. Here N1 is the group the person belongs to: a company, school or hospital. Note the order is the reverse of English 'of': IMCの しゃいん = 'employee of IMC'.",
+    meaning: "N2 of / at N1 — e.g. ABCの しゃいん (an ABC employee)",
+    explain: "の joins two nouns; the first noun describes the second. Here N1 is the group the person belongs to: a company, school or hospital. Note the order is the reverse of English 'of': ABCの しゃいん = 'employee of ABC'.",
     examples: [
-      { jp: "ミラーさんは IMCの しゃいんです。", ro: "Mirā-san wa IMC no shain desu.", en: "Mr. Miller is an IMC employee." },
-      { jp: "カリナさんは ふじだいがくの がくせいです。", ro: "Karina-san wa Fuji-daigaku no gakusei desu.", en: "Ms. Karina is a student at Fuji University." },
-      { jp: "ワンさんは こうべびょういんの いしゃです。", ro: "Wan-san wa Kōbe-byōin no isha desu.", en: "Mr. Wang is a doctor at Kobe Hospital." }
+      { jp: "ベイカーさんは ABCの しゃいんです。", ro: "Beikā-san wa ABC no shain desu.", en: "Mr. Baker is an ABC employee." },
+      { jp: "サリさんは ふじだいがくの がくせいです。", ro: "Sari-san wa Fuji-daigaku no gakusei desu.", en: "Ms. Sari is a student at Fuji University." },
+      { jp: "リンさんは こうべびょういんの いしゃです。", ro: "Rin-san wa Kōbe-byōin no isha desu.", en: "Mr. Lin is a doctor at Kobe Hospital." }
     ],
     drills: [
-      { type: "fill", jp: "シュミットさんは パワーでんき＿＿ しゃいんです。", answer: "の", options: ["の", "は", "も", "か"], en: "Mr. Schmidt is a Power Electric employee." },
-      { type: "fill", jp: "ターワーさんは さくらだいがく＿＿ がくせいです。", answer: "の", options: ["の", "か", "を", "じん"], en: "Thawaa is a student at Sakura University." },
-      { type: "order", tiles: ["イーさんは", "AKCの", "けんきゅうしゃです"], en: "Ms. Lee is a researcher at AKC." },
-      { type: "order", tiles: ["サントスさんは", "ブラジルエアーの", "しゃいん", "ですか"], en: "Is Mr. Santos a Brazil Air employee?" },
-      { type: "choose", q: "How do you say: 'a teacher at Sakura University'?", answer: "さくらだいがくの せんせい", options: ["せんせいの さくらだいがく", "さくらだいがくの せんせい", "さくらだいがくは せんせい", "さくらだいがくも せんせい"] },
-      { type: "choose", q: "'IMCの しゃいん' means…", answer: "an employee of IMC", options: ["an employee of IMC", "IMC is an employee", "IMC and an employee", "the president of IMC"] }
+      { type: "fill", jp: "クラインさんは ヒカリでんき＿＿ しゃいんです。", answer: "の", options: ["の", "は", "も", "か"], en: "Mr. Klein is a Hikari Electric employee." },
+      { type: "fill", jp: "ターワーさんは みどりだいがく＿＿ がくせいです。", answer: "の", options: ["の", "か", "を", "じん"], en: "Thawaa is a student at Midori University." },
+      { type: "order", tiles: ["パクさんは", "ARKの", "けんきゅうしゃです"], en: "Ms. Park is a researcher at ARK." },
+      { type: "order", tiles: ["ロペスさんは", "ブラジルエアーの", "しゃいん", "ですか"], en: "Is Mr. Lopez a Brazil Air employee?" },
+      { type: "choose", q: "How do you say: 'a teacher at Midori University'?", answer: "みどりだいがくの せんせい", options: ["せんせいの みどりだいがく", "みどりだいがくの せんせい", "みどりだいがくは せんせい", "みどりだいがくも せんせい"] },
+      { type: "choose", q: "'ABCの しゃいん' means…", answer: "an employee of ABC", options: ["an employee of ABC", "ABC is an employee", "ABC and an employee", "the president of ABC"] }
     ]
   },
   {
@@ -109,17 +109,17 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "Mr./Ms. ~ ; a person from (country) ; I came from ~",
     explain: "Add さん after someone else's name (family or given name) to be polite — never after your own name. Young children get ちゃん instead. Country + じん means a person from that country (インドじん = Indian), and 'country から きました' means 'I came from (country)'.",
     examples: [
-      { jp: "こちらは ミラーさんです。", ro: "Kochira wa Mirā-san desu.", en: "This is Mr. Miller." },
+      { jp: "こちらは ベイカーさんです。", ro: "Kochira wa Beikā-san desu.", en: "This is Mr. Baker." },
       { jp: "わたしは さとうです。", ro: "Watashi wa Satō desu.", en: "I'm Sato. (no さん for yourself)" },
-      { jp: "グプタさんは インドから きました。", ro: "Guputa-san wa Indo kara kimashita.", en: "Mr. Gupta came from India." }
+      { jp: "シャルマさんは インドから きました。", ro: "Sharuma-san wa Indo kara kimashita.", en: "Mr. Sharma came from India." }
     ],
     drills: [
-      { type: "fill", jp: "シュミットさんは ドイツ＿＿です。", answer: "じん", options: ["じん", "さん", "の", "か"], en: "Mr. Schmidt is German." },
-      { type: "order", tiles: ["こちらは", "イーさん", "です"], en: "This is Ms. Lee." },
+      { type: "fill", jp: "クラインさんは ドイツ＿＿です。", answer: "じん", options: ["じん", "さん", "の", "か"], en: "Mr. Klein is German." },
+      { type: "order", tiles: ["こちらは", "パクさん", "です"], en: "This is Ms. Park." },
       { type: "order", tiles: ["わたしは", "タイから", "きました"], en: "I came from Thailand." },
       { type: "choose", q: "Your name is Sato. How do you introduce yourself?", answer: "わたしは さとうです。", options: ["わたしは さとうさんです。", "さとうさんは わたしです。", "わたしの さとうです。", "わたしは さとうです。"] },
       { type: "choose", q: "Which word means 'an Indonesian (person)'?", answer: "インドネシアじん", options: ["インドネシアじん", "インドネシアさん", "インドネシアの", "インドネシアか"] },
-      { type: "choose", q: "Mr. Santos's young daughter is Teresa. What do you usually call her?", answer: "テレーザちゃん", options: ["テレーザじん", "テレーザちゃん", "テレーザの", "テレーザか"] }
+      { type: "choose", q: "Mr. Lopez's young daughter is Elena. What do you usually call her?", answer: "エレナちゃん", options: ["エレナじん", "エレナちゃん", "エレナの", "エレナか"] }
     ]
   },
   {
@@ -129,13 +129,13 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "Who? / How old?",
     explain: "だれ means 'who'; どなた is the polite version. なんさい means 'how old'; おいくつ is more polite. Put the question word where the answer will go and keep か at the end — and don't answer question-word questions with はい/いいえ. Watch the readings: 1 = いっさい, 8 = はっさい, 10 = じゅっさい.",
     examples: [
-      { jp: "あのかたは どなたですか。…ワンさんです。", ro: "Ano kata wa donata desu ka. …Wan-san desu.", en: "Who is that person? — That's Mr. Wang." },
-      { jp: "テレーザちゃんは なんさいですか。…きゅうさいです。", ro: "Terēza-chan wa nan-sai desu ka. …Kyū-sai desu.", en: "How old is Teresa? — She's nine." },
+      { jp: "あのかたは どなたですか。…リンさんです。", ro: "Ano kata wa donata desu ka. …Rin-san desu.", en: "Who is that person? — That's Mr. Lin." },
+      { jp: "エレナちゃんは なんさいですか。…きゅうさいです。", ro: "Erena-chan wa nan-sai desu ka. …Kyū-sai desu.", en: "How old is Elena? — She's nine." },
       { jp: "やまださんは おいくつですか。…よんじゅうごさいです。", ro: "Yamada-san wa oikutsu desu ka. …Yonjūgo-sai desu.", en: "How old are you, Mr. Yamada? — I'm 45." }
     ],
     drills: [
-      { type: "fill", jp: "あのひとは ＿＿ですか。…カリナさんです。", answer: "だれ", options: ["だれ", "なん", "なんさい", "おいくつ"], en: "Who is that person? — It's Karina." },
-      { type: "fill", jp: "テレーザちゃんは ＿＿ですか。…きゅうさいです。", answer: "なんさい", options: ["なんさい", "だれ", "どなた", "なん"], en: "How old is Teresa? — She's nine." },
+      { type: "fill", jp: "あのひとは ＿＿ですか。…サリさんです。", answer: "だれ", options: ["だれ", "なん", "なんさい", "おいくつ"], en: "Who is that person? — It's Sari." },
+      { type: "fill", jp: "エレナちゃんは ＿＿ですか。…きゅうさいです。", answer: "なんさい", options: ["なんさい", "だれ", "どなた", "なん"], en: "How old is Elena? — She's nine." },
       { type: "order", tiles: ["あのかたは", "どなた", "ですか"], en: "Who is that person? (polite)" },
       { type: "choose", q: "Which is the more polite way to ask someone's age?", answer: "おいくつですか。", options: ["なんさいですか。", "おいくつですか。", "だれですか。", "なんですか。"] },
       { type: "choose", q: "'あのひとは だれですか。' Which reply is correct?", answer: "やまださんです。", options: ["はい、やまださんです。", "いいえ、だれじゃ ありません。", "やまださんです。", "やまださんですか。"] },
@@ -173,11 +173,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     examples: [
       { jp: "この ほんは わたしのです。", ro: "Kono hon wa watashi no desu.", en: "This book is mine." },
       { jp: "その かさは だれのですか。", ro: "Sono kasa wa dare no desu ka.", en: "Whose is that umbrella?" },
-      { jp: "あの ひとは ミラーさんです。", ro: "Ano hito wa Mirā-san desu.", en: "That person over there is Mr. Miller." }
+      { jp: "あの ひとは ベイカーさんです。", ro: "Ano hito wa Beikā-san desu.", en: "That person over there is Mr. Baker." }
     ],
     drills: [
       { type: "fill", jp: "＿＿ かばんは わたしのです。", answer: "この", options: ["この", "これ", "それ", "あれ"], en: "This bag is mine." },
-      { type: "fill", jp: "＿＿ くるまは サントスさんのです。", answer: "あの", options: ["あの", "あれ", "これ", "それ"], en: "That car over there is Mr. Santos's." },
+      { type: "fill", jp: "＿＿ くるまは ロペスさんのです。", answer: "あの", options: ["あの", "あれ", "これ", "それ"], en: "That car over there is Mr. Lopez's." },
       { type: "order", tiles: ["その", "かさは", "だれの", "ですか"], en: "Whose umbrella is that?" },
       { type: "order", tiles: ["あの", "ひとは", "だれ", "ですか"], en: "Who is that person over there?" },
       { type: "choose", q: "Which sentence is correct?", answer: "この カメラは わたしのです。", options: ["これ カメラは わたしのです。", "このは カメラです。", "この カメラは わたしのです。", "あれ カメラは わたしのです。"] },
@@ -213,12 +213,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     examples: [
       { jp: "これは「9」ですか、「7」ですか。…「9」です。", ro: "Kore wa 'kyū' desu ka, 'nana' desu ka. …'Kyū' desu.", en: "Is this a 9 or a 7? — It's a 9." },
       { jp: "それは えいごの ほんですか、にほんごの ほんですか。", ro: "Sore wa eigo no hon desu ka, Nihongo no hon desu ka.", en: "Is that an English book or a Japanese book?" },
-      { jp: "ミラーさんは アメリカじんですか、イギリスじんですか。…アメリカじんです。", ro: "Mirā-san wa Amerika-jin desu ka, Igirisu-jin desu ka. …Amerika-jin desu.", en: "Is Mr. Miller American or British? — American." }
+      { jp: "ベイカーさんは アメリカじんですか、イギリスじんですか。…アメリカじんです。", ro: "Beikā-san wa Amerika-jin desu ka, Igirisu-jin desu ka. …Amerika-jin desu.", en: "Is Mr. Baker American or British? — American." }
     ],
     drills: [
       { type: "fill", jp: "それは ざっしです＿＿、しんぶんですか。", answer: "か", options: ["か", "も", "の", "は"], en: "Is that a magazine or a newspaper?" },
-      { type: "fill", jp: "カリナさんは がくせいですか、せんせいですか。…＿＿です。", answer: "がくせい", options: ["がくせい", "はい", "いいえ", "そう"], en: "Is Karina a student or a teacher? — She's a student." },
-      { type: "order", tiles: ["ワンさんは", "いしゃですか", "せんせいですか"], en: "Is Mr. Wang a doctor or a teacher?" },
+      { type: "fill", jp: "サリさんは がくせいですか、せんせいですか。…＿＿です。", answer: "がくせい", options: ["がくせい", "はい", "いいえ", "そう"], en: "Is Sari a student or a teacher? — She's a student." },
+      { type: "order", tiles: ["リンさんは", "いしゃですか", "せんせいですか"], en: "Is Mr. Lin a doctor or a teacher?" },
       { type: "choose", q: "'これは じしょですか、ほんですか。' It's a dictionary. Which answer is correct?", answer: "じしょです。", options: ["はい、じしょです。", "いいえ、ほんです。", "はい、そうです。", "じしょです。"] },
       { type: "choose", q: "How do you ask: 'Is this a 9 or a 7?'", answer: "これは「9」ですか、「7」ですか。", options: ["これは「9」ですか。「7」です。", "これは「9」ですか、「7」ですか。", "これは「9」も「7」ですか。", "これは「9」の「7」ですか。"] }
     ]
@@ -235,7 +235,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { jp: "あの かばんは だれのですか。…さとうさんのです。", ro: "Ano kaban wa dare no desu ka. …Satō-san no desu.", en: "Whose is that bag? — It's Ms. Sato's." }
     ],
     drills: [
-      { type: "fill", jp: "これは ミラーさん＿＿ かばんです。", answer: "の", options: ["の", "は", "も", "か"], en: "This is Mr. Miller's bag." },
+      { type: "fill", jp: "これは ベイカーさん＿＿ かばんです。", answer: "の", options: ["の", "は", "も", "か"], en: "This is Mr. Baker's bag." },
       { type: "fill", jp: "この かぎは だれ＿＿ですか。", answer: "の", options: ["の", "は", "か", "も"], en: "Whose key is this?" },
       { type: "order", tiles: ["これは", "くるまの", "ざっしです"], en: "This is a car magazine." },
       { type: "order", tiles: ["あの", "かさは", "さとうさんの", "です"], en: "That umbrella is Ms. Sato's." },
@@ -296,7 +296,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "トイレは ＿＿ですか。", answer: "どこ", options: ["どこ", "なん", "だれ", "いくら"], en: "Where is the toilet?" },
-      { type: "fill", jp: "ミラーさんは かいぎしつ＿＿。", answer: "です", options: ["です", "の", "か", "を"], en: "Mr. Miller is in the meeting room." },
+      { type: "fill", jp: "ベイカーさんは かいぎしつ＿＿。", answer: "です", options: ["です", "の", "か", "を"], en: "Mr. Baker is in the meeting room." },
       { type: "order", tiles: ["エレベーターは", "あそこ", "です"], en: "The elevator is over there." },
       { type: "order", tiles: ["じどうはんばいきは", "どこ", "ですか"], en: "Where is the vending machine?" },
       { type: "choose", q: "'かいぎしつは なんがいですか。' — It's on the 3rd floor. Which answer is correct?", answer: "さんがいです。", options: ["さんがいです。", "さんばんです。", "みっかいです。", "さんがいですか。"] },
@@ -312,7 +312,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     examples: [
       { jp: "エレベーターは あちらです。", ro: "Erebētā wa achira desu.", en: "The elevator is that way. (polite)" },
       { jp: "おくには どちらですか。…インドです。", ro: "O-kuni wa dochira desu ka. …Indo desu.", en: "Where are you from? — India." },
-      { jp: "かいしゃは どちらですか。…IMCです。", ro: "Kaisha wa dochira desu ka. …IMC desu.", en: "Which company do you work for? — IMC." }
+      { jp: "かいしゃは どちらですか。…ABCです。", ro: "Kaisha wa dochira desu ka. …ABC desu.", en: "Which company do you work for? — ABC." }
     ],
     drills: [
       { type: "fill", jp: "おくには ＿＿ですか。", answer: "どちら", options: ["どちら", "こちら", "だれ", "なん"], en: "Which country are you from? (polite)" },
@@ -331,7 +331,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     examples: [
       { jp: "これは にほんの くるまです。", ro: "Kore wa Nihon no kuruma desu.", en: "This is a Japanese car." },
       { jp: "これは どこの ワインですか。…イタリアの ワインです。", ro: "Kore wa doko no wain desu ka. …Itaria no wain desu.", en: "Where is this wine from? — It's Italian wine." },
-      { jp: "それは パワーでんきの コンピューターです。", ro: "Sore wa Pawā-denki no konpyūtā desu.", en: "That's a Power Electric computer." }
+      { jp: "それは ヒカリでんきの コンピューターです。", ro: "Sore wa Hikari-denki no konpyūtā desu.", en: "That's a Hikari Electric computer." }
     ],
     drills: [
       { type: "fill", jp: "これは ＿＿の とけいですか。…スイスの とけいです。", answer: "どこ", options: ["どこ", "なん", "だれ", "いくら"], en: "Where is this watch from? — It's a Swiss watch." },
@@ -368,12 +368,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "polite お before the listener's things: おくに, おなまえ",
     explain: "お is added to some words to show respect when talking about the listener's things: おくに (your country), おなまえ (your name). Never use it for your own things — not 'わたしの おくに'. A few words always carry お, like おみやげ and おてあらい.",
     examples: [
-      { jp: "しつれいですが、おなまえは？…ミラーです。", ro: "Shitsurei desu ga, o-namae wa? …Mirā desu.", en: "Excuse me, but what's your name? — Miller." },
+      { jp: "しつれいですが、おなまえは？…ベイカーです。", ro: "Shitsurei desu ga, o-namae wa? …Beikā desu.", en: "Excuse me, but what's your name? — Baker." },
       { jp: "おくには どちらですか。…タイです。", ro: "O-kuni wa dochira desu ka. …Tai desu.", en: "Where are you from? — Thailand." },
       { jp: "おてあらいは どこですか。", ro: "O-tearai wa doko desu ka.", en: "Where is the restroom?" }
     ],
     drills: [
-      { type: "fill", jp: "しつれいですが、お＿＿は？…サントスです。", answer: "なまえ", options: ["なまえ", "くに", "いくつ", "かいしゃ"], en: "Excuse me, but your name? — Santos." },
+      { type: "fill", jp: "しつれいですが、お＿＿は？…ロペスです。", answer: "なまえ", options: ["なまえ", "くに", "いくつ", "かいしゃ"], en: "Excuse me, but your name? — Lopez." },
       { type: "fill", jp: "＿＿くには どちらですか。", answer: "お", options: ["お", "ご", "の", "か"], en: "Which country are you from? (polite)" },
       { type: "order", tiles: ["おてあらいは", "どこ", "ですか"], en: "Where is the restroom?" },
       { type: "choose", q: "Someone asks 'おくには どちらですか。' How do you answer about your own country?", answer: "インドです。", options: ["インドです。", "おインドです。", "わたしの おくには インドです。", "おくには どちらです。"] },
@@ -470,11 +470,11 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     explain: "と joins nouns: 'A と B' = 'A and B'. It lists all the items. It can only connect nouns — not verbs, adjectives or whole sentences.",
     examples: [
       { jp: "ぎんこうの やすみは どようびと にちようびです。", ro: "Ginkō no yasumi wa doyōbi to nichiyōbi desu.", en: "The bank is closed on Saturdays and Sundays." },
-      { jp: "ミラーさんと サントスさんは かいしゃいんです。", ro: "Mirā-san to Santosu-san wa kaishain desu.", en: "Mr. Miller and Mr. Santos are office workers." }
+      { jp: "ベイカーさんと ロペスさんは かいしゃいんです。", ro: "Beikā-san to Ropesu-san wa kaishain desu.", en: "Mr. Baker and Mr. Lopez are office workers." }
     ],
     drills: [
       { type: "fill", jp: "やすみは どようび＿＿ にちようびです。", answer: "と", options: ["と", "も", "の", "から"], en: "My days off are Saturday and Sunday." },
-      { type: "fill", jp: "ミラーさん＿＿ グプタさんは IMCの しゃいんです。", answer: "と", options: ["と", "も", "の", "を"], en: "Mr. Miller and Mr. Gupta are IMC employees." },
+      { type: "fill", jp: "ベイカーさん＿＿ シャルマさんは ABCの しゃいんです。", answer: "と", options: ["と", "も", "の", "を"], en: "Mr. Baker and Mr. Sharma are ABC employees." },
       { type: "order", tiles: ["しけんは", "げつようびと", "かようびです"], en: "The exams are on Monday and Tuesday." },
       { type: "choose", q: "What can と ('and') connect?", answer: "Two nouns", options: ["Two nouns", "Two sentences", "Two verbs", "An adjective and a verb"] },
       { type: "choose", q: "How do you say: 'I study on Monday and Wednesday.'?", answer: "げつようびと すいようびに べんきょうします。", options: ["げつようびも すいようびに べんきょうします。", "げつようびの すいようびに べんきょうします。", "げつようびと すいようびに べんきょうします。", "げつようびに すいようびと べんきょうします。"] }
@@ -517,7 +517,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "order", tiles: ["せんしゅう", "とうきょうへ", "いきました"], en: "I went to Tokyo last week." },
       { type: "choose", q: "How is へ read when it is a particle?", answer: "e", options: ["e", "he", "o", "wa"] },
       { type: "choose", q: "Which verb means 'go home / go back'?", answer: "かえります", options: ["きます", "いきます", "かえります", "おきます"] },
-      { type: "choose", q: "Mr. Miller is in Japan now. How does he say 'I came to Japan last year'?", answer: "きょねん にほんへ きました。", options: ["きょねん にほんへ いきました。", "らいねん にほんへ きます。", "きょねん にほんで きました。", "きょねん にほんへ きました。"] }
+      { type: "choose", q: "Mr. Baker is in Japan now. How does he say 'I came to Japan last year'?", answer: "きょねん にほんへ きました。", options: ["きょねん にほんへ いきました。", "らいねん にほんへ きます。", "きょねん にほんで きました。", "きょねん にほんへ きました。"] }
     ]
   },
   {
@@ -784,14 +784,14 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     examples: [
       { jp: "わたしは きむらさんに はなを あげました。", ro: "Watashi wa Kimura-san ni hana o agemashita.", en: "I gave Ms. Kimura flowers." },
       { jp: "ともだちに ほんを かしました。", ro: "Tomodachi ni hon o kashimashita.", en: "I lent my friend a book." },
-      { jp: "わたしは カリナさんに えいごを おしえます。", ro: "Watashi wa Karina-san ni eigo o oshiemasu.", en: "I teach Karina English." }
+      { jp: "わたしは サリさんに えいごを おしえます。", ro: "Watashi wa Sari-san ni eigo o oshiemasu.", en: "I teach Sari English." }
     ],
     drills: [
       { type: "fill", jp: "わたしは ははに はな＿＿ あげました。", answer: "を", options: ["を", "に", "が", "で"], en: "I gave my mother flowers." },
-      { type: "fill", jp: "ミラーさんは やまださん＿＿ えいごを おしえます。", answer: "に", options: ["に", "を", "で", "へ"], en: "Mr. Miller teaches Mr. Yamada English." },
+      { type: "fill", jp: "ベイカーさんは やまださん＿＿ えいごを おしえます。", answer: "に", options: ["に", "を", "で", "へ"], en: "Mr. Baker teaches Mr. Yamada English." },
       { type: "fill", jp: "ともだちに ペンを ＿＿。", answer: "かしました", options: ["かしました", "かりました", "もらいました", "ならいました"], en: "I lent my friend a pen." },
       { type: "order", tiles: ["わたしは", "ともだちに", "プレゼントを", "あげました"], en: "I gave my friend a present." },
-      { type: "order", tiles: ["サントスさんに", "でんわを", "かけます"], en: "I'll call Mr. Santos." },
+      { type: "order", tiles: ["ロペスさんに", "でんわを", "かけます"], en: "I'll call Mr. Lopez." },
       { type: "choose", q: "In 'A は B に C を あげます', who RECEIVES?", answer: "B", options: ["A", "B", "C", "Nobody"] }
     ]
   },
@@ -809,7 +809,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     drills: [
       { type: "fill", jp: "わたしは ちち＿＿ とけいを もらいました。", answer: "に", options: ["に", "を", "へ", "で"], en: "I received a watch from my father." },
       { type: "fill", jp: "ぎんこう＿＿ おかねを かりました。", answer: "から", options: ["から", "を", "と", "へ"], en: "I borrowed money from the bank." },
-      { type: "fill", jp: "わたしは カリナさんに ほんを ＿＿。", answer: "かりました", options: ["かりました", "かしました", "あげました", "おしえました"], en: "I borrowed a book from Karina." },
+      { type: "fill", jp: "わたしは サリさんに ほんを ＿＿。", answer: "かりました", options: ["かりました", "かしました", "あげました", "おしえました"], en: "I borrowed a book from Sari." },
       { type: "order", tiles: ["わたしは", "せんせいに", "にほんごを", "ならいます"], en: "I learn Japanese from my teacher." },
       { type: "choose", q: "How do you say: 'I received flowers from Maria.'?", answer: "マリアさんに はなを もらいました。", options: ["マリアさんに はなを あげました。", "マリアさんを はなに もらいました。", "マリアさんに はなを もらいました。", "マリアさんで はなを もらいました。"] },
       { type: "choose", q: "What does かります mean?", answer: "borrow", options: ["lend", "borrow", "give", "teach"] }
@@ -886,13 +886,13 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     examples: [
       { jp: "ふじさんは たかい やまです。", ro: "Fujisan wa takai yama desu.", en: "Mt. Fuji is a high mountain." },
       { jp: "ならは しずかな まちです。", ro: "Nara wa shizuka na machi desu.", en: "Nara is a quiet town." },
-      { jp: "ワンさんは しんせつな いしゃです。", ro: "Wan-san wa shinsetsu na isha desu.", en: "Mr. Wang is a kind doctor." }
+      { jp: "リンさんは しんせつな いしゃです。", ro: "Rin-san wa shinsetsu na isha desu.", en: "Mr. Lin is a kind doctor." }
     ],
     drills: [
       { type: "fill", jp: "ならは しずか＿＿ まちです。", answer: "な", options: ["な", "の", "い", "く"], en: "Nara is a quiet town." },
       { type: "fill", jp: "これは あたらし＿＿ くるまです。", answer: "い", options: ["い", "な", "の", "く"], en: "This is a new car." },
       { type: "fill", jp: "さくらは きれい＿＿ はなです。", answer: "な", options: ["な", "の", "い", "く"], en: "Cherry blossoms are beautiful flowers." },
-      { type: "order", tiles: ["ミラーさんは", "おもしろい", "ひと", "です"], en: "Mr. Miller is an interesting person." },
+      { type: "order", tiles: ["ベイカーさんは", "おもしろい", "ひと", "です"], en: "Mr. Baker is an interesting person." },
       { type: "order", tiles: ["きょうとは", "ふるい", "まち", "です"], en: "Kyoto is an old town." },
       { type: "choose", q: "Which is correct?", answer: "ゆうめいな レストラン", options: ["ゆうめいの レストラン", "ゆうめい レストラン", "ゆうめいな レストラン", "ゆうめいい レストラン"] }
     ]
@@ -906,7 +906,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     examples: [
       { jp: "ペキンは とても さむいです。", ro: "Pekin wa totemo samui desu.", en: "Beijing is very cold." },
       { jp: "この えいがは あまり おもしろくないです。", ro: "Kono eiga wa amari omoshiroku nai desu.", en: "This movie isn't very interesting." },
-      { jp: "さくらだいがくは あまり ゆうめいじゃ ありません。", ro: "Sakura-daigaku wa amari yūmei ja arimasen.", en: "Sakura University isn't very famous." }
+      { jp: "みどりだいがくは あまり ゆうめいじゃ ありません。", ro: "Midori-daigaku wa amari yūmei ja arimasen.", en: "Midori University isn't very famous." }
     ],
     drills: [
       { type: "fill", jp: "この ほんは ＿＿ おもしろくないです。", answer: "あまり", options: ["あまり", "とても", "もう", "まだ"], en: "This book isn't very interesting." },
@@ -931,7 +931,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "ふじさんは ＿＿ やまですか。…たかい やまです。", answer: "どんな", options: ["どんな", "どう", "なん", "どこ"], en: "What kind of mountain is Mt. Fuji? — It's a high mountain." },
       { type: "order", tiles: ["きょうとは", "どんな", "まち", "ですか"], en: "What kind of town is Kyoto?" },
       { type: "order", tiles: ["にほんの", "せいかつは", "どうですか"], en: "How is life in Japan?" },
-      { type: "choose", q: "'カリナさんは どんな ひとですか。' Which is a good answer?", answer: "しんせつな ひとです。", options: ["しんせつ ひとです。", "はい、しんせつです。", "しんせつな ひとです。", "どうですか。"] }
+      { type: "choose", q: "'サリさんは どんな ひとですか。' Which is a good answer?", answer: "しんせつな ひとです。", options: ["しんせつ ひとです。", "はい、しんせつです。", "しんせつな ひとです。", "どうですか。"] }
     ]
   },
   {
@@ -959,15 +959,15 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "Which one? (of three or more)",
     explain: "どれ means 'which one' when choosing among three or more things — it's the question word in the これ/それ/あれ family. Like これ, it stands alone and is not put directly before a noun. Answer by pointing it out, e.g. あの あおい かさです.",
     examples: [
-      { jp: "ミラーさんの かさは どれですか。…あの あおい かさです。", ro: "Mirā-san no kasa wa dore desu ka. …Ano aoi kasa desu.", en: "Which one is Mr. Miller's umbrella? — That blue one." },
+      { jp: "ベイカーさんの かさは どれですか。…あの あおい かさです。", ro: "Beikā-san no kasa wa dore desu ka. …Ano aoi kasa desu.", en: "Which one is Mr. Baker's umbrella? — That blue one." },
       { jp: "やまださんの くるまは どれですか。…あの しろい くるまです。", ro: "Yamada-san no kuruma wa dore desu ka. …Ano shiroi kuruma desu.", en: "Which one is Mr. Yamada's car? — That white car." }
     ],
     drills: [
       { type: "fill", jp: "あなたの かばんは ＿＿ですか。…あの くろい かばんです。", answer: "どれ", options: ["どれ", "どの", "どんな", "なん"], en: "Which one is your bag? — That black bag." },
-      { type: "fill", jp: "ミラーさんの くるまは どれですか。…あの ＿＿ くるまです。", answer: "しろい", options: ["しろい", "しろ", "しろいな", "しろく"], en: "Which one is Mr. Miller's car? — That white car." },
+      { type: "fill", jp: "ベイカーさんの くるまは どれですか。…あの ＿＿ くるまです。", answer: "しろい", options: ["しろい", "しろ", "しろいな", "しろく"], en: "Which one is Mr. Baker's car? — That white car." },
       { type: "order", tiles: ["さとうさんの", "かさは", "どれ", "ですか"], en: "Which one is Ms. Sato's umbrella?" },
       { type: "choose", q: "What does どれ ask?", answer: "Which one? (out of three or more)", options: ["Where?", "What kind?", "Which one? (out of three or more)", "How?"] },
-      { type: "choose", q: "'カリナさんの ほんは どれですか。' Which is the best answer?", answer: "あの あかい ほんです。", options: ["あの あかい ほんです。", "はい、あかい ほんです。", "あの あかいな ほんです。", "どれも ほんです。"] }
+      { type: "choose", q: "'サリさんの ほんは どれですか。' Which is the best answer?", answer: "あの あかい ほんです。", options: ["あの あかい ほんです。", "はい、あかい ほんです。", "あの あかいな ほんです。", "どれも ほんです。"] }
     ]
   },
 
@@ -980,14 +980,14 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     explain: "With あります (here meaning 'have') and わかります ('understand'), the thing is marked with が, not を. So it's にほんごが わかります, never にほんごを わかります. Negatives: ありません / わかりません.",
     examples: [
       { jp: "わたしは じかんが あります。", ro: "Watashi wa jikan ga arimasu.", en: "I have time." },
-      { jp: "ミラーさんは にほんごが わかります。", ro: "Mirā-san wa Nihongo ga wakarimasu.", en: "Mr. Miller understands Japanese." },
+      { jp: "ベイカーさんは にほんごが わかります。", ro: "Beikā-san wa Nihongo ga wakarimasu.", en: "Mr. Baker understands Japanese." },
       { jp: "きょうは ようじが あります。", ro: "Kyō wa yōji ga arimasu.", en: "I have something to do today." }
     ],
     drills: [
       { type: "fill", jp: "わたしは かんじ＿＿ わかりません。", answer: "が", options: ["が", "を", "で", "に"], en: "I don't understand kanji." },
       { type: "fill", jp: "こんばん じかん＿＿ ありますか。", answer: "が", options: ["が", "を", "で", "へ"], en: "Do you have time tonight?" },
       { type: "order", tiles: ["きょうは", "ようじが", "あります"], en: "I have something to do today." },
-      { type: "order", tiles: ["サントスさんは", "にほんごが", "すこし", "わかります"], en: "Mr. Santos understands a little Japanese." },
+      { type: "order", tiles: ["ロペスさんは", "にほんごが", "すこし", "わかります"], en: "Mr. Lopez understands a little Japanese." },
       { type: "choose", q: "Which sentence is correct?", answer: "わたしは えいごが わかります。", options: ["わたしは えいごを わかります。", "わたしは えいごへ わかります。", "わたしは えいごが わかります。", "わたしは えいごに わかります。"] },
       { type: "choose", q: "'おかねが ありません' means…", answer: "I don't have any money.", options: ["There is no bank.", "I didn't buy anything.", "I don't have any money.", "Money isn't important."] }
     ]
@@ -1000,13 +1000,13 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     explain: "すき, きらい, じょうず and へた are な-adjectives, and the thing liked or the skill takes が. Negative: すきじゃ ありません. きらい sounds strong, so people often say あまり すきじゃ ありません instead. Don't call yourself じょうず — it sounds boastful.",
     examples: [
       { jp: "わたしは イタリアりょうりが すきです。", ro: "Watashi wa Itaria-ryōri ga suki desu.", en: "I like Italian food." },
-      { jp: "カリナさんは えが じょうずです。", ro: "Karina-san wa e ga jōzu desu.", en: "Karina is good at painting." },
+      { jp: "サリさんは えが じょうずです。", ro: "Sari-san wa e ga jōzu desu.", en: "Sari is good at painting." },
       { jp: "わたしは うたが へたです。", ro: "Watashi wa uta ga heta desu.", en: "I'm bad at singing." }
     ],
     drills: [
       { type: "fill", jp: "わたしは ジャズ＿＿ すきです。", answer: "が", options: ["が", "を", "に", "で"], en: "I like jazz." },
       { type: "fill", jp: "わたしは さかなが すき＿＿ ありません。", answer: "じゃ", options: ["じゃ", "く", "な", "くな"], en: "I don't like fish." },
-      { type: "fill", jp: "ミラーさんは りょうりが ＿＿です。", answer: "じょうず", options: ["じょうず", "へた", "きらい", "わかります"], en: "Mr. Miller is good at cooking." },
+      { type: "fill", jp: "ベイカーさんは りょうりが ＿＿です。", answer: "じょうず", options: ["じょうず", "へた", "きらい", "わかります"], en: "Mr. Baker is good at cooking." },
       { type: "order", tiles: ["わたしは", "スポーツが", "すきです"], en: "I like sports." },
       { type: "order", tiles: ["やまださんは", "テニスが", "じょうずです"], en: "Mr. Yamada is good at tennis." },
       { type: "choose", q: "What is a soft, natural way to say you don't like something much?", answer: "あまり すきじゃ ありません。", options: ["あまり すきです。", "あまり すきくないです。", "あまり すきじゃ ありません。", "あまり すきが ありません。"] },
@@ -1027,7 +1027,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "＿＿ のみものが すきですか。…こうちゃが すきです。", answer: "どんな", options: ["どんな", "どう", "なに", "どれ"], en: "What kind of drinks do you like? — I like black tea." },
       { type: "fill", jp: "どんな りょうり＿＿ すきですか。", answer: "が", options: ["が", "を", "は", "で"], en: "What kind of food do you like?" },
       { type: "order", tiles: ["どんな", "おんがくが", "すきですか"], en: "What kind of music do you like?" },
-      { type: "order", tiles: ["カリナさんは", "どんな", "えが", "すきですか"], en: "What kind of paintings does Karina like?" },
+      { type: "order", tiles: ["サリさんは", "どんな", "えが", "すきですか"], en: "What kind of paintings does Sari like?" },
       { type: "choose", q: "'どんな スポーツが すきですか。' Which is the best answer?", answer: "やきゅうが すきです。", options: ["はい、すきです。", "スポーツが すきです。", "やきゅうが すきです。", "どんな スポーツです。"] }
     ]
   },
@@ -1106,7 +1106,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     ],
     drills: [
       { type: "fill", jp: "はこ＿＿ でんちが あります。", answer: "に", options: ["に", "で", "を", "へ"], en: "There are batteries in the box." },
-      { type: "fill", jp: "あそこに ＿＿が いますか。…ワンさんが います。", answer: "だれ", options: ["だれ", "なに", "どこ", "どれ"], en: "Who is over there? — Mr. Wang is." },
+      { type: "fill", jp: "あそこに ＿＿が いますか。…リンさんが います。", answer: "だれ", options: ["だれ", "なに", "どこ", "どれ"], en: "Who is over there? — Mr. Lin is." },
       { type: "fill", jp: "れいぞうこに ＿＿が ありますか。…ジュースが あります。", answer: "なに", options: ["なに", "だれ", "なん", "どこ"], en: "What is in the fridge? — There's juice." },
       { type: "order", tiles: ["わたしの", "へやに", "ベッドが", "あります"], en: "There is a bed in my room." },
       { type: "order", tiles: ["こうえんに", "こどもが", "います"], en: "There are children in the park." },
@@ -1118,14 +1118,14 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     lesson: 10,
     title: "N は place に あります / います",
     meaning: "N is in/at place",
-    explain: "When the thing or person is already the topic, put it first with は and then say where it is: ミラーさんは じむしょに います. Ask with 'N は どこに ありますか / いますか'. You can also shorten it to 'N は place です' (Lesson 3).",
+    explain: "When the thing or person is already the topic, put it first with は and then say where it is: ベイカーさんは じむしょに います. Ask with 'N は どこに ありますか / いますか'. You can also shorten it to 'N は place です' (Lesson 3).",
     examples: [
-      { jp: "ミラーさんは じむしょに います。", ro: "Mirā-san wa jimusho ni imasu.", en: "Mr. Miller is in the office." },
+      { jp: "ベイカーさんは じむしょに います。", ro: "Beikā-san wa jimusho ni imasu.", en: "Mr. Baker is in the office." },
       { jp: "とうきょうディズニーランドは ちばけんに あります。", ro: "Tōkyō Dizunīrando wa Chiba-ken ni arimasu.", en: "Tokyo Disneyland is in Chiba Prefecture." },
       { jp: "かぎは どこに ありますか。…つくえの うえに あります。", ro: "Kagi wa doko ni arimasu ka. …Tsukue no ue ni arimasu.", en: "Where is the key? — It's on the desk." }
     ],
     drills: [
-      { type: "fill", jp: "ミラーさんは じむしょ＿＿ います。", answer: "に", options: ["に", "で", "が", "を"], en: "Mr. Miller is in the office." },
+      { type: "fill", jp: "ベイカーさんは じむしょ＿＿ います。", answer: "に", options: ["に", "で", "が", "を"], en: "Mr. Baker is in the office." },
       { type: "fill", jp: "ねこは どこに ＿＿か。", answer: "います", options: ["います", "あります", "です"], en: "Where is the cat?" },
       { type: "fill", jp: "コンビニ＿＿ どこに ありますか。", answer: "は", options: ["は", "に", "で", "を"], en: "Where is the convenience store?" },
       { type: "order", tiles: ["やまださんは", "ロビーに", "います"], en: "Mr. Yamada is in the lobby." },

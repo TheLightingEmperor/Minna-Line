@@ -428,16 +428,22 @@ grant execute on function public.community_weekly_prompt() to authenticated;
 -- Post pictures live in a Storage bucket. Each member can upload only into a folder named after their own account,
 -- 2 MB per file, images only (the app shrinks photos before sending). The bucket is public-read so pictures load fast;
 -- file names are random, so a picture can only be found by someone who can already see the post.
-insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('community', 'community', true, 2097152, array['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
-on conflict (id) do update set public = true, file_size_limit = 2097152, allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-
-drop policy if exists community_images_upload on storage.objects;
-create policy community_images_upload on storage.objects for insert to authenticated
-  with check (bucket_id = 'community' and (storage.foldername(name))[1] = (select auth.uid())::text);
-drop policy if exists community_images_delete on storage.objects;
-create policy community_images_delete on storage.objects for delete to authenticated
-  using (bucket_id = 'community' and ((storage.foldername(name))[1] = (select auth.uid())::text or (select public.is_admin())));
+-- (Wrapped so that if Storage refuses for any reason, everything else in this file still installs.)
+do $storage$
+begin
+  insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+  values ('community', 'community', true, 2097152, array['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
+  on conflict (id) do update set public = true, file_size_limit = 2097152, allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  execute 'drop policy if exists community_images_upload on storage.objects';
+  execute $p$create policy community_images_upload on storage.objects for insert to authenticated
+    with check (bucket_id = 'community' and (storage.foldername(name))[1] = (select auth.uid())::text)$p$;
+  execute 'drop policy if exists community_images_delete on storage.objects';
+  execute $p$create policy community_images_delete on storage.objects for delete to authenticated
+    using (bucket_id = 'community' and ((storage.foldername(name))[1] = (select auth.uid())::text or (select public.is_admin())))$p$;
+exception when others then
+  raise notice 'Picture storage was not set up (%). Posts work; pictures will not upload until this is fixed.', sqlerrm;
+end
+$storage$;
 
 -- tell the API layer about the new tables and functions straight away
 notify pgrst, 'reload schema';

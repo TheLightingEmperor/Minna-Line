@@ -1,4 +1,4 @@
-// Study layer for Minna no Nihongo Lessons 1–10: structured grammar cards and lesson guides.
+// Study layer for Lessons 1–10: structured grammar cards and lesson guides.
 // Built from data/grammar_a.js and the learner's own notes. Overrides `title`/`meaning` where set.
 window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
 
@@ -69,7 +69,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
       "The order is the reverse of English of."
     ],
     mistakes: [
-      { bad: "カリナさんは がくせいの ふじだいがくです。", good: "カリナさんは ふじだいがくの がくせいです。", why: "The group comes first, then the role." }
+      { bad: "サリさんは がくせいの ふじだいがくです。", good: "サリさんは ふじだいがくの がくせいです。", why: "The group comes first, then the role." }
     ]
   },
   "L1-6": {
@@ -85,8 +85,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
         title: "Name and country endings",
         headers: ["Ending", "Used for", "Example", "English"],
         rows: [
-          ["さん", "Other people's names", "ミラーさん", "Mr. Miller"],
-          ["ちゃん", "Young children, affection", "テレーザちゃん", "Teresa (a child)"],
+          ["さん", "Other people's names", "ベイカーさん", "Mr. Baker"],
+          ["ちゃん", "Young children, affection", "エレナちゃん", "Elena (a child)"],
           ["くん", "Boys and younger males", "たろうくん", "Taro (a boy)"],
           ["じん", "A person from a country", "わたしは インドじんです。", "I am Indian."],
           ["から きました", "The country you came from", "わたしは インドから きました。", "I came from India."]
@@ -346,7 +346,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
         headers: ["N1 is", "Example", "English"],
         rows: [
           ["A country", "にほんの くるま", "a Japanese car"],
-          ["A company", "パワーでんきの コンピューター", "a Power Electric computer"]
+          ["A company", "ヒカリでんきの コンピューター", "a Hikari Electric computer"]
         ]
       }
     ]
@@ -874,7 +874,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
         rows: [
           ["あげます", "Give", "わたしは ともだちに ほんを あげます。", "I give my friend a book."],
           ["かします", "Lend", "たなかさんに ペンを かしました。", "I lent Tanaka a pen."],
-          ["おしえます", "Teach", "わたしは カリナさんに えいごを おしえます。", "I teach Karina English."],
+          ["おしえます", "Teach", "わたしは サリさんに えいごを おしえます。", "I teach Sari English."],
           ["おしえます", "Tell", "やまださんに でんわばんごうを おしえます。", "I tell Mr. Yamada the phone number."],
           ["おくります", "Send", "ははに にもつを おくります。", "I send my mother a parcel."],
           ["かけます", "Make a call", "ともだちに でんわを かけます。", "I call a friend."]

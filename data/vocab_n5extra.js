@@ -1,8 +1,8 @@
-// JLPT N5 vocabulary beyond Minna no Nihongo I Lessons 1–20.
-// L 21–25 = Minna no Nihongo lesson; L 26 = general JLPT N5 word.
+// JLPT N5 vocabulary beyond Lessons 1–20.
+// L 21–25 = lesson; L 26 = general JLPT N5 word.
 // Verbs are given in polite ます form. pos: v1/v2/v3, i-adj, na-adj, n, adv, exp, other.
 window.VOCAB_EXTRA = [
-  // ===== Minna no Nihongo Lesson 21 =====
+  // ===== Lesson 21 =====
   { kana: "おもいます", kanji: "思います", ro: "omoimasu", en: "think", pos: "v1", L: 21, cat: "verbs" },
   { kana: "いいます", kanji: "言います", ro: "iimasu", en: "say", pos: "v1", L: 21, cat: "verbs" },
   { kana: "かちます", kanji: "勝ちます", ro: "kachimasu", en: "win", pos: "v1", L: 21, cat: "verbs" },
@@ -39,7 +39,7 @@ window.VOCAB_EXTRA = [
   { kana: "しかたがありません", kanji: "仕方がありません", ro: "shikata ga arimasen", en: "it can't be helped", pos: "exp", L: 21, cat: "expressions" },
   { kana: "しばらくですね", kanji: "", ro: "shibaraku desu ne", en: "long time no see", pos: "exp", L: 21, cat: "expressions" },
 
-  // ===== Minna no Nihongo Lesson 22 =====
+  // ===== Lesson 22 =====
   { kana: "きます", kanji: "着ます", ro: "kimasu", en: "put on, wear (shirt, coat, etc.)", pos: "v2", L: 22, cat: "verbs" },
   { kana: "はきます", kanji: "履きます", ro: "hakimasu", en: "put on, wear (shoes, trousers, skirt)", pos: "v1", L: 22, cat: "verbs" },
   { kana: "かぶります", kanji: "", ro: "kaburimasu", en: "put on, wear (a hat)", pos: "v1", L: 22, cat: "verbs" },
@@ -60,7 +60,7 @@ window.VOCAB_EXTRA = [
   { kana: "ふとん", kanji: "布団", ro: "futon", en: "futon, Japanese bedding", pos: "n", L: 22, cat: "things" },
   { kana: "おめでとうございます", kanji: "", ro: "omedetō gozaimasu", en: "congratulations", pos: "exp", L: 22, cat: "expressions" },
 
-  // ===== Minna no Nihongo Lesson 23 =====
+  // ===== Lesson 23 =====
   { kana: "ききます", kanji: "聞きます", ro: "kikimasu", en: "ask (a person)", pos: "v1", L: 23, cat: "verbs" },
   { kana: "まわします", kanji: "回します", ro: "mawashimasu", en: "turn (a knob)", pos: "v1", L: 23, cat: "verbs" },
   { kana: "ひきます", kanji: "引きます", ro: "hikimasu", en: "pull", pos: "v1", L: 23, cat: "verbs" },
@@ -80,7 +80,7 @@ window.VOCAB_EXTRA = [
   { kana: "ちゅうしゃじょう", kanji: "駐車場", ro: "chūshajō", en: "parking lot", pos: "n", L: 23, cat: "places" },
   { kana: "たてもの", kanji: "建物", ro: "tatemono", en: "building", pos: "n", L: 23, cat: "places" },
 
-  // ===== Minna no Nihongo Lesson 24 =====
+  // ===== Lesson 24 =====
   { kana: "くれます", kanji: "", ro: "kuremasu", en: "give (to me or my group)", pos: "v2", L: 24, cat: "verbs" },
   { kana: "なおします", kanji: "直します", ro: "naoshimasu", en: "repair, correct", pos: "v1", L: 24, cat: "verbs" },
   { kana: "つれていきます", kanji: "連れて行きます", ro: "tsurete ikimasu", en: "take (someone) along", pos: "v1", L: 24, cat: "verbs" },
@@ -99,7 +99,7 @@ window.VOCAB_EXTRA = [
   { kana: "ほかに", kanji: "", ro: "hoka ni", en: "besides, in addition", pos: "adv", L: 24, cat: "adverbs" },
   { kana: "ははのひ", kanji: "母の日", ro: "haha no hi", en: "Mother's Day", pos: "n", L: 24, cat: "calendar" },
 
-  // ===== Minna no Nihongo Lesson 25 =====
+  // ===== Lesson 25 =====
   { kana: "かんがえます", kanji: "考えます", ro: "kangaemasu", en: "think, consider", pos: "v2", L: 25, cat: "verbs" },
   { kana: "つきます", kanji: "着きます", ro: "tsukimasu", en: "arrive", pos: "v1", L: 25, cat: "verbs" },
   { kana: "としをとります", kanji: "年を取ります", ro: "toshi o torimasu", en: "grow old", pos: "v1", L: 25, cat: "verbs" },

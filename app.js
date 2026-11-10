@@ -558,7 +558,7 @@
     const lo = lvlFloor(l), hi = lvlFloor(l + 1);
     const quests = todaysQuests(), weak = weakKeys().length, w = wordOfDay();
     const lv = LEVELS.find((x) => x.id === curLevel());
-    const lines = { N5: [['Minna Line', 'M', 'M00–M25', ''], ['N5 Terminal', 'X', 'numbers, words, kanji, verbs, exam', 'express']], N4: [['Summer Line', 'S', 'Lessons 26–50', 'summer'], ['N4 Terminal', 'SX', 'kanji, verbs, exam', 'summer']], N3: [['Autumn Line', 'K', 'Units 1–24', 'autumn'], ['N3 Terminal', 'KX', 'reading, kanji, exam', 'autumn']], N2: [['Winter Line', 'W', 'Units 1–24', 'winter'], ['N2 Terminal', 'WX', 'reading, kanji, exam', 'winter']], N1: [['Starlight Line', 'Y', 'Units 1–24', 'night'], ['N1 Terminal', 'YX', 'reading, kanji, exam', 'night']] }[lv.id];
+    const lines = { N5: [['Minna Line', 'M', 'M00–M25', ''], ['N5 Terminal', 'X', 'numbers, words, kanji, verbs, exam', 'express']], N4: [['Summer Line', 'S', 'S01–S25', 'summer'], ['N4 Terminal', 'SX', 'kanji, verbs, exam', 'summer']], N3: [['Autumn Line', 'K', 'Units 1–24', 'autumn'], ['N3 Terminal', 'KX', 'reading, kanji, exam', 'autumn']], N2: [['Winter Line', 'W', 'Units 1–24', 'winter'], ['N2 Terminal', 'WX', 'reading, kanji, exam', 'winter']], N1: [['Starlight Line', 'Y', 'Units 1–24', 'night'], ['N1 Terminal', 'YX', 'reading, kanji, exam', 'night']] }[lv.id];
     render(`
       <div class="leveltabs" role="tablist" aria-label="JLPT level">${LEVELS.map((x) => `<button role="tab" class="lvtab ${x.season}" aria-selected="${x.id === lv.id}" data-act="level" data-arg="${x.id}"><i class="lvico">${ART.seasonIcon(x.season)}</i><b>${x.name}</b><span>${x.title}</span><small>${Math.round(readiness(x.id).total * 100)}%</small></button>`).join('')}</div>
       <div class="home"><div>
@@ -1662,7 +1662,7 @@
   function start() {
     applySkin();
     const hash = (location.hash || '').slice(1);
-    go(SBY.has(hash) ? { name: 'station', id: hash } : ROUTES[hash] && hash !== 'read' && hash !== 'station' && hash !== 'post' && hash !== 'class' ? { name: hash } : { name: 'home' });
+    go(SBY.has(hash) ? { name: 'station', id: hash } : ROUTES[hash] && hash !== 'read' && hash !== 'station' && hash !== 'post' && hash !== 'class' && hash !== 'placement' ? { name: hash } : { name: 'home' });
     if (started) return;
     started = true;
     window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (SBY.has(h)) go({ name: 'station', id: h }); });

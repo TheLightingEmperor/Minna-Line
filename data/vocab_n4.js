@@ -1,4 +1,4 @@
-// N4 vocabulary: Minna no Nihongo II Lessons 26–50 (L: 126–150) plus the wider JLPT N4 list. Meanings, notes and examples are original.
+// N4 vocabulary: Lessons 1–50 (L: 126–150) plus the wider JLPT N4 list. Meanings, notes and examples are original.
 window.VOCAB_ADD = (window.VOCAB_ADD || []).concat([
   { L: 126, kana: "みます", kanji: "診ます", ro: "mimasu", en: "examine (a patient)", pos: "v2", grp: "verbs", use: "{医者|いしゃ}が {子|こ}どもを みます", useEn: "a doctor examines a child" },
   { L: 126, kana: "さがします", kanji: "探します", ro: "sagashimasu", en: "look for, search for", pos: "v1", grp: "verbs", use: "{家|いえ}の かぎを さがします", useEn: "look for the house key" },

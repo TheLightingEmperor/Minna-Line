@@ -1,4 +1,4 @@
-// JLPT N5 kanji (~100), ordered by the Minna no Nihongo I lesson where a learner
+// JLPT N5 kanji (~100), ordered by the lesson where a learner
 // first meets a common word using the kanji, then by usefulness.
 // on = katakana, kun = hiragana with okurigana after a hyphen.
 window.KANJI = [

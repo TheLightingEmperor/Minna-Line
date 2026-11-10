@@ -1,4 +1,4 @@
-// Study layer for Minna no Nihongo Lessons 11–25: structured grammar cards and lesson guides.
+// Study layer for Lessons 11–25: structured grammar cards and lesson guides.
 // Built from data/grammar_b.js and the learner's own notes. Overrides `title`/`meaning` where set.
 // `examples` here replace the originals position by position.
 window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
@@ -891,7 +891,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
         rows: [
           ["State", "わたしは けっこんして います。", "I am married."],
           ["State", "わたしは おおさかに すんで います。", "I live in Osaka."],
-          ["State", "わたしは サントスさんを しって います。", "I know Mr. Santos."],
+          ["State", "わたしは ロペスさんを しって います。", "I know Mr. Lopez."],
           ["Habit", "まいあさ ジョギングを して います。", "I jog every morning."],
           ["Job", "この かいしゃは カメラを つくって います。", "This company makes cameras."]
         ]
@@ -905,7 +905,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
       }
     ],
     mistakes: [
-      { bad: "サントスさんを しって いません。", good: "サントスさんを しりません。", why: "I don't know is always しりません." },
+      { bad: "ロペスさんを しって いません。", good: "ロペスさんを しりません。", why: "I don't know is always しりません." },
       { bad: "わたしは おおさかで すんで います。", good: "わたしは おおさかに すんで います。", why: "すんで います takes に for the place." }
     ]
   },
@@ -1034,7 +1034,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
           ["たかしさんは せが たかいです。", "As for Takashi, height is high.", "Takashi is tall."],
           ["おおさかは たべものが おいしいです。", "As for Osaka, food is tasty.", "The food in Osaka is delicious."],
           ["マリアさんは かみが ながいです。", "As for Maria, hair is long.", "Maria has long hair."],
-          ["ミラーさんは あたまが いいです。", "As for Mr. Miller, head is good.", "Mr. Miller is smart."]
+          ["ベイカーさんは あたまが いいです。", "As for Mr. Baker, head is good.", "Mr. Baker is smart."]
         ]
       }
     ],
@@ -1904,8 +1904,8 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
         title: "I think vs I don't think",
         headers: ["Japanese", "Meaning"],
         rows: [
-          ["ミラーさんは くると おもいます。", "I think Mr. Miller will come."],
-          ["ミラーさんは こないと おもいます。", "I don't think Mr. Miller will come."]
+          ["ベイカーさんは くると おもいます。", "I think Mr. Baker will come."],
+          ["ベイカーさんは こないと おもいます。", "I don't think Mr. Baker will come."]
         ]
       }
     ],
@@ -1929,7 +1929,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
         headers: ["Use", "Japanese", "Meaning"],
         rows: [
           ["Exact words", "ねる まえに、「おやすみなさい」と いいます。", "Before going to bed, we say 'Good night'."],
-          ["Reporting", "ミラーさんは らいしゅう おおさかへ いくと いいました。", "Mr. Miller said he is going to Osaka next week."],
+          ["Reporting", "ベイカーさんは らいしゅう おおさかへ いくと いいました。", "Mr. Baker said he is going to Osaka next week."],
           ["Asking for a word", "これは にほんごで なんと いいますか。", "What is this called in Japanese?"]
         ]
       }
@@ -1954,12 +1954,12 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
           ["Verb", "あしたの パーティーに いくでしょう？", "You're going to tomorrow's party, right?"],
           ["い", "にほんの なつは あついでしょう？", "Summer in Japan is hot, right?"],
           ["な", "ならは しずかでしょう？", "Nara is quiet, right?"],
-          ["Noun", "カリナさんは がくせいでしょう？", "Karina is a student, right?"]
+          ["Noun", "サリさんは がくせいでしょう？", "Sari is a student, right?"]
         ]
       }
     ],
     mistakes: [
-      { bad: "カリナさんは がくせいだでしょう？", good: "カリナさんは がくせいでしょう？", why: "Drop だ before でしょう." }
+      { bad: "サリさんは がくせいだでしょう？", good: "サリさんは がくせいでしょう？", why: "Drop だ before でしょう." }
     ]
   },
   "L22-1": {

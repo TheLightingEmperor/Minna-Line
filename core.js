@@ -63,7 +63,7 @@ window.ML = (() => {
   const speakable = (kana) => String(kana).split(/\s*[\/／]\s*/)[0].replace(/[（(].*?[）)]/g, '').replace(/[～〜［］\[\]]/g, '');
 
   // ---------------------------------------------------------------- data
-  // vocab.js comes from the lesson notes; the overlay holds the cleaned wording, grouping and usage on top of it.
+  // vocab.js is the core word list; the overlay holds the cleaned wording, grouping and usage on top of it.
   const OVERLAY = window.VOCAB_OVERLAY || {};
   const CORE = [...(window.VOCAB || []).map((v) => ({ ...v, ...OVERLAY[`${v.L}:${v.kana}`] })), ...(window.VOCAB_ADD || []).map((v) => ({ ...v, id: v.L > 100 ? `${v.L}:${v.kana}:${v.kanji || ''}` : `${v.L}:${v.kana}` }))].filter((v) => v.kana && v.en);
   const coreKey = new Set(CORE.map((v) => v.kana + '|' + (v.kanji || '')));
@@ -137,13 +137,13 @@ window.ML = (() => {
   const N2_TITLES = { 301: ['Time and Change', 'じかん・へんか'], 302: ['People and Relationships', 'ひと・かんけい'], 303: ['Personality and Attitude', 'せいかく・たいど'], 304: ['Emotions and the Mind', 'かんじょう・こころ'], 305: ['Health and Medicine', 'けんこう・いりょう'], 306: ['Home and Daily Life', 'せいかつ'], 307: ['Food and Culture', 'しょく・ぶんか'], 308: ['Town and Environment', 'まち・かんきょう'], 309: ['Transport and Travel', 'こうつう・りょこう'], 310: ['Work and Business', 'しごと・ビジネス'], 311: ['Economy and Money', 'けいざい'], 312: ['Politics and Law', 'せいじ・ほうりつ'], 313: ['Society and Issues', 'しゃかい・もんだい'], 314: ['Education and Research', 'きょういく・けんきゅう'], 315: ['Science and Technology', 'かがく・ぎじゅつ'], 316: ['Nature and Disasters', 'しぜん・さいがい'], 317: ['Media and Communication', 'メディア'], 318: ['Arts, Sport, Leisure', 'げいじゅつ・スポーツ'], 319: ['Abstract Ideas', 'ちゅうしょうご'], 320: ['Adverbs and Degree', 'ふくし'], 321: ['Easily Confused Verbs', 'まぎらわしい どうし'], 322: ['Compound Verbs', 'ふくごうどうし'], 323: ['Katakana Words', 'カタカナご'], 324: ['Idioms and Proverbs', 'かんようく・ことわざ'] };
   const N1_TITLES = { 401: ['History and Tradition', 'れきし・でんとう'], 402: ['Relations and Manners', 'にんげんかんけい'], 403: ['Character and Behaviour', 'じんかく'], 404: ['Psychology', 'しんり'], 405: ['Medicine and Welfare', 'いりょう・ふくし'], 406: ['Lifestyle and Consumption', 'しょうひ'], 407: ['Culture and the Arts', 'ぶんか・げいじゅつ'], 408: ['Land and Environment', 'こくど・かんきょう'], 409: ['Infrastructure', 'インフラ'], 410: ['Corporate and Management', 'けいえい'], 411: ['Finance and Markets', 'きんゆう'], 412: ['Government and Justice', 'せいじ・しほう'], 413: ['International Affairs', 'こくさい'], 414: ['Academia and Research', 'がくじゅつ'], 415: ['Science and Engineering', 'かがく・こうがく'], 416: ['Natural Science', 'しぜんかがく'], 417: ['Journalism and Rhetoric', 'ほうどう'], 418: ['Philosophy and Thought', 'しそう'], 419: ['Formal Nouns', 'かたい ことば'], 420: ['Literary Adverbs', 'ぶんしょうご'], 421: ['Nuanced Verbs', 'どうし'], 422: ['Formal Set Phrases', 'かんようひょうげん'], 423: ['Four-character Idioms', 'よじじゅくご'], 424: ['Proverbs and Sayings', 'ことわざ'] };
   const LEVELS = [
-    { id: 'N5', name: 'N5', title: 'Spring Line', jp: 'はるの せん', season: 'spring', blurb: 'Minna no Nihongo I · Lessons 1–25' },
-    { id: 'N4', name: 'N4', title: 'Summer Line', jp: 'なつの せん', season: 'summer', blurb: 'Minna no Nihongo II · Lessons 26–50' },
+    { id: 'N5', name: 'N5', title: 'Spring Line', jp: 'はるの せん', season: 'spring', blurb: 'Stations 00–25 · kana, first conversations, the building blocks of every sentence' },
+    { id: 'N4', name: 'N4', title: 'Summer Line', jp: 'なつの せん', season: 'summer', blurb: 'Stations 01–25 · plain forms, potential, passive, giving and receiving, conditionals' },
     { id: 'N3', name: 'N3', title: 'Autumn Line', jp: 'あきの せん', season: 'autumn', blurb: '24 themed units and the Reading Academy' },
     { id: 'N2', name: 'N2', title: 'Winter Line', jp: 'ふゆの せん', season: 'winter', blurb: '24 themed units and the N2 Reading Academy' },
     { id: 'N1', name: 'N1', title: 'Starlight Line', jp: 'ほしの せん', season: 'night', blurb: '24 themed units and the N1 Reading Academy' },
   ];
-  const lessonName = (L) => (L >= 1 && L <= 25 ? `Lesson ${L}` : L >= 126 && L <= 150 ? `Lesson ${L - 100}` : L >= 201 && L <= 224 ? `Unit ${L - 200}` : L >= 301 && L <= 324 ? `Unit ${L - 300}` : L >= 401 && L <= 424 ? `Unit ${L - 400}` : '');
+  const lessonName = (L) => (L >= 1 && L <= 25 ? `Lesson ${L}` : L >= 126 && L <= 150 ? `Lesson ${L - 125}` : L >= 201 && L <= 224 ? `Unit ${L - 200}` : L >= 301 && L <= 324 ? `Unit ${L - 300}` : L >= 401 && L <= 424 ? `Unit ${L - 400}` : '');
   const STATIONS = [];
   // One unbroken line for the whole N5 course, stations 00 to 25; the practice halls and the exam sit at the terminal.
   for (let L = 0; L <= 25; L++) STATIONS.push({ id: 'L' + L, L, line: 'M', code: String(L).padStart(2, '0'), name: TITLES[L][0], jp: TITLES[L][1], kind: L === 0 ? 'kana' : 'lesson' });
@@ -152,7 +152,7 @@ window.ML = (() => {
   STATIONS.push({ id: 'kanji', line: 'X', code: '漢', name: 'Kanji Hall', jp: 'かんじの ひろば', kind: 'kanji' });
   STATIONS.push({ id: 'verbs', line: 'X', code: '活', name: 'Verb Forge', jp: 'どうしの かたち', kind: 'verbs' });
   STATIONS.push({ id: 'exam', line: 'X', code: '試', name: 'N5 Mock Exam', jp: 'もぎしけん', kind: 'exam' });
-  for (let L = 126; L <= 150; L++) STATIONS.push({ id: 'L' + L, L, line: 'S', code: String(L - 100), name: N4_TITLES[L][0], jp: N4_TITLES[L][1], kind: 'lesson' });
+  for (let L = 126; L <= 150; L++) STATIONS.push({ id: 'L' + L, L, line: 'S', code: String(L - 125).padStart(2, '0'), name: N4_TITLES[L][0], jp: N4_TITLES[L][1], kind: 'lesson' });
   STATIONS.push({ id: 'kanji4', line: 'SX', code: '漢', name: 'N4 Kanji Hall', jp: 'かんじの ひろば', kind: 'kanji' });
   STATIONS.push({ id: 'verbs4', line: 'SX', code: '活', name: 'N4 Verb Forge', jp: 'どうしの かたち', kind: 'verbs' });
   STATIONS.push({ id: 'exam4', line: 'SX', code: '試', name: 'N4 Mock Exam', jp: 'もぎしけん', kind: 'exam' });

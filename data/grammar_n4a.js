@@ -1,4 +1,4 @@
-// Grammar data N4 part A: Minna no Nihongo II syllabus, Lessons 26–37 (internal lesson 126–137).
+// Grammar data N4 part A: syllabus, Lessons 1–37 (internal lesson 126–137).
 // All sentences, explanations and drills are original. Each lesson block holds its grammar points,
 // study cards and lesson guide.
 
@@ -499,7 +499,7 @@ window.LESSON_GUIDE = Object.assign(window.LESSON_GUIDE || {}, {
   127: {
     can: ["Say what you can and can't do", "Say what you can see or hear", "Say something has been built or is ready", "Say only with しか"],
     first: ["かいます", "みえます", "きこえます", "ひらきます", "たてます", "しんぱい", "ペット", "けしき", "むかし", "どうぐ", "ほかの", "はっきり"],
-    tip: "Drill the potential forms until they are automatic, because Lesson 36 builds on them."
+    tip: "Drill the potential forms until they are automatic, because Lesson 11 builds on them."
   }
 });
 

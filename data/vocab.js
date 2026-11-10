@@ -1,4 +1,4 @@
-// Minna no Nihongo L1–20 vocab, built from the "Learning Japanese" notes (+ L0 greetings, L11 counters, L20 filled in)
+// L1–20 vocab, built from the "Learning Japanese" notes (+ L0 greetings, L11 counters, L20 filled in)
 window.VOCAB = [
 {
 "L": 1,
@@ -1838,13 +1838,13 @@ window.VOCAB = [
 },
 {
 "L": 4,
-"kana": "アップルぎんこう",
+"kana": "あおばぎんこう",
 "kanji": "アップル銀行",
-"ro": "Appuru-ginkō",
+"ro": "Aoba-ginkō",
 "en": "fictitious bank",
 "pos": "n",
 "cat": "proper",
-"id": "4:アップルぎんこう"
+"id": "4:あおばぎんこう"
 },
 {
 "L": 5,

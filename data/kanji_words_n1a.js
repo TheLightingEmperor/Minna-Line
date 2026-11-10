@@ -309,7 +309,7 @@ window.KANJI_WORDS = Object.assign(window.KANJI_WORDS || {}, {
   "柄": { words: [ { w: "人柄", r: "ひとがら", m: "personality" }, { w: "銘柄", r: "めいがら", m: "brand" }, { w: "横柄", r: "おうへい", m: "arrogant" } ] },
   "驚": { words: [ { w: "驚く", r: "おどろく", m: "to be surprised" }, { w: "驚異", r: "きょうい", m: "wonder" }, { w: "驚き", r: "おどろき", m: "surprise" } ] },
   "麻": { words: [ { w: "麻薬", r: "まやく", m: "narcotic" }, { w: "麻酔", r: "ますい", m: "anesthesia" }, { w: "麻痺", r: "まひ", m: "paralysis" } ] },
-  "李": { words: [ { w: "李", r: "すもも", m: "plum" }, { w: "李氏", r: "りし", m: "Mr. Lee" }, { w: "行李", r: "こうり", m: "wicker trunk" } ] },
+  "李": { words: [ { w: "李", r: "すもも", m: "plum" }, { w: "李氏", r: "りし", m: "Mr. Park" }, { w: "行李", r: "こうり", m: "wicker trunk" } ] },
   "浩": { words: [ { w: "浩然", r: "こうぜん", m: "vast and free" }, { w: "浩瀚", r: "こうかん", m: "voluminous" }, { w: "浩", r: "ひろし", m: "Hiroshi (name)" } ] },
   "剤": { words: [ { w: "薬剤", r: "やくざい", m: "medicine" }, { w: "洗剤", r: "せんざい", m: "detergent" }, { w: "錠剤", r: "じょうざい", m: "tablet" } ] },
   "瀬": { words: [ { w: "瀬戸際", r: "せとぎわ", m: "critical moment" }, { w: "瀬", r: "せ", m: "rapids" }, { w: "立つ瀬", r: "たつせ", m: "standing" } ] },

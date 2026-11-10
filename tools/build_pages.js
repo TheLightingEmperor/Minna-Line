@@ -16,7 +16,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const ruby = (s) => esc(s).replace(/\{([^|}]+)\|([^}]+)\}/g, '<ruby>$1<rt>$2</rt></ruby>');
 const plain = (s) => String(s ?? '').replace(/\{([^|}]+)\|[^}]+\}/g, '$1');
 const levelOf = (L) => (L >= 401 ? 'N1' : L >= 301 ? 'N2' : L >= 201 ? 'N3' : L >= 126 ? 'N4' : 'N5');
-const unitName = (L) => (L <= 25 ? `Lesson ${L}` : L <= 150 ? `Lesson ${L - 100}` : `Unit ${L % 100}`);
+const unitName = (L) => (L <= 25 ? `Lesson ${L}` : L <= 150 ? `Lesson ${L - 125}` : `Unit ${L % 100}`);
 const station = (L) => 'L' + L;
 const slug = (g) => (g.id.toLowerCase() + '-' + String(g.meaning || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 44)).replace(/-$/, '');
 const GR = (window.GRAMMAR || []).map((g) => { const st = STUDY[g.id] || {}; return { ...g, title: st.title || g.title, meaning: st.meaning || g.meaning, examples: st.examples || g.examples, st }; }).sort((a, b) => a.lesson - b.lesson);

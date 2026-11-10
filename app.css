@@ -978,3 +978,8 @@ code { font: 12.5px ui-monospace, monospace; background: var(--bg); border: 1px 
 @media (max-width: 560px) { .codecard { grid-template-columns: minmax(0, 1fr); } }
 .ccodein { font-family: var(--f-pop); font-size: 24px; letter-spacing: .2em; text-transform: uppercase; text-align: center; }
 select.input { appearance: auto; }
+
+/* placement quiz */
+.plprompt { font-family: var(--f-glyph); font-size: clamp(26px, 6vw, 40px); text-align: center; line-height: 1.7; padding: 8px 0; }
+.plprompt rt { font-size: .42em; color: var(--muted); }
+.placement .qcard.result { gap: 14px; }

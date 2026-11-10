@@ -1,5 +1,5 @@
 // Reading and conversation practice for Minna Line, Lessons 14–25.
-// All texts are original (not taken from Minna no Nihongo). Kanji are written {漢字|かな}.
+// All texts are original. Kanji are written {漢字|かな}.
 window.READING = (window.READING || []).concat([
 
   // ───────────────────────── LESSON 14 ─────────────────────────

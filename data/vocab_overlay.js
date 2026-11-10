@@ -1,6 +1,6 @@
 // Study-ready overlay for data/vocab.js. Keys are `${L}:${kana}` from vocab.js; never change either.
 // Every entry has grp; other fields appear only where they change the base entry.
-// VOCAB_ADD holds Minna no Nihongo I words (and words from the learner's notes) missing from vocab.js and vocab_n5extra.js.
+// VOCAB_ADD holds words (and words from the learner's notes) missing from vocab.js and vocab_n5extra.js.
 window.VOCAB_OVERLAY = {
   // ───── Lesson 0: greetings and classroom language ─────
   "0:おはよう ございます": { grp: "phrases", note: "to friends: おはよう" },
@@ -35,7 +35,7 @@ window.VOCAB_OVERLAY = {
   "1:きょうし": { grp: "people", en: "teacher, instructor", note: "for your own profession" },
   "1:がくせい": { grp: "people" },
   "1:かいしゃいん": { grp: "people" },
-  "1:しゃいん": { grp: "people", en: "employee", note: "after a company name: IMCの しゃいん" },
+  "1:しゃいん": { grp: "people", en: "employee", note: "after a company name: ABCの しゃいん" },
   "1:ぎんこういん": { grp: "people" },
   "1:いしゃ": { grp: "people" },
   "1:けんきゅうしゃ": { grp: "people", en: "researcher, scholar" },
@@ -239,7 +239,7 @@ window.VOCAB_OVERLAY = {
   "4:やまとびじゅつかん": { grp: "names", en: "Yamato Art Museum (fictional)" },
   "4:おおさかデパート": { grp: "names", en: "Osaka Department Store (fictional)" },
   "4:みどりとしょかん": { grp: "names", en: "Midori Library (fictional)" },
-  "4:アップルぎんこう": { grp: "names", en: "Apple Bank (fictional)" },
+  "4:あおばぎんこう": { grp: "names", en: "Aoba Bank (fictional)" },
 
   // ───── Lesson 5 ─────
   "5:いきます": { grp: "verbs", use: "がっこうへ いきます", useEn: "go to school" },

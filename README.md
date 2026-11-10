@@ -1,6 +1,6 @@
 # Minna Line
 
-A study game for Japanese from JLPT N5 to N1: *Minna no Nihongo* Lessons 1–50, then 24 themed units each for N3, N2 and N1 (the Autumn, Winter and Starlight Lines), with a Reading Academy at each of those levels. Each lesson is a station on a train line. Mochi, the black cat conductor, rides along with you. Beat a station's yokai to collect its stamp.
+A study game for Japanese from JLPT N5 to N1: 25 stations each for N5 and N4 (the Spring and Summer Lines), then 24 themed units each for N3, N2 and N1 (the Autumn, Winter and Starlight Lines), with a Reading Academy at each of those levels. Each lesson is a station on a train line. Mochi, the black cat conductor, rides along with you. Beat a station's yokai to collect its stamp.
 
 ## What's inside
 
@@ -60,7 +60,7 @@ It's a static site, so any static host works. `netlify.toml` publishes the repo 
 | `sw.js`, `manifest.webmanifest`, `icons/` | Installable app shell and offline support |
 | `vendor/supabase.js` | Supabase client library (MIT) |
 | `data/guide_extra.js` | Guidebook pages for travel Japanese and sound words |
-| `data/vocab.js` | Lessons 0–20 vocab, built from my lesson notes |
+| `data/vocab.js` | Core vocabulary for stations 0–20 |
 | `data/vocab_n5extra.js` | Extra N5 words (Lessons 21–25 and general N5) |
 | `data/grammar_a.js`, `data/grammar_b.js` | Grammar points with explanations, examples and drills (Lessons 1–25) |
 | `data/kanji.js` | N5 kanji with readings and example words |
@@ -70,9 +70,9 @@ It's a static site, so any static host works. `netlify.toml` publishes the repo 
 | `data/reading_a.js`, `data/reading_b.js` | Conversations and reading texts with questions (Lessons 1–25) |
 | `data/guide.js` | Guidebook pages |
 | `data/strokes.js` | Stroke order paths for kana and N5 kanji, from KanjiVG |
-| `tools/` | Scripts that turn the Obsidian lesson notes into `data/vocab.js` |
+| `tools/` | Scripts that rebuild `data/vocab.js` from a folder of word-list notes, and the public-page generator |
 
-## Rebuilding vocab from the lesson notes
+## Rebuilding the core vocab from notes
 
 ```bash
 cd tools
@@ -89,4 +89,4 @@ Stroke order data in `data/strokes.js` comes from [KanjiVG](https://kanjivg.taga
 
 Kanji readings, meanings and stroke counts in `data/kanji_more.js` come from [KANJIDIC](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) (EDRDG), CC BY-SA 4.0, via the kanji-data project. JLPT kanji levels are the commonly used unofficial lists.
 
-All N4 and N3 words lists, sentences and passages are original to this project. No textbook content is reproduced.
+Every explanation, example sentence, dialogue and passage is original to this project. It is not affiliated with, or derived from the text of, any textbook; characters and company names in the examples are invented.

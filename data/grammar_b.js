@@ -1,4 +1,4 @@
-// Grammar data B: Minna no Nihongo I, Lessons 11–20 + remaining N5 grammar (L21–25)
+// Grammar data B: Lessons 11–20 + remaining N5 grammar (L21–25)
 window.GRAMMAR = (window.GRAMMAR || []).concat([
 
   // ───────────────────────── LESSON 11 ─────────────────────────
@@ -358,12 +358,12 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "is doing V (right now)",
     explain: "て-form + います describes an action in progress: いま でんわを かけて います = I'm on the phone now. The negative is ～て いません, the question ～て いますか. It's often used with いま.",
     examples: [
-      { jp: "ミラーさんは いま でんわを かけて います。", ro: "Mirā-san wa ima denwa o kakete imasu.", en: "Mr. Miller is on the phone now." },
+      { jp: "ベイカーさんは いま でんわを かけて います。", ro: "Beikā-san wa ima denwa o kakete imasu.", en: "Mr. Baker is on the phone now." },
       { jp: "いま なにを して いますか。", ro: "Ima nani o shite imasu ka.", en: "What are you doing now?" },
       { jp: "こどもたちは こうえんで あそんで います。", ro: "Kodomotachi wa kōen de asonde imasu.", en: "The children are playing in the park." }
     ],
     drills: [
-      { type: "fill", jp: "ミラーさんは いま でんわを ＿＿ います。", answer: "かけて", options: ["かけて", "かけって", "かいて", "かけ"], en: "Mr. Miller is on the phone now." },
+      { type: "fill", jp: "ベイカーさんは いま でんわを ＿＿ います。", answer: "かけて", options: ["かけて", "かけって", "かいて", "かけ"], en: "Mr. Baker is on the phone now." },
       { type: "fill", jp: "いま なにを ＿＿ いますか。", answer: "して", options: ["して", "しって", "きて", "すて"], en: "What are you doing now?" },
       { type: "fill", jp: "こどもたちは こうえんで ＿＿ います。", answer: "あそんで", options: ["あそんで", "あそびて", "あそって", "あそいで"], en: "The children are playing in the park." },
       { type: "choose", q: "What does いま ほんを よんで います mean?", answer: "I'm reading a book now.", options: ["I'm reading a book now.", "I'm going to read a book now.", "I read a book earlier.", "Please read a book now."] },
@@ -400,7 +400,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     examples: [
       { jp: "あめが ふって います。", ro: "Ame ga futte imasu.", en: "It's raining." },
       { jp: "あ、バスが きました。", ro: "A, basu ga kimashita.", en: "Oh, the bus has come." },
-      { jp: "サントスさんが いませんね。", ro: "Santosu-san ga imasen ne.", en: "Mr. Santos isn't here, is he." }
+      { jp: "ロペスさんが いませんね。", ro: "Ropesu-san ga imasen ne.", en: "Mr. Lopez isn't here, is he." }
     ],
     drills: [
       { type: "fill", jp: "そとは あめ＿＿ ふって います。", answer: "が", options: ["が", "を", "に", "で"], en: "It's raining outside." },
@@ -459,13 +459,13 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     explain: "て います also describes a state that results from an action: けっこんして います (am married), すんで います (live), しって います (know). It also describes habits and jobs: この かいしゃは カメラを つくって います. Gotcha: 'I don't know' is しりません, NOT しって いません. すんで います takes に for the place.",
     examples: [
       { jp: "わたしは おおさかに すんで います。", ro: "Watashi wa Ōsaka ni sunde imasu.", en: "I live in Osaka." },
-      { jp: "サントスさんを しって いますか。…いいえ、しりません。", ro: "Santosu-san o shitte imasu ka. … Iie, shirimasen.", en: "Do you know Mr. Santos? — No, I don't." },
-      { jp: "ミラーさんは けっこんして います。", ro: "Mirā-san wa kekkon shite imasu.", en: "Mr. Miller is married." }
+      { jp: "ロペスさんを しって いますか。…いいえ、しりません。", ro: "Ropesu-san o shitte imasu ka. … Iie, shirimasen.", en: "Do you know Mr. Lopez? — No, I don't." },
+      { jp: "ベイカーさんは けっこんして います。", ro: "Beikā-san wa kekkon shite imasu.", en: "Mr. Baker is married." }
     ],
     drills: [
       { type: "fill", jp: "わたしは とうきょうに ＿＿ います。", answer: "すんで", options: ["すんで", "すみて", "すって", "すいて"], en: "I live in Tokyo." },
       { type: "fill", jp: "やまださんの でんわばんごうを しって いますか。…いいえ、＿＿。", answer: "しりません", options: ["しりません", "しって いません", "しりたくないです", "しって ください"], en: "Do you know Mr. Yamada's phone number? — No, I don't." },
-      { type: "fill", jp: "ミラーさんは ＿＿ いますか。…いいえ、どくしんです。", answer: "けっこんして", options: ["けっこんして", "けっこんしって", "けっこんしで", "けっこんきて"], en: "Is Mr. Miller married? — No, he's single." },
+      { type: "fill", jp: "ベイカーさんは ＿＿ いますか。…いいえ、どくしんです。", answer: "けっこんして", options: ["けっこんして", "けっこんしって", "けっこんしで", "けっこんきて"], en: "Is Mr. Baker married? — No, he's single." },
       { type: "choose", q: "Which particle goes with すんで います for the place?", answer: "に", options: ["に", "で", "を", "へ"] },
       { type: "choose", q: "Best meaning: いもうとは だいがくで けいざいを べんきょうして います。", answer: "My younger sister studies economics at university.", options: ["My younger sister studies economics at university.", "My younger sister studied economics at university.", "My younger sister wants to study economics.", "My younger sister will study economics next year."] },
       { type: "order", tiles: ["この", "かいしゃは", "カメラを", "つくって", "います"], en: "This company makes cameras." }
@@ -519,17 +519,17 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "joining adjectives and nouns ('… and …')",
     explain: "To join descriptions: い-adjective → drop い + くて (わかい → わかくて); な-adjective or noun → add で (しずかで, がくせいで). いい becomes よくて. Gotcha: only join qualities pointing the same way; for a contrast ('cheap BUT tasty') use が instead.",
     examples: [
-      { jp: "ミラーさんは わかくて、げんきです。", ro: "Mirā-san wa wakakute, genki desu.", en: "Mr. Miller is young and energetic." },
+      { jp: "ベイカーさんは わかくて、げんきです。", ro: "Beikā-san wa wakakute, genki desu.", en: "Mr. Baker is young and energetic." },
       { jp: "ならは しずかで、きれいな まちです。", ro: "Nara wa shizuka de, kirei na machi desu.", en: "Nara is a quiet, beautiful town." },
-      { jp: "カリナさんは インドネシアじんで、きょうとだいがくの りゅうがくせいです。", ro: "Karina-san wa Indoneshia-jin de, Kyōto Daigaku no ryūgakusei desu.", en: "Karina is Indonesian and an exchange student at Kyoto University." }
+      { jp: "サリさんは インドネシアじんで、きょうとだいがくの りゅうがくせいです。", ro: "Sari-san wa Indoneshia-jin de, Kyōto Daigaku no ryūgakusei desu.", en: "Sari is Indonesian and an exchange student at Kyoto University." }
     ],
     drills: [
       { type: "fill", jp: "この へやは ＿＿、あかるいです。", answer: "ひろくて", options: ["ひろくて", "ひろいで", "ひろいくて", "ひろくで"], en: "This room is spacious and bright." },
       { type: "fill", jp: "ならは ＿＿、きれいな まちです。", answer: "しずかで", options: ["しずかで", "しずかくて", "しずかの", "しずかって"], en: "Nara is a quiet, beautiful town." },
-      { type: "fill", jp: "カリナさんは ＿＿、だいがくの りゅうがくせいです。", answer: "インドネシアじんで", options: ["インドネシアじんで", "インドネシアじんくて", "インドネシアじんです", "インドネシアじんな"], en: "Karina is Indonesian and a university exchange student." },
+      { type: "fill", jp: "サリさんは ＿＿、だいがくの りゅうがくせいです。", answer: "インドネシアじんで", options: ["インドネシアじんで", "インドネシアじんくて", "インドネシアじんです", "インドネシアじんな"], en: "Sari is Indonesian and a university exchange student." },
       { type: "choose", q: "How do you join いい with another adjective?", answer: "よくて", options: ["よくて", "いくて", "いいで", "よいで"] },
       { type: "order", tiles: ["この", "カメラは", "かるくて", "べんりです"], en: "This camera is light and convenient." },
-      { type: "order", tiles: ["サントスさんは", "ブラジルじんで", "かいしゃいんです"], en: "Mr. Santos is Brazilian and a company employee." }
+      { type: "order", tiles: ["ロペスさんは", "ブラジルじんで", "かいしゃいんです"], en: "Mr. Lopez is Brazilian and a company employee." }
     ]
   },
   {
@@ -567,7 +567,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
       { type: "fill", jp: "マリアさんは かみ＿＿ ながいです。", answer: "が", options: ["が", "を", "に", "で"], en: "Maria has long hair." },
       { type: "fill", jp: "とうきょうは ひと＿＿ おおいです。", answer: "が", options: ["が", "を", "に", "で"], en: "Tokyo has a lot of people." },
       { type: "fill", jp: "たかしさんは せが ＿＿です。", answer: "たかい", options: ["たかい", "ながい", "ひろい", "おもい"], en: "Takashi is tall." },
-      { type: "choose", q: "What does サントスさんは めが おおきいです mean?", answer: "Mr. Santos has big eyes.", options: ["Mr. Santos has big eyes.", "Mr. Santos is big.", "Mr. Santos's eyes are bigger than mine.", "Mr. Santos looks at big things."] },
+      { type: "choose", q: "What does ロペスさんは めが おおきいです mean?", answer: "Mr. Lopez has big eyes.", options: ["Mr. Lopez has big eyes.", "Mr. Lopez is big.", "Mr. Lopez's eyes are bigger than mine.", "Mr. Lopez looks at big things."] },
       { type: "order", tiles: ["おおさかは", "たべものが", "おいしいです"], en: "The food in Osaka is delicious." },
       { type: "order", tiles: ["この", "まちは", "みどりが", "おおいです"], en: "This town has a lot of greenery." }
     ]
@@ -742,13 +742,13 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "can do / be able to",
     explain: "Use できます for ability or possibility. With a noun: にほんごが できます. With a verb, turn it into a noun with dictionary form + こと: かんじを よむ ことが できます. Gotcha: できます takes が, not を. It can also mean something is possible in a place: ここで カードで はらう ことが できます.",
     examples: [
-      { jp: "ミラーさんは かんじを よむ ことが できます。", ro: "Mirā-san wa kanji o yomu koto ga dekimasu.", en: "Mr. Miller can read kanji." },
+      { jp: "ベイカーさんは かんじを よむ ことが できます。", ro: "Beikā-san wa kanji o yomu koto ga dekimasu.", en: "Mr. Baker can read kanji." },
       { jp: "わたしは にほんごが できます。", ro: "Watashi wa nihongo ga dekimasu.", en: "I can speak Japanese." },
       { jp: "ここで カードで はらう ことが できます。", ro: "Koko de kādo de harau koto ga dekimasu.", en: "You can pay by card here." }
     ],
     drills: [
       { type: "fill", jp: "わたしは ピアノを ＿＿ ことが できます。", answer: "ひく", options: ["ひく", "ひき", "ひいて", "ひきます"], en: "I can play the piano." },
-      { type: "fill", jp: "ミラーさんは にほんご＿＿ できます。", answer: "が", options: ["が", "を", "に", "で"], en: "Mr. Miller can speak Japanese." },
+      { type: "fill", jp: "ベイカーさんは にほんご＿＿ できます。", answer: "が", options: ["が", "を", "に", "で"], en: "Mr. Baker can speak Japanese." },
       { type: "fill", jp: "この ホテルで おかねを ＿＿ ことが できますか。", answer: "かえる", options: ["かえる", "かえ", "かえて", "かえます"], en: "Can I exchange money at this hotel?" },
       { type: "choose", q: "What does くるまを うんてんする ことが できます mean?", answer: "I can drive a car.", options: ["I can drive a car.", "I want to drive a car.", "I drove a car.", "I have to drive a car."] },
       { type: "choose", q: "Which is correct?", answer: "かんじを かく ことが できます。", options: ["かんじを かく ことが できます。", "かんじを かきます ことが できます。", "かんじを かく ことを できます。", "かんじを かいて ことが できます。"] },
@@ -979,14 +979,14 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     explain: "Put a plain-form sentence before と おもいます to give an opinion or guess: あした あめが ふると おもいます. Nouns and な-adjectives need だ: かんたんだと おもいます. To say 'I don't think…', Japanese usually makes the inner clause negative: こないと おもいます. Ask someone's opinion with ～に ついて どう おもいますか.",
     examples: [
       { jp: "あした あめが ふると おもいます。", ro: "Ashita ame ga furu to omoimasu.", en: "I think it will rain tomorrow." },
-      { jp: "ミラーさんは もう うちへ かえったと おもいます。", ro: "Mirā-san wa mō uchi e kaetta to omoimasu.", en: "I think Mr. Miller has already gone home." },
+      { jp: "ベイカーさんは もう うちへ かえったと おもいます。", ro: "Beikā-san wa mō uchi e kaetta to omoimasu.", en: "I think Mr. Baker has already gone home." },
       { jp: "にほんは ぶっかが たかいと おもいます。", ro: "Nihon wa bukka ga takai to omoimasu.", en: "I think prices in Japan are high." }
     ],
     drills: [
       { type: "fill", jp: "あしたは あめが ＿＿と おもいます。", answer: "ふる", options: ["ふる", "ふります", "ふって", "ふり"], en: "I think it will rain tomorrow." },
       { type: "fill", jp: "この もんだいは かんたん＿＿と おもいます。", answer: "だ", options: ["だ", "な", "に", "の"], en: "I think this problem is easy." },
       { type: "fill", jp: "たなかさんは もう かえった＿＿ おもいます。", answer: "と", options: ["と", "を", "が", "に"], en: "I think Mr. Tanaka has already gone home." },
-      { type: "choose", q: "Which says 'I think Mr. Miller won't come'?", answer: "ミラーさんは こないと おもいます。", options: ["ミラーさんは こないと おもいます。", "ミラーさんは こないだと おもいます。", "ミラーさんは きないと おもいます。", "ミラーさんは こないですと おもいます。"] },
+      { type: "choose", q: "Which says 'I think Mr. Baker won't come'?", answer: "ベイカーさんは こないと おもいます。", options: ["ベイカーさんは こないと おもいます。", "ベイカーさんは こないだと おもいます。", "ベイカーさんは きないと おもいます。", "ベイカーさんは こないですと おもいます。"] },
       { type: "choose", q: "What does どう おもいますか mean?", answer: "What do you think?", options: ["What do you think?", "How do you do?", "Why do you think so?", "What did you say?"] },
       { type: "order", tiles: ["にほんは", "ぶっかが", "たかいと", "おもいます"], en: "I think prices in Japan are high." }
     ]
@@ -996,14 +996,14 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     lesson: 21,
     title: "「～」と いいます / plain form + と いいます",
     meaning: "say ~ / say that ~",
-    explain: "To quote words exactly, put them in 「」 + と いいます: 「いただきます」と いいます. To report what someone said indirectly, use the plain form + と いいました: ミラーさんは らいしゅう いくと いいました. The quote particle is always と.",
+    explain: "To quote words exactly, put them in 「」 + と いいます: 「いただきます」と いいます. To report what someone said indirectly, use the plain form + と いいました: ベイカーさんは らいしゅう いくと いいました. The quote particle is always と.",
     examples: [
       { jp: "ねる まえに、「おやすみなさい」と いいます。", ro: "Neru mae ni, 'Oyasuminasai' to iimasu.", en: "Before going to bed, we say 'Good night'." },
-      { jp: "ミラーさんは らいしゅう とうきょうへ しゅっちょうすると いいました。", ro: "Mirā-san wa raishū Tōkyō e shutchō suru to iimashita.", en: "Mr. Miller said he's going on a business trip to Tokyo next week." }
+      { jp: "ベイカーさんは らいしゅう とうきょうへ しゅっちょうすると いいました。", ro: "Beikā-san wa raishū Tōkyō e shutchō suru to iimashita.", en: "Mr. Baker said he's going on a business trip to Tokyo next week." }
     ],
     drills: [
       { type: "fill", jp: "ごはんを たべる まえに、「いただきます」＿＿ いいます。", answer: "と", options: ["と", "を", "が", "に"], en: "Before eating, we say 'Itadakimasu'." },
-      { type: "fill", jp: "ミラーさんは らいしゅう おおさかへ ＿＿と いいました。", answer: "いく", options: ["いく", "いって", "いき", "いくだ"], en: "Mr. Miller said he's going to Osaka next week." },
+      { type: "fill", jp: "ベイカーさんは らいしゅう おおさかへ ＿＿と いいました。", answer: "いく", options: ["いく", "いって", "いき", "いくだ"], en: "Mr. Baker said he's going to Osaka next week." },
       { type: "choose", q: "What do Japanese people say before eating?", answer: "「いただきます」と いいます。", options: ["「いただきます」と いいます。", "「ごちそうさま」と いいます。", "「おやすみなさい」と いいます。", "「いってきます」と いいます。"] },
       { type: "choose", q: "Which reports 'Ms. Sato said she is busy'?", answer: "さとうさんは いそがしいと いいました。", options: ["さとうさんは いそがしいと いいました。", "さとうさんは いそがしいを いいました。", "さとうさんは いそがしいだと いいました。", "さとうさんは いそがしく いいました。"] },
       { type: "order", tiles: ["これは", "にほんごで", "なんと", "いいますか"], en: "What is this called in Japanese?" }
@@ -1022,7 +1022,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     drills: [
       { type: "fill", jp: "あしたの パーティーに ＿＿でしょう？", answer: "いく", options: ["いく", "いって", "いき", "いくだ"], en: "You're going to tomorrow's party, right?" },
       { type: "fill", jp: "ほっかいどうは ＿＿でしょう？", answer: "さむかった", options: ["さむかった", "さむいだった", "さむくて", "さむかったです"], en: "Hokkaido was cold, right?" },
-      { type: "fill", jp: "カリナさんは がくせい＿＿？", answer: "でしょう", options: ["でしょう", "だでしょう", "なでしょう", "にでしょう"], en: "Karina is a student, right?" },
+      { type: "fill", jp: "サリさんは がくせい＿＿？", answer: "でしょう", options: ["でしょう", "だでしょう", "なでしょう", "にでしょう"], en: "Sari is a student, right?" },
       { type: "choose", q: "What does つかれたでしょう？ mean?", answer: "You must be tired, right?", options: ["You must be tired, right?", "I'm tired.", "Are you going to get tired?", "Don't get tired."] },
       { type: "order", tiles: ["にほんの", "なつは", "あついでしょう"], en: "Summer in Japan is hot, right?" }
     ]
@@ -1034,14 +1034,14 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
     meaning: "the N that (someone) does / did",
     explain: "In Japanese, a whole plain-form clause goes BEFORE the noun it describes: わたしが すんで いる うち = the house (that) I live in. The subject inside the clause takes が, not は. The verb must be plain form (たべた パン, not たべました パン).",
     examples: [
-      { jp: "これは ミラーさんが すんで いる うちです。", ro: "Kore wa Mirā-san ga sunde iru uchi desu.", en: "This is the house Mr. Miller lives in." },
+      { jp: "これは ベイカーさんが すんで いる うちです。", ro: "Kore wa Beikā-san ga sunde iru uchi desu.", en: "This is the house Mr. Baker lives in." },
       { jp: "わたしが きのう みた えいがは おもしろかったです。", ro: "Watashi ga kinō mita eiga wa omoshirokatta desu.", en: "The movie I saw yesterday was interesting." },
       { jp: "めがねを かけて いる ひとは だれですか。", ro: "Megane o kakete iru hito wa dare desu ka.", en: "Who is the person wearing glasses?" }
     ],
     drills: [
       { type: "fill", jp: "これは わたし＿＿ かいた えです。", answer: "が", options: ["が", "は", "を", "に"], en: "This is a picture I drew." },
       { type: "fill", jp: "これは きのう デパートで ＿＿ くつです。", answer: "かった", options: ["かった", "かいました", "かって", "かいた"], en: "These are the shoes I bought at the department store yesterday." },
-      { type: "fill", jp: "ミラーさんが ＿＿ うちは どこですか。", answer: "すんで いる", options: ["すんで いる", "すんで います", "すむの", "すみて いる"], en: "Where is the house Mr. Miller lives in?" },
+      { type: "fill", jp: "ベイカーさんが ＿＿ うちは どこですか。", answer: "すんで いる", options: ["すんで いる", "すんで います", "すむの", "すみて いる"], en: "Where is the house Mr. Baker lives in?" },
       { type: "choose", q: "What does あそこで しゃしんを とって いる ひと mean?", answer: "the person taking photos over there", options: ["the person taking photos over there", "the photos that person took over there", "a person who took photos there long ago", "the person who will take photos over there"] },
       { type: "choose", q: "Which is 'the bread I ate'?", answer: "わたしが たべた パン", options: ["わたしが たべた パン", "わたしは たべた パン", "パン わたしが たべた", "わたしが たべました パン"] },
       { type: "order", tiles: ["わたしが", "すんで いる", "うちは", "えきの", "ちかくです"], en: "The house I live in is near the station." },

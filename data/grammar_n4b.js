@@ -1,4 +1,4 @@
-// Grammar data N4 part B: Minna no Nihongo II, Lessons 38–50 (internal lessons 138–150).
+// Grammar data N4 part B: Lessons 13–50 (internal lessons 138–150).
 // All sentences and explanations are original to this project.
 window.GRAMMAR = (window.GRAMMAR || []).concat([
 
@@ -1091,7 +1091,7 @@ window.GRAMMAR = (window.GRAMMAR || []).concat([
 
 window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
 
-  // ───────────── Lesson 38 ─────────────
+  // ───────────── Lesson 13 ─────────────
   "L138-1": {
     formula: ["V plain + のは + adjective"],
     points: ["の turns a whole verb phrase into a noun.", "Use the plain form before の, never the ます form.", "The adjective after は says what the action is like."],
@@ -1205,7 +1205,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "Build it backwards: start with the fact you want to stress, then add the rest before ～のは."
   },
 
-  // ───────────── Lesson 39 ─────────────
+  // ───────────── Lesson 14 ─────────────
   "L139-1": {
     formula: ["V て, feeling or result", "V なくて, feeling or result", "いA くて / なA で, feeling or result"],
     points: ["The first half causes the second half.", "The second half is a feeling, a state or something that just happened.", "Requests, plans and invitations can't follow this ～て.", "Negative verbs use なくて, not ないで."],
@@ -1297,7 +1297,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "Use ので with your boss and から with your friends."
   },
 
-  // ───────────── Lesson 40 ─────────────
+  // ───────────── Lesson 15 ─────────────
   "L140-1": {
     formula: ["Question word + V / いA plain + か", "Question word + なA / N + か"],
     points: ["The inner question uses plain forms, not です or ます.", "Nouns and な-adjectives drop だ before か.", "A comma usually follows か.", "Next comes a verb like しりません, しらべます or ききます."],
@@ -1403,7 +1403,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "Pair it with units you already know: ～キロ, ～グラム, ～センチ, ～メートル."
   },
 
-  // ───────────── Lesson 41 ─────────────
+  // ───────────── Lesson 16 ─────────────
   "L141-1": {
     formula: ["N1 は + N2 に + N3 を + いただきます", "N1 が + わたしに + N3 を + くださいます"],
     points: ["Receiver is the subject of いただきます.", "Giver is the subject of くださいます.", "The ます form is くださいます, not くださります."],
@@ -1515,7 +1515,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "Before you say ～て やります, check the receiver is younger than you or is a pet."
   },
 
-  // ───────────── Lesson 42 ─────────────
+  // ───────────── Lesson 17 ─────────────
   "L142-1": {
     formula: ["V dictionary + ために, V"],
     points: ["ために marks a goal you chose yourself.", "Both halves have the same doer.", "Potential and negative verbs use ように instead."],
@@ -1582,7 +1582,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "Describe the things on your desk: これは ～のに つかいます。"
   },
 
-  // ───────────── Lesson 43 ─────────────
+  // ───────────── Lesson 18 ─────────────
   "L143-1": {
     formula: ["V ます-stem + そうです"],
     points: ["It is based on what you can see now.", "Remove ます, then add そうです.", "Good for warnings and quick reactions."],
@@ -1672,7 +1672,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "Use it before you step out of a meeting or class: ちょっと ～て きます。"
   },
 
-  // ───────────── Lesson 44 ─────────────
+  // ───────────── Lesson 19 ─────────────
   "L144-1": {
     formula: ["V ます-stem + すぎます", "いA (drop い) + すぎます", "なA + すぎます"],
     points: ["It usually shows a problem or a complaint.", "すぎます is a Group 2 verb, so it conjugates like たべます.", "いい becomes よすぎます."],
@@ -1805,7 +1805,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "これに します is all you need to say in a shop."
   },
 
-  // ───────────── Lesson 45 ─────────────
+  // ───────────── Lesson 20 ─────────────
   "L145-1": {
     formula: ["V / いA plain + ばあいは", "なA な + ばあいは", "N の + ばあいは"],
     points: ["It introduces a situation that may or may not happen.", "The second half is usually what to do.", "It sounds more formal than ～たら."],
@@ -1855,7 +1855,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
   },
   "L145-3": {
     formula: ["Plain + のに + fact", "～が + anything", "～ても + anything"],
-    points: ["のに can't be followed by a wish, request or plan.", "が is the neutral 'but'.", "～ても is for 'even if', often about the future.", "のに for purpose comes from Lesson 42."],
+    points: ["のに can't be followed by a wish, request or plan.", "が is the neutral 'but'.", "～ても is for 'even if', often about the future.", "のに for purpose comes from Lesson 17."],
     tables: [
       {
         title: "Three ways to say but",
@@ -1883,7 +1883,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "のに reports what happened. To say what you want, use が."
   },
 
-  // ───────────── Lesson 46 ─────────────
+  // ───────────── Lesson 21 ─────────────
   "L146-1": {
     formula: ["V dictionary + ところです"],
     points: ["ところ here means a point in time, not a place.", "The action hasn't started yet.", "これから and いまから often come with it."],
@@ -1994,7 +1994,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "Add the reason first with ～から, then finish with ～はずです."
   },
 
-  // ───────────── Lesson 47 ─────────────
+  // ───────────── Lesson 22 ─────────────
   "L147-1": {
     formula: ["Plain + そうです", "N に よると、plain + そうです"],
     points: ["The information comes from someone else.", "Nouns and な-adjectives keep だ.", "そうです never changes to the past or negative."],
@@ -2092,7 +2092,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "Walk past a bakery and say it: いい においが します。"
   },
 
-  // ───────────── Lesson 48 ─────────────
+  // ───────────── Lesson 23 ─────────────
   "L148-1": {
     formula: ["Group 1: あ-row + せます", "Group 2: stem + させます", "Group 3: こさせます / させます"],
     points: ["Verbs ending in います change to わせます.", "Every causative verb conjugates as Group 2.", "きます becomes こさせます and します becomes させます."],
@@ -2228,7 +2228,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "Save this for work: it is the safest way to ask your boss for time off."
   },
 
-  // ───────────── Lesson 49 ─────────────
+  // ───────────── Lesson 24 ─────────────
   "L149-1": {
     formula: ["Group 1: あ-row + れます", "Group 2: stem + られます", "Group 3: こられます / されます"],
     points: ["Use it for actions of people above you.", "Never use it for yourself.", "The form matches the passive, so context decides.", "It conjugates as a Group 2 verb."],
@@ -2394,7 +2394,7 @@ window.GRAMMAR_STUDY = Object.assign(window.GRAMMAR_STUDY || {}, {
     tip: "When in doubt, learn each word with its prefix: おげんきですか is one chunk."
   },
 
-  // ───────────── Lesson 50 ─────────────
+  // ───────────── Lesson 25 ─────────────
   "L150-1": {
     formula: ["お + V ます-stem + します", "ご + する-noun + します"],
     points: ["The doer is you or someone on your side.", "The action must involve the other person.", "いたします is even more humble than します.", "Short verbs like みます and います use special forms."],
@@ -2558,7 +2558,7 @@ window.LESSON_GUIDE = Object.assign(window.LESSON_GUIDE || {}, {
   143: {
     can: ["Say something looks about to happen", "Say how things and people look", "Describe things with そうな and そうに", "Say you'll pop out and come back"],
     first: ["ふえます", "へります", "あがります", "さがります", "きれます", "とれます", "おちます", "へん", "しあわせ", "ガソリン", "パンフレット", "りゆう"],
-    tip: "Remember that そう follows a stem here, because Lesson 47 has a そうです that follows a plain form."
+    tip: "Remember that そう follows a stem here, because Lesson 22 has a そうです that follows a plain form."
   },
   144: {
     can: ["Say something is too much", "Say something is easy or hard to do", "Ask someone to change something", "Choose from a menu or a list"],
