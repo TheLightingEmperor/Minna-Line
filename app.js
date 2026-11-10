@@ -459,9 +459,9 @@
     guide: (id) => go({ name: 'guide', id }),
   };
   function applySkin() {
-    const el = document.documentElement, th = S.settings.theme;
+    const el = document.documentElement;
     el.dataset.skin = S.equip.skin;
-    if (th === 'light' || th === 'dark') el.dataset.theme = th; else delete el.dataset.theme;
+    el.dataset.theme = 'light'; // dark mode is switched off for now; the dark palette is still in app.css for later
   }
   // Extension points filled in by social.js (accounts, leaderboard, stats). Everything works without them.
   const X = { homeSide: null, homeFoot: null, homeActions: null, navItems: null };
@@ -1627,7 +1627,6 @@
         <div class="field"><label>Read words aloud automatically</label>${seg('audio', [[true, 'On'], [false, 'Off']])}${speech.ok ? '' : '<div class="muted small">This browser has no Japanese voice, so listening drills fall back to reading.</div>'}</div>
         <div class="field"><label>Voice speed</label>${seg('rate', [[0.7, 'Slow'], [0.9, 'Normal'], [1.05, 'Fast']])}</div>
         <div class="field"><label>Sound effects</label>${seg('sound', [[true, 'On'], [false, 'Off']])}</div>
-        <div class="field"><label>Colours</label>${seg('theme', [['auto', 'Match my device'], ['light', 'Light'], ['dark', 'Dark']])}</div>
         <div class="field"><label for="bk">Backup</label><div class="muted small">Progress saves automatically${ML.isRemote() ? ' to your account' : ' in this browser'}. Copy this text to move it somewhere else, or paste a backup and press Restore.</div>
           <textarea id="bk" rows="3"></textarea>
           <div class="seg"><button class="chip" data-op="copy">Copy backup</button><button class="chip" data-op="restore">Restore from text</button><button class="chip" data-op="reset" style="color:var(--bad)">${armed ? 'Press again to erase everything' : 'Reset all progress'}</button></div></div>
@@ -1663,7 +1662,7 @@
   function start() {
     applySkin();
     const hash = (location.hash || '').slice(1);
-    go(SBY.has(hash) ? { name: 'station', id: hash } : ROUTES[hash] && hash !== 'read' && hash !== 'station' && hash !== 'post' ? { name: hash } : { name: 'home' });
+    go(SBY.has(hash) ? { name: 'station', id: hash } : ROUTES[hash] && hash !== 'read' && hash !== 'station' && hash !== 'post' && hash !== 'class' ? { name: hash } : { name: 'home' });
     if (started) return;
     started = true;
     window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (SBY.has(h)) go({ name: 'station', id: h }); });

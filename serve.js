@@ -4,7 +4,7 @@ const root = __dirname, port = +process.env.PORT || 4390;
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
 http.createServer((req, res) => {
   const p = path.normalize(decodeURIComponent(req.url.split('?')[0])).replace(/^(\.\.[\/\\])+/, '');
-  const file = path.join(root, p === '/' ? 'index.html' : p);
+  const file = path.join(root, p.endsWith('/') ? p + 'index.html' : p);   // folders serve their index.html, as Netlify does
   if (!file.startsWith(root)) { res.writeHead(403); return res.end(); }
   fs.readFile(file, (err, buf) => {
     if (err) { res.writeHead(404); return res.end('not found'); }

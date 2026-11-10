@@ -1,0 +1,67 @@
+// Runs schema.sql + classes.sql in an in-memory Postgres and checks who can see and do what in a class.
+import { PGlite } from '@electric-sql/pglite';
+import fs from 'node:fs';
+const read = (f) => fs.readFileSync(new URL('../supabase/' + f, import.meta.url), 'utf8');
+const db = new PGlite();
+let pass = 0, fail = 0;
+const ok = (name, cond, extra = '') => { cond ? pass++ : fail++; console.log((cond ? 'PASS ' : 'FAIL ') + name + (extra ? '  → ' + extra : '')); };
+const as = async (role, uid) => { await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${uid || ''}', false); ${role ? `set role ${role};` : ''}`); };
+const q = async (sql) => (await db.query(sql)).rows;
+const fails = async (name, sql, want) => { try { const r = await db.query(sql); ok(name, false, 'expected error, got ' + JSON.stringify(r.rows).slice(0, 100)); } catch (e) { ok(name, !want || want.test(e.message), e.message.slice(0, 80)); } };
+await db.exec(`
+  create role anon nologin; create role authenticated nologin;
+  create schema auth;
+  create table auth.users (id uuid primary key default gen_random_uuid(), email text, raw_user_meta_data jsonb, created_at timestamptz default now());
+  create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+  grant usage on schema auth, public to anon, authenticated;
+  grant execute on function auth.uid() to anon, authenticated;
+  alter default privileges in schema public grant all on tables to anon, authenticated;
+  alter default privileges in schema public grant execute on functions to anon, authenticated;
+`);
+await db.exec(read('schema.sql')); await db.exec(read('classes.sql')); await db.exec(read('classes.sql'));
+ok('classes.sql runs twice', true);
+const mk = async (email, name) => (await q(`insert into auth.users (email, raw_user_meta_data) values ('${email}', '{"display_name":"${name}"}') returning id`))[0].id;
+const T = await mk('sensei@example.com', 'Medha'), A = await mk('aiko@example.com', 'Aiko'), B = await mk('ben@example.com', 'Ben'), X = await mk('other@example.com', 'Other');
+
+await as('authenticated', T);
+const cls = (await q(`select public.class_create('Saturday N5', 'N5') c`))[0].c;
+ok('teacher creates a class with a 6-character code', /^[A-HJ-NP-Z2-9]{6}$/.test(cls.code) && !!cls.id, cls.code);
+const hw = (await q(`select public.class_homework_set('${cls.id}', 'L3', 'Finish before Saturday', current_date + 5) id`))[0].id;
+await fails('teacher cannot join own class', `select public.class_join('${cls.code}')`, /own class/);
+await fails('tables are closed to direct reads', `select * from public.classes`);
+
+await as('authenticated', A);
+await fails('wrong code is refused', `select public.class_join('ZZZZZZ')`, /No class/);
+const j = (await q(`select public.class_join(' ${cls.code.toLowerCase().slice(0, 3)}-${cls.code.toLowerCase().slice(3)} ') j`))[0].j;
+ok('student joins with a loosely typed code', j.name === 'Saturday N5' && j.teacher === 'Medha');
+await q(`select public.class_join('${cls.code}')`);
+await q(`update public.profiles set xp = 900, user_level = 4, answers = 200, correct = 160, streak = 3, last_study_day = current_date where id = '${A}'`);
+await q(`insert into public.progress (user_id, data, client_ts) values ('${A}', '{"v":1,"stamps":{"L3":{"date":"2026.11.10","score":92}}}', 1)`);
+await q(`insert into public.daily_activity (user_id, day, answers, correct, xp, secs) values ('${A}', (now() at time zone 'utc')::date, 40, 35, 420, 600)`);
+const mine = (await q(`select public.my_classes() m`))[0].m;
+ok('student sees the class and its homework', mine.joined.length === 1 && mine.joined[0].teacher === 'Medha' && mine.joined[0].homework[0].station_id === 'L3' && mine.teaching.length === 0 && !('code' in mine.joined[0]));
+ok('student cannot see the roster', (await q(`select public.class_roster('${cls.id}') r`))[0].r === null);
+await fails('student cannot set homework', `select public.class_homework_set('${cls.id}', 'L4', null, null)`, /not your class/);
+await q(`select public.class_homework_remove(${hw})`); await q(`select public.class_delete('${cls.id}')`);
+await as('authenticated', B); await q(`select public.class_join('${cls.code}')`);
+await as('authenticated', X);
+ok('an outsider sees nothing', (await q(`select public.class_roster('${cls.id}') r`))[0].r === null && (await q(`select public.my_classes() m`))[0].m.joined.length === 0);
+
+await as('authenticated', T);
+const r = (await q(`select public.class_roster('${cls.id}') r`))[0].r;
+const sa = r.students.find((s) => s.name === 'Aiko');
+ok('roster survives student attempts to delete things', r.homework.length === 1 && r.students.length === 2);
+ok('teacher sees progress but no email or account id', sa.xp === 900 && sa.stamps.L3.score === 92 && sa.week.answers === 40 && sa.streak === 3 && /^[0-9a-f]{12}$/.test(sa.key) && !JSON.stringify(r).includes('@') && !JSON.stringify(r).includes(A));
+const tm = (await q(`select public.my_classes() m`))[0].m;
+ok('teacher list shows counts and the code', tm.teaching[0].students === 2 && tm.teaching[0].homework === 1 && tm.teaching[0].code === cls.code);
+await q(`select public.class_remove_member('${cls.id}', '${sa.key}')`);
+ok('teacher removes a student', (await q(`select public.class_roster('${cls.id}') r`))[0].r.students.length === 1);
+await as('authenticated', B); await q(`select public.class_leave('${cls.id}')`);
+await as('authenticated', T);
+ok('student can leave', (await q(`select public.class_roster('${cls.id}') r`))[0].r.students.length === 0);
+await q(`select public.class_delete('${cls.id}')`);
+ok('teacher deletes the class', (await q(`select public.my_classes() m`))[0].m.teaching.length === 0);
+await as('anon', '');
+await fails('anon cannot call class functions', `select public.my_classes()`);
+console.log(`\n${pass} passed, ${fail} failed`);
+process.exit(fail ? 1 : 0);

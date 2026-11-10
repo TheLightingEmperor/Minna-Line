@@ -53,6 +53,8 @@ It's a static site, so any static host works. `netlify.toml` publishes the repo 
 | `cloud.js` | Accounts, sync engine, leaderboard and admin data (Supabase, or the `?demo=1` pretend backend) |
 | `social.js` | Welcome gate, Me page, league, stats, feedback, admin dashboard |
 | `community.js` | The community: feed, posts, comments, likes, reports, staff tools |
+| `classes.js`, `supabase/classes.sql` | Classes: teacher board, join codes, homework |
+| `learn/`, `tools/build_pages.js` | Public study pages for search engines, generated from the data |
 | `supabase/community.sql` | Community tables, access rules and functions |
 | `supabase/schema.sql` | Database tables, access rules and functions |
 | `sw.js`, `manifest.webmanifest`, `icons/` | Installable app shell and offline support |

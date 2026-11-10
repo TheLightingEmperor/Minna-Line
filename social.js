@@ -133,6 +133,7 @@ window.SOCIAL = (() => {
       </section>
       <section class="gate-side">
         <form class="card gate-card" id="authform" novalidate>${tabs}${form}${CLOUD.demo ? '<p class="fine">Demo mode: accounts live only in this browser. Use any email and password.</p>' : ''}</form>
+        <a class="linkbtn" href="learn/" style="text-align:center">Just browsing? Read the free grammar pages</a>
         <div class="card gate-board" id="gateboard" hidden></div>
       </section>
     </div></div>`;
@@ -368,6 +369,7 @@ window.SOCIAL = (() => {
         ${account}
         <section class="card"><div class="eyebrow">App</div>
           ${CLOUD.isAdmin ? row('admin', 'Admin dashboard', 'Everyone’s progress, logins and feedback') : ''}
+          ${u ? row('classes', 'Classes', 'Join your teacher’s class, or run your own') : ''}
           ${row('stats', 'Your stats', 'Calendar, memory, accuracy, review forecast')}
           ${row('collection', 'Collection', 'Stamps, stickers and trophies')}
           ${row('shop', 'Shop', 'Dress up Mochi and change the colours')}

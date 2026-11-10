@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://minna-line.netlify.app/sitemap.xml

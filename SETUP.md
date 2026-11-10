@@ -75,6 +75,25 @@ Tables: `community_posts`, `community_comments`, `community_likes`, `community_r
 
 The weekly challenge is posted under the name of the first admin, so make yourself an admin (step 5) before opening the Community tab.
 
+## 7. Switch on classes (クラス)
+
+A teacher starts a class and gets a six-character code. Students join with the code (or an invite link that fills it in), see their homework on the home page, and the teacher sees one table of everyone's activity, accuracy, readiness and homework stamps, with a CSV download.
+
+1. **SQL Editor → New query** → paste the whole of [`supabase/classes.sql`](supabase/classes.sql) → **Run**.
+2. In the app: **Me → Classes**. Anyone signed in can start a class (up to 10) or join one.
+
+Homework is a station. It counts as done when the student wins that station's stamp. A teacher sees only name, Mochi, level, activity and stamps for students who typed their code, never an email.
+
+## Public study pages (for search engines)
+
+Everything under `/learn/` is plain HTML that Google can read without logging in: one page per grammar point (460), an index per JLPT level, and one page per Guidebook sheet, plus `sitemap.xml` and `robots.txt`. They are generated from the app's own data:
+
+```bash
+node tools/build_pages.js
+```
+
+Run that and commit after changing grammar or Guidebook data. To get indexed faster, add the site in [Google Search Console](https://search.google.com/search-console) and submit `https://minna-line.netlify.app/sitemap.xml`.
+
 ## Where the data lives
 
 | You want to see | In the app | In Supabase |

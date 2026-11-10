@@ -31,6 +31,12 @@ global.fetch = async (url, opt = {}) => {
   if (u.pathname === '/rest/v1/rpc/log_login') return json({ admin: true, profile: { id: UID, display_name: 'Aiko', is_public: true, created_at: new Date().toISOString(), login_count: 1 } });
   if (u.pathname === '/rest/v1/rpc/leaderboard') return json([{ pos: 1, display_name: 'Aiko', avatar: {}, jlpt: 'N5', user_level: 2, rank_name: 'Local', streak: 1, stamps: 0, xp: 50, score: 50, is_me: true, total: 1 }]);
   if (u.pathname === '/rest/v1/rpc/delete_my_account' || u.pathname === '/rest/v1/rpc/admin_set_hidden') return new Response(null, { status: 204 });
+  if (u.pathname === '/rest/v1/rpc/my_classes') return json({ teaching: [], joined: [] });
+  if (u.pathname === '/rest/v1/rpc/class_create') return json({ id: 'c1', code: 'ABC234' });
+  if (u.pathname === '/rest/v1/rpc/class_join') return json({ id: 'c1', name: 'Sat', teacher: 'Medha' });
+  if (u.pathname === '/rest/v1/rpc/class_roster') return json({ id: 'c1', students: [], homework: [] });
+  if (u.pathname === '/rest/v1/rpc/class_homework_set') return json(5);
+  if (u.pathname.startsWith('/rest/v1/rpc/class_')) return new Response(null, { status: 204 });
   if (u.pathname.startsWith('/storage/v1/object/community/')) return json({ Key: u.pathname.replace('/storage/v1/object/', ''), Id: 'x' });
   if (u.pathname === '/rest/v1/rpc/community_notifications' || u.pathname === '/rest/v1/rpc/community_members') return json([]);
   if (u.pathname === '/rest/v1/rpc/community_member') return json({ display_name: 'Aiko', posts: [] });
@@ -116,6 +122,13 @@ const find = (m, p) => calls.filter((c) => c.method === m && c.path === p);
   ok('notifications, members, member, weekly challenge', Array.isArray(await C.notifications()) && Array.isArray(await C.members('level')) && (await C.member('abc')).display_name === 'Aiko' && (await C.weeklyPrompt()) === 9 && find('POST', '/rest/v1/rpc/community_members')[0].body.p_sort === 'level');
   let miss = null; try { await C.thread(1); await CLOUD.community.feed({}); } catch (e) { miss = e; }
   ok('thread + feed still fine', miss === null);
+  // classes
+  const K = CLOUD.classes;
+  const made = await K.create('Sat', 'N5'), joined = await K.join('abc234');
+  await K.setHomework('c1', 'L3', 'note', '2026-11-20'); await K.removeHomework(5); await K.removeMember('c1', 'abcdef123456'); await K.leave('c1'); await K.remove('c1');
+  ok('class calls', made.code === 'ABC234' && joined.teacher === 'Medha' && Array.isArray((await K.mine()).teaching) && (await K.roster('c1')).id === 'c1'
+    && find('POST', '/rest/v1/rpc/class_homework_set')[0].body.p_station === 'L3' && find('POST', '/rest/v1/rpc/class_homework_set')[0].body.p_due === '2026-11-20'
+    && find('POST', '/rest/v1/rpc/class_remove_member')[0].body.p_member === 'abcdef123456' && find('POST', '/rest/v1/rpc/class_join')[0].body.p_code === 'abc234');
   await CLOUD.sendReset('a@b.co');
   ok('password reset request', find('POST', '/auth/v1/recover')[0].body.email === 'a@b.co');
   await CLOUD.setPassword('newpassword1');

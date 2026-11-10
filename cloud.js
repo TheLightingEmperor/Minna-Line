@@ -99,6 +99,17 @@ window.CLOUD = (() => {
       async leaderboard(board, limit) { return need(await sb.rpc('leaderboard', { p_board: board, p_limit: limit })) || []; },
       async sendFeedback(row) { need(await sb.from('feedback').insert({ ...row, user_id: uid })); },
       async deleteAccount() { need(await sb.rpc('delete_my_account')); try { await sb.auth.signOut({ scope: 'local' }); } catch (e) { /* session already invalid */ } uid = null; },
+      classes: {
+        async mine() { return need(await sb.rpc('my_classes')) || { teaching: [], joined: [] }; },
+        async create(name, jlpt) { return need(await sb.rpc('class_create', { p_name: name, p_jlpt: jlpt })); },
+        async join(code) { return need(await sb.rpc('class_join', { p_code: code })); },
+        async leave(id) { need(await sb.rpc('class_leave', { p_class: id })); },
+        async roster(id) { return need(await sb.rpc('class_roster', { p_class: id })); },
+        async setHomework(id, station, note, due) { return need(await sb.rpc('class_homework_set', { p_class: id, p_station: station, p_note: note || null, p_due: due || null })); },
+        async removeHomework(hid) { need(await sb.rpc('class_homework_remove', { p_id: hid })); },
+        async removeMember(id, key) { need(await sb.rpc('class_remove_member', { p_class: id, p_member: key })); },
+        async remove(id) { need(await sb.rpc('class_delete', { p_class: id })); },
+      },
       community: {
         async feed(o) { return need(await sb.rpc('community_feed', { p_category: o.category || null, p_sort: o.sort || 'hot', p_limit: o.limit || 30, p_offset: o.offset || 0, p_jlpt: o.jlpt || null })) || []; },
         async thread(id) { return need(await sb.rpc('community_thread', { p_post: id })); },
@@ -278,6 +289,28 @@ window.CLOUD = (() => {
       },
       async sendFeedback(row) { await wait(); const db = read(); db.feedback.unshift({ id: db.nextId++, user_id: uid, status: 'new', created_at: iso(Date.now()), ...row }); write(db); },
       async deleteAccount() { const db = read(), u = byId(db, uid); if (u) delete db.users[u.email]; delete db.profiles[uid]; delete db.progress[uid]; delete db.days[uid]; db.logins = db.logins.filter((l) => l.user_id !== uid); db.session = null; write(db); uid = null; },
+      classes: (() => {
+        const init = (db) => {
+          if (db.classes) return db;
+          // one sample class taught by a demo teacher, so a new demo account can join with code MOCHI2
+          db.classes = [{ id: 'c-demo', teacher_id: 'demo-1', name: 'Saturday N5 with Aiko', code: 'MOCHI2', jlpt: 'N5', created_at: iso(Date.now() - 20 * 864e5), members: ['demo-4', 'demo-6', 'demo-9'], homework: [{ id: 1, station_id: 'L1', note: 'Beat the yokai before Saturday', due: dayStr(new Date(Date.now() + 3 * 864e5)), created_at: iso(Date.now() - 864e5) }, { id: 2, station_id: 'L2', note: null, due: null, created_at: iso(Date.now()) }] }];
+          return db;
+        };
+        const student = (db, id) => { const p = db.profiles[id] || {}; const week = Object.entries(db.days[id] || {}).filter(([d]) => d >= dayStr(new Date(Date.now() - 6 * 864e5))).reduce((a, [, v]) => ({ answers: a.answers + v.answers, correct: a.correct + v.correct, xp: a.xp + v.xp, secs: a.secs + v.secs, days: a.days + 1 }), { answers: 0, correct: 0, xp: 0, secs: 0, days: 0 });
+          const stamps = id === uid ? (db.progress[uid] && db.progress[uid].data.stamps) || {} : Object.fromEntries(['L0', 'L1', 'L2', 'L3'].slice(0, (p.user_level || 1) % 5).map((k) => [k, { date: '2026.11.01', score: 80 + ((p.user_level || 1) % 20) }]));
+          return { key: id, name: p.display_name || 'Conductor', avatar: p.avatar || {}, jlpt: p.jlpt, level: p.user_level || 1, rank: p.rank_name, xp: p.xp || 0, streak: p.streak || 0, answers: p.answers || 0, correct: p.correct || 0, study_secs: p.study_secs || 0, words: p.words_mastered || 0, kanji: p.kanji_mastered || 0, last_seen_at: p.last_seen_at, readiness: (p.summary || {}).readiness || null, stamps, week }; };
+        return {
+          async mine() { await wait(120); const db = init(read()); write(db); return { teaching: db.classes.filter((c) => c.teacher_id === uid).map((c) => ({ id: c.id, name: c.name, code: c.code, jlpt: c.jlpt, students: c.members.length, homework: c.homework.length })), joined: db.classes.filter((c) => c.members.includes(uid)).map((c) => ({ id: c.id, name: c.name, jlpt: c.jlpt, teacher: (db.profiles[c.teacher_id] || {}).display_name, homework: c.homework })) }; },
+          async create(name, jlpt) { await wait(); const db = init(read()); const code = Array.from({ length: 6 }, () => 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 31)]).join(''); const id = 'c-' + db.nextId++; db.classes.push({ id, teacher_id: uid, name, code, jlpt, created_at: iso(Date.now()), members: ['demo-2', 'demo-5', 'demo-8', 'demo-10'], homework: [] }); write(db); return { id, code }; },
+          async join(code) { await wait(); const db = init(read()), c = db.classes.find((x) => x.code === String(code).toUpperCase().replace(/[^A-Z0-9]/g, '')); if (!c) throw new Error('No class has that code. Check it with your teacher.'); if (c.teacher_id === uid) throw new Error('This is your own class.'); if (!c.members.includes(uid)) c.members.push(uid); write(db); return { id: c.id, name: c.name, teacher: (db.profiles[c.teacher_id] || {}).display_name }; },
+          async leave(id) { const db = init(read()), c = db.classes.find((x) => x.id === id); if (c) c.members = c.members.filter((m) => m !== uid); write(db); },
+          async roster(id) { await wait(150); const db = init(read()), c = db.classes.find((x) => x.id === id && x.teacher_id === uid); if (!c) return null; return { id: c.id, name: c.name, code: c.code, jlpt: c.jlpt, created_at: c.created_at, homework: c.homework, students: c.members.map((m) => student(db, m)) }; },
+          async setHomework(id, station, note, due) { const db = init(read()), c = db.classes.find((x) => x.id === id); c.homework.push({ id: db.nextId++, station_id: station, note: note || null, due: due || null, created_at: iso(Date.now()) }); write(db); },
+          async removeHomework(hid) { const db = init(read()); for (const c of db.classes) c.homework = c.homework.filter((h) => h.id !== hid); write(db); },
+          async removeMember(id, key) { const db = init(read()), c = db.classes.find((x) => x.id === id); c.members = c.members.filter((m) => m !== key); write(db); },
+          async remove(id) { const db = init(read()); db.classes = db.classes.filter((c) => c.id !== id); write(db); },
+        };
+      })(),
       community: (() => {
         const author = (db, id) => { const p = db.profiles[id] || {}; return { author_key: p.is_public === false ? null : id, author_name: p.display_name || 'Conductor', author_avatar: p.avatar || {}, author_level: p.user_level || 1, author_rank: p.rank_name || null, author_jlpt: p.jlpt || null, author_staff: id === 'demo-1' || id === uid }; };
         const lk = (kind, id) => `${uid}|${kind}|${id}`;
@@ -537,6 +570,16 @@ window.CLOUD = (() => {
     },
     schedulePush, pushNow, pull,
     // Community calls. If the tables are not installed yet (supabase/community.sql not run) the error has .missing = true.
+    classes: new Proxy({}, {
+      get: (_, name) => async (...args) => {
+        if (!be || !be.classes || !user) throw new Error('Log in to use classes.');
+        try { return await be.classes[name](...args); } catch (e) {
+          const raw = String((e && (e.message || e.msg)) || e || ''), err = new Error(nice(e));
+          err.missing = (e && (e.code === 'PGRST202' || e.code === 'PGRST205' || e.code === '42P01' || e.code === '42883')) || /could not find the (function|table)|schema cache/i.test(raw);
+          throw err;
+        }
+      },
+    }),
     communityImage: (path) => (be && be.community && be.community.imageUrl ? be.community.imageUrl(path) : path),
     community: new Proxy({}, {
       get: (_, name) => async (...args) => {
