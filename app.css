@@ -983,3 +983,19 @@ select.input { appearance: auto; }
 .plprompt { font-family: var(--f-glyph); font-size: clamp(26px, 6vw, 40px); text-align: center; line-height: 1.7; padding: 8px 0; }
 .plprompt rt { font-size: .42em; color: var(--muted); }
 .placement .qcard.result { gap: 14px; }
+
+/* class life: goals, noticeboard, tests */
+.goal { display: grid; gap: 6px; padding: 4px 0; }
+.goal .meter { height: 14px; }
+.hwform.g { grid-template-columns: minmax(0, 1.6fr) 130px auto auto; }
+@media (max-width: 900px) { .hwform.g { grid-template-columns: minmax(0, 1fr); } }
+.nudge { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-width: 2px; }
+.npost { display: grid; gap: 6px; border-top: 2px dashed var(--rule); padding-top: 10px; }
+.npost.pinned { background: color-mix(in srgb, var(--coin) 12%, transparent); border-radius: 8px; padding: 10px; border: 1.5px solid var(--edge); }
+.creplies .npost { border-top: 0; padding-top: 2px; }
+.tqhead { display: grid; grid-template-columns: minmax(0, 1fr) 170px; gap: 10px; }
+.tq { border: 2px solid var(--edge); border-radius: 8px; padding: 10px; display: grid; gap: 8px; background: var(--bg); }
+.tqa { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.tqa .input { padding: 8px 10px; font-size: 14px; background: var(--panel); }
+.tqa .input.ok { border-color: var(--good); border-width: 2.5px; }
+@media (max-width: 640px) { .tqa, .tqhead { grid-template-columns: minmax(0, 1fr); } }

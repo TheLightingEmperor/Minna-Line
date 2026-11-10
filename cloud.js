@@ -109,6 +109,19 @@ window.CLOUD = (() => {
         async removeHomework(hid) { need(await sb.rpc('class_homework_remove', { p_id: hid })); },
         async removeMember(id, key) { need(await sb.rpc('class_remove_member', { p_class: id, p_member: key })); },
         async remove(id) { need(await sb.rpc('class_delete', { p_class: id })); },
+        async view(id) { return need(await sb.rpc('class_view', { p_class: id })); },
+        async postAdd(id, body, parent) { return need(await sb.rpc('class_post_add', { p_class: id, p_body: body, p_parent: parent || null })); },
+        async postRemove(pid) { need(await sb.rpc('class_post_remove', { p_id: pid })); },
+        async postPin(pid, on) { need(await sb.rpc('class_post_pin', { p_id: pid, p_on: !!on })); },
+        async noteSet(id, key, note) { need(await sb.rpc('class_note_set', { p_class: id, p_member: key, p_note: note || '' })); },
+        async nudge(id, key, message) { need(await sb.rpc('class_nudge_send', { p_class: id, p_member: key, p_message: message })); },
+        async nudgeSeen(nid) { need(await sb.rpc('class_nudge_seen', { p_id: nid })); },
+        async goalSet(id, title, xp, due) { return need(await sb.rpc('class_goal_set', { p_class: id, p_title: title, p_target_xp: xp, p_due: due || null })); },
+        async goalRemove(gid) { need(await sb.rpc('class_goal_remove', { p_id: gid })); },
+        async testSave(id, tid, title, questions, due) { return need(await sb.rpc('class_test_save', { p_class: id, p_id: tid || null, p_title: title, p_questions: questions, p_due: due || null })); },
+        async testRemove(tid) { need(await sb.rpc('class_test_remove', { p_id: tid })); },
+        async testTake(tid) { return need(await sb.rpc('class_test_take', { p_id: tid })); },
+        async testSubmit(tid, answers) { return need(await sb.rpc('class_test_submit', { p_id: tid, p_answers: answers })); },
       },
       community: {
         async feed(o) { return need(await sb.rpc('community_feed', { p_category: o.category || null, p_sort: o.sort || 'hot', p_limit: o.limit || 30, p_offset: o.offset || 0, p_jlpt: o.jlpt || null })) || []; },
@@ -309,6 +322,49 @@ window.CLOUD = (() => {
           async removeHomework(hid) { const db = init(read()); for (const c of db.classes) c.homework = c.homework.filter((h) => h.id !== hid); write(db); },
           async removeMember(id, key) { const db = init(read()), c = db.classes.find((x) => x.id === id); c.members = c.members.filter((m) => m !== key); write(db); },
           async remove(id) { const db = init(read()); db.classes = db.classes.filter((c) => c.id !== id); write(db); },
+          // ---- class life (demo): board, noticeboard, notes, nudges, goals, tests
+          ...(() => {
+            const norm = (t) => String(t || '').toLowerCase().replace(/[\s\u3000\u3002\uff0e.\u3001,\uff01!\uff1f?]+/g, '');
+            const cls = (db, id) => {
+              const c = db.classes.find((x) => x.id === id);
+              if (!c) return c;
+              const demo = c.id === 'c-demo';
+              c.posts = c.posts || (demo ? [{ id: 9001, author_id: 'demo-1', parent_id: null, body: 'Welcome to the class! Saturday\'s test covers stations 01 and 02.', pinned: true, created_at: iso(Date.now() - 2 * 864e5) }, { id: 9002, author_id: 'demo-4', parent_id: 9001, body: 'Thank you, sensei!', pinned: false, created_at: iso(Date.now() - 864e5) }] : []);
+              c.notes = c.notes || {}; c.nudges = c.nudges || [];
+              c.goals = c.goals || (demo ? [{ id: 9101, title: '5,000 XP together this week', target_xp: 5000, due: dayStr(new Date(Date.now() + 4 * 864e5)), created_at: iso(Date.now() - 2 * 864e5) }] : []);
+              c.tests = c.tests || (demo ? [{ id: 9201, title: 'Week 1 class test', due: null, created_at: iso(Date.now()), results: {}, questions: [{ q: 'As a particle, the kana "ha" is read…', answer: 'wa', wrong: ['ha', 'wo'] }, { q: 'Which one means "thank you"?', answer: 'arigatou', wrong: ['sumimasen', 'konnichiwa', 'sayounara'] }, { q: 'Type in romaji: "good morning"', answer: 'ohayou', wrong: [] }] }] : []);
+              return c;
+            };
+            const all = (db) => { db.classes.forEach((c) => cls(db, c.id)); return db.classes; };
+            const wxp = (db, m) => Object.entries(db.days[m] || {}).filter(([d]) => d >= dayStr(new Date(Date.now() - 6 * 864e5))).reduce((a, [, v]) => a + (v.xp || 0), 0);
+            return {
+              async view(id) {
+                await wait(150);
+                const db = init(read()), c = cls(db, id); if (!c) return null;
+                const role = c.teacher_id === uid ? 'teacher' : c.members.includes(uid) ? 'student' : null; if (!role) return null;
+                write(db);
+                const prof = (x) => db.profiles[x] || {};
+                return { role, id: c.id, name: c.name, jlpt: c.jlpt, code: role === 'teacher' ? c.code : null, teacher: prof(c.teacher_id).display_name,
+                  board: c.members.map((m) => ({ name: prof(m).display_name || 'Conductor', avatar: prof(m).avatar || {}, level: prof(m).user_level || 1, rank: prof(m).rank_name, streak: prof(m).streak || 0, week_xp: wxp(db, m), is_me: m === uid })).sort((a, b) => b.week_xp - a.week_xp),
+                  goals: c.goals.map((g) => ({ ...g, xp: c.members.reduce((a, m) => a + wxp(db, m), 0) })),
+                  tests: c.tests.map((t) => ({ id: t.id, title: t.title, due: t.due, n: t.questions.length, mine: t.results[uid] || null, results: role === 'teacher' ? t.results : null })),
+                  feed: c.posts.map((p) => ({ ...p, author_id: undefined, author_name: prof(p.author_id).display_name || 'Conductor', author_avatar: prof(p.author_id).avatar || {}, is_teacher: p.author_id === c.teacher_id, is_mine: p.author_id === uid })),
+                  nudges: role === 'student' ? c.nudges.filter((n) => n.user_id === uid && !n.seen) : null, notes: role === 'teacher' ? c.notes : null };
+              },
+              async postAdd(id, body, parent) { const db = init(read()), c = cls(db, id), par = parent ? c.posts.find((p) => p.id === +parent) : null; c.posts.push({ id: db.nextId++, author_id: uid, parent_id: par ? par.parent_id || par.id : null, body, pinned: false, created_at: iso(Date.now()) }); write(db); },
+              async postRemove(pid) { const db = init(read()); for (const c of all(db)) c.posts = c.posts.filter((p) => p.id !== +pid && p.parent_id !== +pid); write(db); },
+              async postPin(pid, on) { const db = init(read()); for (const c of all(db)) for (const p of c.posts) if (p.id === +pid) p.pinned = !!on; write(db); },
+              async noteSet(id, key, note) { const db = init(read()), c = cls(db, id); if (note) c.notes[key] = note; else delete c.notes[key]; write(db); },
+              async nudge(id, key, message) { const db = init(read()), c = cls(db, id); c.nudges.push({ id: db.nextId++, user_id: key, message, seen: false, created_at: iso(Date.now()) }); write(db); },
+              async nudgeSeen(nid) { const db = init(read()); for (const c of all(db)) for (const n of c.nudges) if (n.id === +nid) n.seen = true; write(db); },
+              async goalSet(id, title, xp, due) { const db = init(read()), c = cls(db, id); c.goals.push({ id: db.nextId++, title, target_xp: xp, due: due || null, created_at: iso(Date.now()) }); write(db); },
+              async goalRemove(gid) { const db = init(read()); for (const c of all(db)) c.goals = c.goals.filter((g) => g.id !== +gid); write(db); },
+              async testSave(id, tid, title, questions, due) { const db = init(read()), c = cls(db, id), clean = questions.map((q) => ({ q: q.q, answer: q.answer, wrong: (q.wrong || []).filter(Boolean).slice(0, 3) })), t = tid && c.tests.find((x) => x.id === +tid); if (t) Object.assign(t, { title, questions: clean, due: due || null }); else c.tests.push({ id: db.nextId++, title, questions: clean, due: due || null, created_at: iso(Date.now()), results: {} }); write(db); },
+              async testRemove(tid) { const db = init(read()); for (const c of all(db)) c.tests = c.tests.filter((t) => t.id !== +tid); write(db); },
+              async testTake(tid) { const db = init(read()), c = all(db).find((x) => x.tests.some((t) => t.id === +tid)); if (!c) return null; const t = c.tests.find((x) => x.id === +tid), role = c.teacher_id === uid ? 'teacher' : 'student'; return role === 'teacher' ? { id: t.id, title: t.title, due: t.due, role, questions: t.questions } : { id: t.id, title: t.title, due: t.due, role, questions: t.questions.map((q) => ({ q: q.q, options: q.wrong.length ? ML.shuffle([q.answer, ...q.wrong]) : null })) }; },
+              async testSubmit(tid, answers) { const db = init(read()), c = all(db).find((x) => x.tests.some((t) => t.id === +tid)), t = c.tests.find((x) => x.id === +tid); const review = t.questions.map((q, i) => ({ q: q.q, correct: q.answer, yours: answers[i] || '', ok: norm(q.answer) === norm(answers[i]) })); const score = review.filter((x) => x.ok).length; t.results[uid] = { score, total: review.length, attempts: ((t.results[uid] || {}).attempts || 0) + 1 }; write(db); return { score, total: review.length, review }; },
+            };
+          })(),
         };
       })(),
       community: (() => {
