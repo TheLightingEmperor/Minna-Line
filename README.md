@@ -4,8 +4,8 @@ A study game for Japanese from JLPT N5 to N1: *Minna no Nihongo* Lessons 1–50,
 
 ## What's inside
 
-- **Minna Line (stations 00–20):** kana, greetings and Lessons 1–20. Each station has flashcards, quizzes, listening, typing, dictation, match pairs, a 60-second sprint, grammar drills, sentence listening, verb and adjective form drills, and kanji.
-- **N5 Express:** grammar from Lessons 21–25, an N5 word bank, Numbers Depot (numbers, prices, clock times, dates, counters, ages), Kanji Hall (all 105 N5 kanji), Verb Forge and an N5 mock exam.
+- **Minna Line (stations 00–25):** kana, greetings and Lessons 1–25, one unbroken line. Each station has flashcards, quizzes, listening, typing, dictation, match pairs, a 60-second sprint, grammar drills, sentence listening, verb and adjective form drills, and kanji.
+- **N5 Terminal:** an N5 word bank, Numbers Depot (numbers, prices, clock times, dates, counters, ages), Kanji Hall (all 105 N5 kanji), Verb Forge and an N5 mock exam.
 - **Verb forms:** 29 drillable forms: the polite ます family from Lesson 4, plain forms, and every N5 pattern built on them, plus adjectives. Answers are generated from the verb's group.
 - **Reading room:** an original conversation and an N5-style text for each lesson, with audio and comprehension questions.
 - **Handwriting:** stroke-order animations and a writing pad that checks each stroke's shape, order and direction, for all kana and every kanji in the app (N5–N1 plus the extra kanji used in words).

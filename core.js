@@ -145,9 +145,10 @@ window.ML = (() => {
   ];
   const lessonName = (L) => (L >= 1 && L <= 25 ? `Lesson ${L}` : L >= 126 && L <= 150 ? `Lesson ${L - 100}` : L >= 201 && L <= 224 ? `Unit ${L - 200}` : L >= 301 && L <= 324 ? `Unit ${L - 300}` : L >= 401 && L <= 424 ? `Unit ${L - 400}` : '');
   const STATIONS = [];
-  for (let L = 0; L <= 20; L++) STATIONS.push({ id: 'L' + L, L, line: 'M', code: String(L).padStart(2, '0'), name: TITLES[L][0], jp: TITLES[L][1], kind: L === 0 ? 'kana' : 'lesson' });
+  // One unbroken line for the whole N5 course, stations 00 to 25; the practice halls and the exam sit at the terminal.
+  for (let L = 0; L <= 25; L++) STATIONS.push({ id: 'L' + L, L, line: 'M', code: String(L).padStart(2, '0'), name: TITLES[L][0], jp: TITLES[L][1], kind: L === 0 ? 'kana' : 'lesson' });
   STATIONS.push({ id: 'numbers', line: 'X', code: '数', name: 'Numbers Depot', jp: 'かずと じかん', kind: 'numbers' });
-  for (let L = 21; L <= 26; L++) STATIONS.push({ id: 'L' + L, L, line: 'X', code: String(L).padStart(2, '0'), name: TITLES[L][0], jp: TITLES[L][1], kind: 'lesson' });
+  STATIONS.push({ id: 'L26', L: 26, line: 'X', code: '26', name: TITLES[26][0], jp: TITLES[26][1], kind: 'lesson' });
   STATIONS.push({ id: 'kanji', line: 'X', code: '漢', name: 'Kanji Hall', jp: 'かんじの ひろば', kind: 'kanji' });
   STATIONS.push({ id: 'verbs', line: 'X', code: '活', name: 'Verb Forge', jp: 'どうしの かたち', kind: 'verbs' });
   STATIONS.push({ id: 'exam', line: 'X', code: '試', name: 'N5 Mock Exam', jp: 'もぎしけん', kind: 'exam' });
@@ -634,7 +635,7 @@ window.ML = (() => {
     ['streak30', 'いっかげつ', 'Study 30 days in a row', () => S.streak.days >= 30],
     ['stamp1', 'はじめての スタンプ', 'Collect your first station stamp', () => Object.keys(S.stamps).length >= 1],
     ['stamp10', 'スタンプ じゅっこ', 'Collect 10 station stamps', () => Object.keys(S.stamps).length >= 10],
-    ['minna', 'みんなの せん', 'Collect every Minna Line stamp (00–20)', () => allStamped(STATIONS.filter((s) => s.line === 'M').map((s) => s.id))],
+    ['minna', 'みんなの せん', 'Collect every Minna Line stamp (00–25)', () => allStamped(STATIONS.filter((s) => s.line === 'M').map((s) => s.id))],
     ['all', 'ぜんぶ', 'Collect every stamp on the map', () => allStamped(STATIONS.map((s) => s.id))],
     ['yokai5', 'ようかいハンター', 'Defeat 5 yokai in stamp battles', () => S.stats.yokai >= 5],
     ['perfect', 'かんぺき', 'Score 100% on a session of 10 or more', () => S.stats.perfects >= 1],

@@ -473,7 +473,7 @@
         <span class="chipstat" title="Day streak${S.omamori ? ` · ${S.omamori} omamori` : ''}">${ICON.lantern(streak > 0)}${streak}</span>
         <span class="chipstat" title="Yen">${ICON.coin}<span id="coinct">${S.coins.toLocaleString('en-US')}</span></span>
         <span class="chipstat hide-sm" title="${S.xp} XP · ${rank()[3]}">Lv ${l}<span class="lvbar"><i style="width:${Math.round(((S.xp - lo) / (hi - lo)) * 100)}%"></i></span></span>
-        ${navItems().filter((n) => n[0] !== 'home').map(([act, label, , icon]) => `<button class="iconbtn nav-d" data-act="${act}" aria-label="${label}" title="${label}"${view.name === act || (act === 'community' && view.name === 'post') ? ' aria-current="page"' : ''}>${icon}</button>`).join('')}
+        ${navItems().filter((n) => n[0] !== 'home').map(([act, label, , icon]) => `<button class="iconbtn nav-d" data-act="${act}" aria-label="${label}" title="${label}"${view.name === act || (act === 'community' && (view.name === 'post' || view.name === 'members')) ? ' aria-current="page"' : ''}>${icon}</button>`).join('')}
         <button class="iconbtn" data-act="shop" aria-label="Shop" title="Shop">${ICON.bag}</button>
         <button class="iconbtn" data-act="settings" aria-label="Settings" title="Settings">${ICON.gear}</button>
       </div></div></header>`;
@@ -482,7 +482,7 @@
   const navItems = () => (X.navItems ? X.navItems() : [['home', 'Home', 'ホーム', ICON.home], ['collection', 'Collection', 'コレクション', ICON.book]]);
   function tabbar() {
     if (view.name === 'session') return '';
-    const cur = view.name === 'station' || view.name === 'read' || view.name === 'reading' || view.name === 'guide' || view.name === 'dict' || view.name === 'mix' ? 'home' : view.name === 'post' ? 'community' : view.name;
+    const cur = view.name === 'station' || view.name === 'read' || view.name === 'reading' || view.name === 'guide' || view.name === 'dict' || view.name === 'mix' ? 'home' : view.name === 'post' || view.name === 'members' ? 'community' : view.name;
     return `<nav class="tabbar" aria-label="Main">${navItems().filter((n) => n[4] !== 'wide').map(([act, label, jp, icon]) => `<button data-act="${act}"${cur === act ? ' aria-current="page"' : ''}>${icon}<span>${label}</span></button>`).join('')}</nav>`;
   }
   function render(body, actions = {}, onMount) {
@@ -558,7 +558,7 @@
     const lo = lvlFloor(l), hi = lvlFloor(l + 1);
     const quests = todaysQuests(), weak = weakKeys().length, w = wordOfDay();
     const lv = LEVELS.find((x) => x.id === curLevel());
-    const lines = { N5: [['Minna Line', 'M', 'M00–M20', ''], ['N5 Express', 'X', 'beyond Lesson 20', 'express']], N4: [['Summer Line', 'S', 'Lessons 26–50', 'summer'], ['N4 Terminal', 'SX', 'kanji, verbs, exam', 'summer']], N3: [['Autumn Line', 'K', 'Units 1–24', 'autumn'], ['N3 Terminal', 'KX', 'reading, kanji, exam', 'autumn']], N2: [['Winter Line', 'W', 'Units 1–24', 'winter'], ['N2 Terminal', 'WX', 'reading, kanji, exam', 'winter']], N1: [['Starlight Line', 'Y', 'Units 1–24', 'night'], ['N1 Terminal', 'YX', 'reading, kanji, exam', 'night']] }[lv.id];
+    const lines = { N5: [['Minna Line', 'M', 'M00–M25', ''], ['N5 Terminal', 'X', 'numbers, words, kanji, verbs, exam', 'express']], N4: [['Summer Line', 'S', 'Lessons 26–50', 'summer'], ['N4 Terminal', 'SX', 'kanji, verbs, exam', 'summer']], N3: [['Autumn Line', 'K', 'Units 1–24', 'autumn'], ['N3 Terminal', 'KX', 'reading, kanji, exam', 'autumn']], N2: [['Winter Line', 'W', 'Units 1–24', 'winter'], ['N2 Terminal', 'WX', 'reading, kanji, exam', 'winter']], N1: [['Starlight Line', 'Y', 'Units 1–24', 'night'], ['N1 Terminal', 'YX', 'reading, kanji, exam', 'night']] }[lv.id];
     render(`
       <div class="leveltabs" role="tablist" aria-label="JLPT level">${LEVELS.map((x) => `<button role="tab" class="lvtab ${x.season}" aria-selected="${x.id === lv.id}" data-act="level" data-arg="${x.id}"><i class="lvico">${ART.seasonIcon(x.season)}</i><b>${x.name}</b><span>${x.title}</span><small>${Math.round(readiness(x.id).total * 100)}%</small></button>`).join('')}</div>
       <div class="home"><div>
@@ -1419,10 +1419,11 @@
         <div class="gains"><span class="pill">${right} of ${answeredFirst} right${battle || cfg.exam ? '' : ' first time'}</span><span class="pill express">best combo ×${st.best}</span><span class="pill">+${st.xp} XP</span><span class="pill coin">+${st.coins + bonusCoins} ${ICON.coin}</span></div>
         ${cfg.exam && !won ? `<div class="pill stamp">${pass}% needed for the stamp.</div>` : ''}
         ${Object.keys(st.sections).length ? `<div class="readiness" style="width:100%;max-width:420px">${Object.entries(st.sections).map(([k, [a, b]]) => `<div class="row"><span class="small">${esc(k.split(' ')[0])}</span>${meter(a / b)}<span>${a}/${b}</span></div>`).join('')}</div>` : ''}
-        <div class="row-between" style="justify-content:center"><button class="btn primary" data-act="again">${target && !won ? 'Try again' : 'Go again'}</button><button class="btn" data-act="quit">Back</button></div>
+        <div class="row-between" style="justify-content:center"><button class="btn primary" data-act="again">${target && !won ? 'Try again' : 'Go again'}</button><button class="btn" data-act="quit">Back</button>${target && won && window.COMMUNITY && window.COMMUNITY.share && window.CLOUD && window.CLOUD.user ? '<button class="btn gold" data-act="sharewin">Share this win</button>' : ''}</div>
       </div>
       ${missed.length ? `<div class="stack"><div class="eyebrow">To review (${missed.length})</div>${missed.map((q) => `<div class="card"><div class="small muted">${esc(q.label)}</div><div>${q.after || ''}</div></div>`).join('')}</div>` : ''}
-      </div>`, { quit: () => go(cfg.back), again: () => quizSession(cfg.questions && !cfg.keys ? { ...cfg, questions: cfg.questions.map((q) => (q.cat === 'num' ? numQ() : q)) } : cfg) });
+      </div>`, { sharewin: () => window.COMMUNITY.share({ jlpt: target.level || null, title: cfg.exam ? `Passed the ${target.name} with ${pct}%` : `Stamp collected: ${target.name} (${codeOf(target)})`, body: `${cfg.exam ? `I just passed the ${target.name}` : `I just beat the ${battle ? yk.name : 'station battle'} at ${target.name}`} with ${pct}%.\n\nLevel ${level()}, ${liveStreak()}-day streak, ${Object.keys(S.stamps).length} stamps so far.\n` }),
+        quit: () => go(cfg.back), again: () => quizSession(cfg.questions && !cfg.keys ? { ...cfg, questions: cfg.questions.map((q) => (q.cat === 'num' ? numQ() : q)) } : cfg) });
       if (target && won) { sfx.play('stamp'); petals(40); }
       else if (!target && pct >= 80 && answeredFirst >= 5) petals(16);
       setTimeout(() => celebrate(st.lvl), target && won ? 1200 : 300);

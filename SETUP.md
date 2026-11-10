@@ -60,7 +60,9 @@ insert into public.admins (user_id) select id from auth.users where email = 'you
 
 ## 6. Switch on the community (ひろば)
 
-The Community tab is a members-only space for posts, comments and likes, with categories (Announcements, Introductions, Questions, Wins, Study tips, Lounge), Hot / New / Top sorting and level tags.
+The Community tab is a members-only space for posts, comments and likes, with categories (Announcements, Weekly challenge, Introductions, Questions, Wins, Study tips, Lounge), Hot / New / Top sorting and level tags. It also has pictures on posts (up to four, shrunk in the browser before upload), a member directory with profile cards, a list of replies to you, a "Share this win" button after earning a stamp, and a weekly writing challenge that posts itself each Monday.
+
+If you ran an earlier version of the file, run it again: it adds what's new and keeps everything already posted.
 
 1. **SQL Editor → New query** → paste the whole of [`supabase/community.sql`](supabase/community.sql) → **Run**.
 2. Reload the app. Until you do this, the tab shows a "still being built" notice.
@@ -69,7 +71,9 @@ What you can do as an admin, from inside any post: **Pin**, **Close comments**, 
 
 Limits built in: 8 posts and 100 comments per person per day; titles up to 140 characters; posts up to 8,000.
 
-Tables: `community_posts`, `community_comments`, `community_likes`, `community_reports`.
+Tables: `community_posts`, `community_comments`, `community_likes`, `community_reports`, `community_prompts`. Pictures are stored in a Storage bucket called `community` (see **Storage** in the dashboard); the free plan includes 1 GB, which is several thousand photos at the size the app uploads.
+
+The weekly challenge is posted under the name of the first admin, so make yourself an admin (step 5) before opening the Community tab.
 
 ## Where the data lives
 

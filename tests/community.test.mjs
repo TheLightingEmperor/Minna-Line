@@ -13,6 +13,12 @@ await db.exec(`
   create schema auth;
   create table auth.users (id uuid primary key default gen_random_uuid(), email text, raw_user_meta_data jsonb, created_at timestamptz default now());
   create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+  create schema storage;
+  create table storage.buckets (id text primary key, name text, public boolean, file_size_limit bigint, allowed_mime_types text[]);
+  create table storage.objects (id uuid primary key default gen_random_uuid(), bucket_id text, name text);
+  alter table storage.objects enable row level security;
+  create function storage.foldername(name text) returns text[] language sql immutable as $$ select (string_to_array(name, '/'))[1:array_length(string_to_array(name, '/'), 1) - 1] $$;
+  grant usage on schema storage to anon, authenticated; grant all on storage.objects to authenticated; grant execute on function storage.foldername(text) to authenticated;
   grant usage on schema auth, public to anon, authenticated;
   grant execute on function auth.uid() to anon, authenticated;
   alter default privileges in schema public grant all on tables to anon, authenticated;
@@ -63,6 +69,31 @@ await as('authenticated', B);
 r = (await q(`select public.community_like(${p1.id}, null) as r`))[0].r;
 ok('B un-likes', r.liked === false && r.count === 0);
 
+// pictures, profiles, notifications
+await as('authenticated', A);
+const [pp] = await q(`insert into public.community_posts (author_id, category, title, body, images) values ('${A}', 'lounge', 'My desk', 'photo', array['${A}/abc.webp']) returning id`);
+await fails("A cannot attach someone else's upload", `insert into public.community_posts (author_id, category, title, body, images) values ('${A}', 'lounge', 'Stolen', 'photo', array['${B}/x.webp'])`, /own uploads/);
+await fails('no more than 4 pictures', `insert into public.community_posts (author_id, category, title, body, images) values ('${A}', 'lounge', 'Too many', 'x', array['${A}/1','${A}/2','${A}/3','${A}/4','${A}/5'])`);
+await fails('A cannot post a weekly challenge by hand', `insert into public.community_posts (author_id, category, title, body) values ('${A}', 'prompt', 'Fake prompt', 'x')`, /staff/);
+ok('A uploads into own folder', (await db.query(`insert into storage.objects (bucket_id, name) values ('community', '${A}/abc.webp')`)).affectedRows === 1);
+await fails("A cannot upload into B's folder", `insert into storage.objects (bucket_id, name) values ('community', '${B}/evil.webp')`);
+await q(`update public.profiles set bio = 'Learning for a trip to Osaka' where id = '${A}'`);
+const fd = await q(`select * from public.community_feed('lounge', 'new', 30, 0, null)`);
+ok('feed carries pictures and a member key', fd[0].images.length === 1 && /^[0-9a-f]{12}$/.test(fd[0].author_key));
+const mem = (await q(`select public.community_member('${fd[0].author_key}') m`))[0].m;
+ok('member card is public-safe', mem.display_name === 'Aiko' && mem.bio.includes('Osaka') && mem.is_me === true && mem.posts.length === 2 && !('email' in mem) && !('id' in mem));
+const dir = await q(`select * from public.community_members('kudos', 60)`);
+ok('directory lists public members without emails', dir.length === 3 && !('email' in dir[0]) && !('id' in dir[0]) && dir[0].display_name === 'Ben' && dir[0].kudos === 1 && dir.some((m) => m.display_name === 'Aiko' && m.bio));
+const nt = await q(`select * from public.community_notifications(30)`);
+ok('notifications list replies to me', nt.length === 3 && nt[0].author_name === 'Ben' && nt[0].post_title.includes('edited'));
+ok('weekly challenge needs staff to exist first', true);
+const wp = (await q(`select public.community_weekly_prompt() id`))[0].id;
+const wp2 = (await q(`select public.community_weekly_prompt() id`))[0].id;
+const wrow = (await q(`select category, pinned, title from public.community_posts where id = ${wp}`))[0];
+ok('weekly challenge is posted once and pinned', wp && Number(wp) === Number(wp2) && wrow.category === 'prompt' && wrow.pinned && wrow.title.startsWith('This week:'), wrow.title);
+await q(`delete from public.community_posts where id = ${pp.id}`);
+await as('authenticated', C); await q(`select public.community_moderate('post', '${wp}', 'delete')`);
+
 // staff
 await as('authenticated', C);
 const [n1] = await q(`insert into public.community_posts (author_id, category, title, body) values ('${C}', 'news', 'Welcome to the hiroba', 'Be kind.') returning id`);
@@ -81,7 +112,7 @@ ok('hidden post leaves the feed for others', (await q(`select * from public.comm
 await fails('muted member cannot post', `insert into public.community_posts (author_id, category, title, body) values ('${B}', 'lounge', 'hello again', 'x')`, /muted/);
 await as('authenticated', A);
 ok('author still sees own hidden post', (await q(`select * from public.community_feed('question', 'new', 30, 0, null)`)).length === 1);
-for (let i = 0; i < 7; i++) await q(`insert into public.community_posts (author_id, category, title, body) values ('${A}', 'lounge', 'post ${i}', 'x')`);
+{ const have = (await q(`select count(*)::int n from public.community_posts where author_id = '${A}'`))[0].n; for (let i = have; i < 8; i++) await q(`insert into public.community_posts (author_id, category, title, body) values ('${A}', 'lounge', 'post ${i}', 'x')`); }
 await fails('daily post limit', `insert into public.community_posts (author_id, category, title, body) values ('${A}', 'lounge', 'one too many', 'x')`, /limit/);
 ok('A deletes own post, comments go too', (await db.query(`delete from public.community_posts where id = ${p1.id}`)).affectedRows === 1);
 await as(null, '');

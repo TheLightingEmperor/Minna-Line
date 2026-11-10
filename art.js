@@ -46,55 +46,75 @@ window.ART = (() => {
   function install() { if (!document.getElementById('art-defs')) { const d = document.createElement('div'); d.id = 'art-defs'; d.innerHTML = DEFS; document.body.prepend(d); } }
 
   // ---------------------------------------------------------------- Mochi, the black-sesame cat conductor
-  const CAT_BODY = 'M60 27C82 27 101 42 106 66l7 1-5 5 6 4-6 3C110 100 88 115 60 115S10 100 12 79l-6-3 6-4-5-5 7-1C19 42 38 27 60 27z';
-  const EAR_L = 'M21 55 24 14c0-4 3-5 6-2l23 21z', EAR_R = 'M99 55 96 14c0-4-3-5-6-2L67 33z';
-  const TAIL = 'M100 100q24 0 18-24-3-9-10-6-5 3-1 9 4 8-12 9z';
+  // Drawn like a woodblock cat rather than a sticker: a real sitting-cat silhouette with fur breaking the outline,
+  // lamp-yellow eyes under heavy lids, a lighter plate for the fur's sheen, cut fur lines and a halftone shadow.
+  const FUR = '#39332e', FUR2 = '#55493d';      // the second and third "plates" of black
+  const HEAD = 'M60 17c8 0 14 1 20 3l3-3 1 5c7 4 12 9 14 17 3 7 4 14 2 21l8-1-5 5 8 3-8 3 5 5-9 0c-6 9-20 14-39 14s-33-5-39-14l-9 0 5-5-8-3 8-3-5-5 8 1c-2-7-1-14 2-21 2-8 7-13 14-17l1-5 3 3c6-2 12-3 20-3z';
+  const EARL = 'M24 40 20 7c0-4 3-5 6-3l25 18z', EARR = 'M96 40l4-33c0-4-3-5-6-3L69 22z';
+  const BODY = 'M41 80c-9 8-13 20-11 30 1 5 5 7 10 7h40c5 0 9-2 10-7 2-10-2-22-11-30z';
+  const TAILP = 'M84 111c14 3 26-5 26-18 0-8-6-12-11-9';
   function mascot(mood = 'calm', o = {}) {
     const hat = o.hat || 'cap', acc = o.acc || 'none';
-    const disc = (x, r = 10.6) => `<circle cx="${x}" cy="66" r="${r}" fill="${WASHI}"/>`;
-    const pupil = (x, rx, ry, dy = 1.5) => `<ellipse cx="${x}" cy="${66 + dy}" rx="${rx}" ry="${ry}" fill="${SUMI}"/><circle cx="${x + rx * 0.45}" cy="${66 + dy - ry * 0.48}" r="${Math.max(1.2, rx * 0.3)}" fill="${WASHI}"/>`;
+    // thin paper edge: enough to lift black off a dark page, never a thick sticker rim
+    const E = (d, fill, w = 2.2) => `<path d="${d}" fill="none" stroke="${WASHI}" stroke-width="${w + 2}" stroke-linejoin="round"/><path d="${d}" fill="${fill}" ${st(w)}/>`;
+    const eye = (x, f) => `<ellipse cx="${x}" cy="56" rx="10.400" ry="9.800" fill="${WASHI}"/><circle cx="${x + f * 0.8}" cy="57" r="7.800" fill="${KARASHI}"/><circle cx="${x + f * 0.8}" cy="57" r="7.800" fill="url(#pDots)" opacity=".16"/>
+      <ellipse cx="${x + f * 1.2}" cy="57.500" rx="3.300" ry="6.600" fill="${SUMI}"/><circle cx="${x + f * 1.2 + 2.6}" cy="53.600" r="2.100" fill="${WASHI}"/><circle cx="${x + f * 1.2 - 2.2}" cy="60.600" r="1" fill="${WASHI}" opacity=".8"/>
+      <path d="M${x - 12} 55q12-13 24 0V42h-24z" fill="${SUMI}"/><path d="M${x - 11.5} 53.500q11.500-11 23 0" fill="none" ${st(1.300, FUR2)}/>`;
     const eyes = {
-      calm: disc(44) + disc(76) + pupil(45.5, 5.4, 6.8) + pupil(74.5, 5.4, 6.8),
-      wow: disc(44, 12) + disc(76, 12) + pupil(44, 3.4, 3.4, 0) + pupil(76, 3.4, 3.4, 0),
-      happy: `<path d="M34 69q10-13 20 0M66 69q10-13 20 0" fill="none" ${st(4.2, WASHI)}/>`,
-      cheer: `<path d="M35 59l15 7.500-15 7.500M85 59l-15 7.500 15 7.500" fill="none" ${st(4.2, WASHI)}/>`,
-      sad: disc(44) + disc(76) + pupil(45, 4.6, 5, 4) + pupil(75, 4.6, 5, 4) + `<path d="M31 62l25-9v9zM89 62l-25-9v9z" fill="${SUMI}"/><path d="M84 79q-4 7 0 10 4-3 0-10z" fill="#bfe0ea" ${st(1.2)}/>`,
+      calm: eye(43, 1) + eye(77, -1),
+      wow: [43, 77].map((x) => `<circle cx="${x}" cy="55" r="11.400" fill="${WASHI}"/><circle cx="${x}" cy="55" r="8.400" fill="${KARASHI}"/><circle cx="${x}" cy="55" r="3.200" fill="${SUMI}"/><circle cx="${x + 2.6}" cy="52" r="1.800" fill="${WASHI}"/>`).join(''),
+      happy: `<path d="M33 59q10-13 20 0M67 59q10-13 20 0" fill="none" ${st(3.800, WASHI)}/><path d="M34 62.500q9-6 18 0M68 62.500q9-6 18 0" fill="none" ${st(1.100, FUR2)}/>`,
+      cheer: `<path d="M34 50l15 7-15 7M86 50l-15 7 15 7" fill="none" ${st(3.800, WASHI)}/>`,
+      sad: eye(43, 1) + eye(77, -1) + `<path d="M30 50l26-7v10zM90 50l-26-7v10z" fill="${SUMI}"/><path d="M86 68q-4 7 0 10 4-3 0-10z" fill="#bfe0ea" ${st(1.100)}/>`,
     }[mood] || '';
-    const mouth = mood === 'wow' ? `<ellipse cx="60" cy="83" rx="4" ry="5" fill="${SHU}" ${st(1.8, WASHI)}/>`
-      : mood === 'cheer' || mood === 'happy' ? `<path d="M51 78q9 15 18 0z" fill="${SHU}" ${st(2, WASHI)}/><path d="M56 85q4 3 8 0-4-3-8 0z" fill="${MOMO}"/>`
-        : `<path d="M52.500 78.500q3.750 5 7.500 0 3.750 5 7.500 0" fill="none" ${st(2.3, WASHI)}/>`;
+    const mouth = mood === 'wow' ? `<ellipse cx="60" cy="74" rx="3.600" ry="4.600" fill="${SHU}" ${st(1.500, WASHI)}/>`
+      : mood === 'cheer' || mood === 'happy' ? `<path d="M52.500 69.500q7.500 13 15 0z" fill="${SHU}" ${st(1.700, WASHI)}/><path d="M56.500 75.500q3.500 2.600 7 0-3.500-2.600-7 0z" fill="${MOMO}"/><path d="M57 70.500l1.500 2.600 1.500-2.600M60 70.500l1.500 2.600 1.500-2.600" fill="${WASHI}"/>`
+        : `<path d="M60 67.500v2.500M53 70.500q3.500 4.500 7 0 3.500 4.500 7 0" fill="none" ${st(1.900, WASHI)}/>`;
+    const H = (inner) => `<g>${inner}</g>`;
     const HATS = {
-      cap: K('M35 38c2-23 48-23 50 0z', AI) + `<path d="M35.700 34.500q24.300-5 48.600 0l.7 3.500H35z" fill="${SHU}"/><path d="M36 34.400q24-5 48 0" fill="none" ${st(1.2)}/><path d="M44 27q7-7 17-8" fill="none" ${st(2, WASHI)} opacity=".55"/><path d="M63 21.500c12 2 20 8 21.500 16.500H63z" fill="url(#pDots)" opacity=".3"/>`
-        + K('M29 38h62a4.300 4.300 0 0 1 0 8.600H29a4.300 4.300 0 0 1 0-8.600z', SUMI, 2) + `<path d="M34 41h30" ${st(1.4, WASHI)} opacity=".45"/>`
-        + `<circle cx="60" cy="27" r="6" fill="${KARASHI}" ${st(1.8)}/><path d="M60 22.800v8.400M55.800 27h8.400M57 24l6 6M63 24l-6 6" ${st(1)}/><circle cx="60" cy="27" r="1.700" fill="${SHU}"/>`,
-      sakura: `<g transform="translate(93 40)">${[0, 72, 144, 216, 288].map((a) => `<path d="M0 0c-6-4-8-11-3.500-15l3.500 2.500 3.500-2.500c4.500 4 2.500 11-3.500 15z" transform="rotate(${a})" fill="${MOMO}" ${st(1.5)}/>`).join('')}<circle r="3.200" fill="${KARASHI}" ${st(1.2)}/></g>`,
-      hachimaki: `<path d="M106 58l16-9-3 14zM106 60l14 8-10 5z" fill="${WASHI}" ${st(2)}/>` + K('M12 56q48-19 96 0l-1 11q-47-18-94 0z', WASHI, 2.2) + `<circle cx="60" cy="51" r="6.200" fill="${SHU}"/><path d="M40 55.500q-10 2-18 5.500M80 55.500q10 2 18 5.500" fill="none" ${st(1.1)} opacity=".5"/>`,
-      straw: K('M10 37c0-7 22-12 50-12s50 5 50 12-22 11-50 11-50-4-50-11z', KARASHI) + K('M36 36c0-24 48-24 48 0z', KARASHI) + `<path d="M36.500 30q23.500 8 47 0l.5 6q-24 8-48 0z" fill="${SHU}" ${st(1.4)}/><path d="M16 40q44 9 88 0M44 18q16-6 32 0M22 35q-3 3-4 6M98 35q3 3 4 6M60 44v3M40 43l-1 3M80 43l1 3" fill="none" ${st(1)} opacity=".5"/>`,
-      kitsune: `<g transform="rotate(-18 28 36)">${K('M10 46l3-27 11 11 11-11 3 27q-14 13-28 0z', WASHI, 2.2)}<path d="M14.500 24l4.500 6M33.500 24l-4.500 6" ${st(3, SHU)}/><path d="M16 40q3-4 7 0M32 40q-3-4-7 0" fill="none" ${st(2)}/><path d="M24 48v3M18 33.500q6-3 12 0" fill="none" ${st(2.200, SHU)}/><circle cx="24" cy="44.500" r="1.400" fill="${SUMI}"/></g>`,
-      crown: K('M36 38l3-24 11 11L60 9l10 16 11-11 3 24z', KARASHI) + `<path d="M39 33.500h42" ${st(1.4)}/><circle cx="60" cy="27" r="3.600" fill="${SHU}" ${st(1.3)}/><circle cx="46" cy="29" r="2.700" fill="${ROKU}" ${st(1.1)}/><circle cx="74" cy="29" r="2.700" fill="${SORA}" ${st(1.1)}/><path d="M66 14l7 12-6 7z" fill="url(#pDots)" opacity=".25"/>`,
+      // a railway conductor's peaked cap: indigo crown, vermilion band, lacquer visor, brass cherry-blossom crest
+      cap: H(E('M33 27C31 7 89 7 87 27z', AI) + `<path d="M36 13c12-7 36-7 48 0" fill="none" ${st(1.300, WASHI)} opacity=".55"/><path d="M64 9.500c13 2 22 8 23 17.500H64z" fill="url(#pDots)" opacity=".32"/>
+        <path d="M33.300 21.500q26.700-6 53.400 0l.3 5.500H33z" fill="${SHU}" ${st(1.300)}/><path d="M34 23.800q26-5.400 52 0" fill="none" ${st(0.900, KARASHI)}/>`
+        + E('M26 27q34-7 68 0c4 1 5 4 3 6-24-5-50-5-74 0-2-2-1-5 3-6z', SUMI, 2) + `<path d="M31 29.500q18-3.600 36-3.400" fill="none" ${st(1.300, WASHI)} opacity=".5"/>
+        <circle cx="33.500" cy="25.800" r="2.100" fill="${KARASHI}" ${st(1)}/><circle cx="86.500" cy="25.800" r="2.100" fill="${KARASHI}" ${st(1)}/>
+        <g transform="translate(60 16.500)">${[0, 72, 144, 216, 288].map((a) => `<path d="M0 0c-3.200-2-4.200-5.400-2-7.600l2 1.400 2-1.400c2.200 2.200 1.200 5.600-2 7.600z" transform="rotate(${a})" fill="${KARASHI}" ${st(0.900)}/>`).join('')}<circle r="1.700" fill="${SHU}" ${st(0.700)}/></g>`),
+      sakura: `<g transform="translate(89 27) rotate(12)"><path d="M-2 4q-10 4-16 12" fill="none" ${st(2.400, KARASHI)}/>${[0, 72, 144, 216, 288].map((a) => `<path d="M0 0c-6.500-4.300-8.600-11.500-4-16l4 3 4-3c4.600 4.500 2.500 11.700-4 16z" transform="rotate(${a})" fill="${MOMO}" ${st(1.400)}/><path d="M0-4v-7" transform="rotate(${a})" ${st(0.800, SHU)} opacity=".7"/>`).join('')}<circle r="3.400" fill="${KARASHI}" ${st(1.100)}/><circle cx="-9" cy="12" r="4.400" fill="${MOMO}" ${st(1.200)}/><circle cx="-9" cy="12" r="1.300" fill="${SHU}"/></g>`,
+      hachimaki: `<path d="M97 34l17-7-4 13zM97 36l15 9-11 4z" fill="${WASHI}" ${st(1.800)}/><path d="M103 33l5-2M103 40l4 2" ${st(0.900)} opacity=".5"/>` + E('M19 37q41-17 82 0l-1 10q-40-16-80 0z', WASHI, 2) + `<circle cx="60" cy="30.500" r="6" fill="${SHU}" ${st(1.200)}/><path d="M34 35q-6 2-10 5M86 35q6 2 10 5M44 32l-2 6M76 32l2 6" fill="none" ${st(0.900)} opacity=".4"/><text x="43.500" y="38.500" text-anchor="middle" style="fill:${SUMI};font:7px var(--f-pop)">必</text><text x="76.500" y="38.500" text-anchor="middle" style="fill:${SUMI};font:7px var(--f-pop)">勝</text>`,
+      straw: E('M8 25c0-7 23-12 52-12s52 5 52 12-23 11-52 11S8 32 8 25z', KARASHI) + E('M36 24c0-25 48-25 48 0z', KARASHI) + `<path d="M36.300 17.500q23.700 8 47.400 0l.3 6.500q-24 8-48 0z" fill="${SHU}" ${st(1.300)}/>
+        <path d="M14 28q46 9 92 0M12 24q48 8 96 0M42 6q18-6 36 0M40 11q20-6 40 0M24 21l-3 7M36 31l-1 4M60 33v3M84 31l1 4M96 21l3 7" fill="none" ${st(0.900)} opacity=".45"/><path d="M62 5c12 2 21 8 22 19H62z" fill="url(#pDots)" opacity=".22"/>`,
+      kitsune: `<g transform="translate(4 -12) rotate(-16 26 34)">${E('M9 46 12 17l12 12 12-12 3 29q-15 14-30 0z', WASHI, 2)}<path d="M14 23l5 6M34 23l-5 6" ${st(3.200, SHU)}/><path d="M15 39q4-5 8 0M33 39q-4-5-8 0" fill="none" ${st(2)}/><path d="M24 50v3M17 33q7-4 14 0" fill="none" ${st(2, SHU)}/><path d="M22 45h4l-2 2.400z" fill="${SUMI}"/><path d="M12 42l-4 1M12 46l-4 3M36 42l4 1M36 46l4 3" ${st(1.200, SHU)}/><circle cx="24" cy="26" r="1.800" fill="${KARASHI}" ${st(0.800)}/></g>`,
+      crown: E('M35 27l2-25 12 12L60-3l11 17L83 2l2 25z', KARASHI) + `<path d="M37 21h46M37 24.500h46" ${st(1.100)}/><path d="M70 14 83 2l2 25H70z" fill="url(#pDots)" opacity=".24"/><circle cx="60" cy="13" r="3.800" fill="${SHU}" ${st(1.200)}/><circle cx="45.500" cy="15" r="2.700" fill="${ROKU}" ${st(1)}/><circle cx="74.500" cy="15" r="2.700" fill="${SORA}" ${st(1)}/><circle cx="37" cy="2" r="2.200" fill="${WASHI}" ${st(1)}/><circle cx="60" cy="-3" r="2.400" fill="${WASHI}" ${st(1)}/><circle cx="83" cy="2" r="2.200" fill="${WASHI}" ${st(1)}/>`,
     };
     const ACCS = {
-      bell: `<path d="M38 97q22 12 44 0" fill="none" ${st(7.500, WASHI)}/><path d="M38 97q22 12 44 0" fill="none" ${st(4.600, SHU)}/>` + `<circle cx="60" cy="106.500" r="8" fill="${WASHI}" stroke="${WASHI}" stroke-width="3"/><circle cx="60" cy="106.500" r="8" fill="${KARASHI}" ${st(2)}/><path d="M54.500 108.500h11M60 108.500v5" ${st(1.700)}/><circle cx="60" cy="108.500" r="1.500" fill="${SUMI}"/>`,
-      bow: K('M60 102l-18-10v20z', SHU, 2.1) + K('M60 102l18-10v20z', SHU, 2.1) + `<path d="M47 98l8 3M73 98l-8 3" ${st(1.200, WASHI)} opacity=".6"/><circle cx="60" cy="102" r="5" fill="${KARASHI}" ${st(2)}/>`,
-      scarf: K('M24 93q36 17 72 0l2 12q-38 17-76 0z', SHU, 2.2) + K('M78 104l11 17-13 1-5-15z', SHU, 2) + `<path d="M34 98.500l-1 10M46 102l-1 10M60 103.500v10M74 102l1 10M86 98.500l1 10" ${st(1.600, WASHI)} opacity=".7"/>`,
+      // a red silk collar with a brass bell
+      bell: `<path d="M39 83q21 11 42 0" fill="none" ${st(8, WASHI)}/><path d="M39 83q21 11 42 0" fill="none" ${st(5.600, SHU)}/><path d="M43 85.500q17 8 34 0" fill="none" ${st(0.900, KARASHI)}/>` + E('M52 94a8 8 0 1 0 16 0 8 8 0 1 0-16 0z', KARASHI, 1.800) + `<path d="M53 95.500h14M60 95.500v6" ${st(1.500)}/><circle cx="60" cy="95.500" r="1.600" fill="${SUMI}"/><path d="M55 90q3-3 6-3" fill="none" ${st(1.300, WASHI)} opacity=".8"/><path d="M57 86.500h6v-3h-6z" fill="${KARASHI}" ${st(1.100)}/>`,
+      // a station master's bow tie with polka dots
+      bow: E('M60 89 41 78q-3 11 0 22z', SHU, 1.900) + E('M60 89l19-11q3 11 0 22z', SHU, 1.900) + `<g fill="${WASHI}"><circle cx="47" cy="85" r="1.300"/><circle cx="46" cy="93" r="1.300"/><circle cx="52" cy="89" r="1.300"/><circle cx="73" cy="85" r="1.300"/><circle cx="74" cy="93" r="1.300"/><circle cx="68" cy="89" r="1.300"/></g><path d="M56 87l-8-4M56 91l-8 4M64 87l8-4M64 91l8 4" ${st(0.900)} opacity=".45"/>` + E('M55 84h10v10H55z', KARASHI, 1.700),
+      // a striped winter muffler with a fringed end
+      scarf: E('M33 79q27 14 54 0l3 11q-30 15-60 0z', SHU, 2) + E('M70 91l12 19-14 3-6-17z', SHU, 1.900) + `<path d="M39 83l-2 10M48 86.500l-1.500 10M60 88v10M72 86.500l1.500 10M81 83l2 10M69.500 99l10-4M72.500 105l10-3.500" ${st(1.700, WASHI)} opacity=".85"/><path d="M69 113l-1 5M73 112.500v5M77 111.500l1 5M81 110.500l2 4.500" ${st(1.400, SHU)}/>`,
     };
-    const ground = o.face ? '' : `<path d="M26 120h68M36 123.500h48" fill="none" stroke="currentColor" stroke-width="1.600" stroke-linecap="round" opacity=".32"/>`;
-    const tail = o.face ? '' : K(TAIL, SUMI, 2.4) + `<path d="M116.500 80q2-7-5-8.500-4 1.500-1.500 6z" fill="${WASHI}"/>`;
+    const ground = o.face ? '' : `<path d="M22 120.500h76M34 124h52M48 127h24" fill="none" stroke="currentColor" stroke-width="1.500" stroke-linecap="round" opacity=".3"/>`;
+    const tail = o.face ? '' : `<path d="${TAILP}" fill="none" ${st(12.500, WASHI)}/><path d="${TAILP}" fill="none" ${st(9.500)}/><path d="M108.500 86c-2.500-3.500-6.500-4.500-9.500-2" fill="none" ${st(6.500, WASHI)}/><path d="M92 113c8 0 14-5 16-12" fill="none" ${st(1.300, FUR2)}/>`;
     return `<svg class="mascot ${esc(o.cls || '')}" viewBox="-6 -6 132 132" role="img" aria-label="Mochi the cat conductor">
       ${ground}${tail}
-      ${K(EAR_L, SUMI)}${K(EAR_R, SUMI)}
-      <path d="M28.500 45l2-20 14 12z" fill="${MOMO}"/><path d="M91.500 45l-2-20-14 12z" fill="${MOMO}"/>
-      ${K(CAT_BODY, SUMI)}
-      <path d="M95 52c9 12 12 30 6 44-8 9-22 15-38 16 24-8 38-28 32-60z" fill="url(#pDotsW)" opacity=".2"/>
-      <path d="M24 60c3-11 10-19 20-23M21 68c1-2 1-3 2-5" fill="none" ${st(2.600, WASHI)} opacity=".4"/>
-      <path d="M49 96q11 9 22 0-1 14-11 17-10-3-11-17z" fill="${WASHI}"/>
-      <path d="M21 73l-14-3.500M21 79H6M22 85l-13 4M99 73l14-3.500M99 79h15M98 85l13 4" fill="none" ${st(1.300, WASHI)} opacity=".85"/>
-      <circle cx="29" cy="84" r="5.200" fill="${SHU}"/><circle cx="91" cy="84" r="5.200" fill="${SHU}"/>
-      <path d="M26 83.500l5-3M88 83.500l5-3" ${st(1.100, WASHI)} opacity=".55"/>
+      ${E(BODY, SUMI, 2.4)}
+      <path d="M36 92c-3 7-3 14-1 19M84 92c3 7 3 14 1 19" fill="none" ${st(1.300, FUR2)}/>
+      <path d="M72 84c8 7 12 18 10 28-2 3-6 4-10 4 6-9 6-21 0-32z" fill="url(#pDotsW)" opacity=".2"/>
+      <path d="M46 86l5 4 4.500-4 4.500 4 4.500-4 4.500 4 5-4c2 12-4 21-14 25-10-4-16-13-14-25z" fill="${WASHI}"/>
+      <path d="M53 96v5M60 98v6M67 96v5" ${st(1, FUR2)} opacity=".5"/>
+      <path d="M49 104v9M71 104v9" ${st(1.300, FUR2)}/>
+      ${E('M39.500 113.500a9 5.600 0 1 0 18 0 9 5.600 0 1 0-18 0z', WASHI, 1.900)}${E('M62.500 113.500a9 5.600 0 1 0 18 0 9 5.600 0 1 0-18 0z', WASHI, 1.900)}
+      <path d="M45.500 112.500v3.400M48.500 112v4M51.500 112.500v3.400M68.500 112.500v3.400M71.500 112v4M74.500 112.500v3.400" ${st(1)} opacity=".65"/>
+      ${E(EARL, SUMI, 2.4)}${E(EARR, SUMI, 2.4)}
+      <path d="M27.500 31l-2.500-18 16 11z" fill="${MOMO}"/><path d="M92.500 31l2.500-18-16 11z" fill="${MOMO}"/><path d="M29 27l1-6M33 26l2-5M91 27l-1-6M87 26l-2-5" ${st(0.900, WASHI)} opacity=".8"/>
+      ${E(HEAD, SUMI, 2.4)}
+      <path d="M26 44c4-11 13-18 26-21-9 5-15 12-18 22-1 4-1 8 0 12-5-3-9-7-8-13z" fill="${FUR}"/>
+      <path d="M96 38c5 10 5 22-1 32-7 8-18 12-32 13 20-7 31-22 33-45z" fill="url(#pDotsW)" opacity=".2"/>
+      <path d="M56 33l1 6M60 31.500v8M64 33l-1 6M22 60l5 1M21 66l6-1M98 60l-5 1M99 66l-6-1M40 82l2-4M80 82l-2-4" ${st(1.100, FUR2)}/>
+      <path d="M25 62l-17-5M24 67.500l-18 .5M25 73l-16 6M95 62l17-5M96 67.500l18 .5M95 73l16 6" fill="none" ${st(1.100, WASHI)}/>
+      <circle cx="29" cy="70" r="4.800" fill="${SHU}"/><circle cx="91" cy="70" r="4.800" fill="${SHU}"/><circle cx="29" cy="70" r="4.800" fill="url(#pDots)" opacity=".18"/><circle cx="91" cy="70" r="4.800" fill="url(#pDots)" opacity=".18"/>
       ${eyes}
-      <path d="M57.300 73.800h5.400l-2.700 3.300z" fill="${MOMO}"/>${mouth}
-      ${K('M34.500 112a8.800 5.600 0 1 0 17.600 0 8.800 5.600 0 1 0-17.600 0z', WASHI, 2)}${K('M67.900 112a8.800 5.600 0 1 0 17.600 0 8.800 5.600 0 1 0-17.600 0z', WASHI, 2)}
-      <path d="M40.500 111v3M43.300 110.500v3.600M46.100 111v3M73.900 111v3M76.700 110.500v3.600M79.500 111v3" ${st(1.100)} opacity=".6"/>
+      <path d="M56.800 63.500h6.400l-3.200 4z" fill="${MOMO}" ${st(0.900)}/>${mouth}
       ${ACCS[acc] || ''}${HATS[hat] || ''}
     </svg>`;
   }
@@ -196,7 +216,7 @@ window.ART = (() => {
   const MOTIFS = { M: ['sakura', 'fuji', 'torii', 'pagoda', 'train', 'lantern', 'castle'], X: ['train', 'fuji', 'castle', 'wave'], S: ['sun', 'wave', 'fan', 'fireworks', 'goldfish', 'lantern'], SX: ['fireworks', 'train'], K: ['maple', 'moon', 'temple', 'persimmon', 'pagoda', 'fuji'], KX: ['maple', 'train'], W: ['snow', 'moon', 'temple', 'fuji', 'lantern', 'pagoda'], WX: ['snow', 'train'], Y: ['moon', 'lantern', 'temple', 'pagoda', 'castle', 'fuji'], YX: ['moon', 'train'] };
   // Stamp-pad inks: vermilion, indigo, verdigris, persimmon, navy, Edo purple.
   const INK = { M: '#c4321f', X: '#2f6f9e', S: '#2a7d72', SX: '#2a7d72', K: '#bf5a1c', KX: '#bf5a1c', W: '#2c4a80', WX: '#2c4a80', Y: '#63458a', YX: '#63458a' };
-  const LABEL = { M: 'MINNA LINE', X: 'N5 EXPRESS', S: 'SUMMER LINE', SX: 'N4 TERMINAL', K: 'AUTUMN LINE', KX: 'N3 TERMINAL', W: 'WINTER LINE', WX: 'N2 TERMINAL', Y: 'STARLIGHT LINE', YX: 'N1 TERMINAL' };
+  const LABEL = { M: 'MINNA LINE', X: 'N5 TERMINAL', S: 'SUMMER LINE', SX: 'N4 TERMINAL', K: 'AUTUMN LINE', KX: 'N3 TERMINAL', W: 'WINTER LINE', WX: 'N2 TERMINAL', Y: 'STARLIGHT LINE', YX: 'N1 TERMINAL' };
   function stamp(stn, code, date) {
     const list = MOTIFS[stn.line] || MOTIFS.M, h = hash(stn.id);
     const motif = M[list[h % list.length]], frame = h % 3;

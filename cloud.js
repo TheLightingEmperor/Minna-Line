@@ -102,8 +102,19 @@ window.CLOUD = (() => {
       community: {
         async feed(o) { return need(await sb.rpc('community_feed', { p_category: o.category || null, p_sort: o.sort || 'hot', p_limit: o.limit || 30, p_offset: o.offset || 0, p_jlpt: o.jlpt || null })) || []; },
         async thread(id) { return need(await sb.rpc('community_thread', { p_post: id })); },
-        async createPost(r) { return need(await sb.from('community_posts').insert({ author_id: uid, category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body }).select('id').single()).id; },
-        async updatePost(id, r) { need(await sb.from('community_posts').update({ category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body }).eq('id', id)); },
+        async createPost(r) { return need(await sb.from('community_posts').insert({ author_id: uid, category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body, images: r.images || [] }).select('id').single()).id; },
+        async updatePost(id, r) { need(await sb.from('community_posts').update({ category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body, images: r.images || [] }).eq('id', id)); },
+        // pictures go to Storage under the member's own folder; the post keeps only the path
+        async uploadImage(blob, ext) {
+          const path = `${uid}/${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}.${ext}`;
+          need(await sb.storage.from('community').upload(path, blob, { contentType: blob.type || 'image/jpeg', cacheControl: '31536000', upsert: false }));
+          return path;
+        },
+        imageUrl: (path) => `${cfg.SUPABASE_URL}/storage/v1/object/public/community/${String(path).split('/').map(encodeURIComponent).join('/')}`,
+        async notifications() { return need(await sb.rpc('community_notifications', { p_limit: 30 })) || []; },
+        async members(sort) { return need(await sb.rpc('community_members', { p_sort: sort || 'kudos', p_limit: 100 })) || []; },
+        async member(key) { return need(await sb.rpc('community_member', { p_key: key })); },
+        async weeklyPrompt() { return need(await sb.rpc('community_weekly_prompt')); },
         async deletePost(id) { need(await sb.from('community_posts').delete().eq('id', id)); },
         async addComment(r) { need(await sb.from('community_comments').insert({ post_id: r.post_id, parent_id: r.parent_id || null, author_id: uid, body: r.body })); },
         async deleteComment(id) { need(await sb.from('community_comments').delete().eq('id', id)); },
@@ -268,7 +279,7 @@ window.CLOUD = (() => {
       async sendFeedback(row) { await wait(); const db = read(); db.feedback.unshift({ id: db.nextId++, user_id: uid, status: 'new', created_at: iso(Date.now()), ...row }); write(db); },
       async deleteAccount() { const db = read(), u = byId(db, uid); if (u) delete db.users[u.email]; delete db.profiles[uid]; delete db.progress[uid]; delete db.days[uid]; db.logins = db.logins.filter((l) => l.user_id !== uid); db.session = null; write(db); uid = null; },
       community: (() => {
-        const author = (db, id) => { const p = db.profiles[id] || {}; return { author_name: p.display_name || 'Conductor', author_avatar: p.avatar || {}, author_level: p.user_level || 1, author_rank: p.rank_name || null, author_jlpt: p.jlpt || null, author_staff: id === 'demo-1' || id === uid }; };
+        const author = (db, id) => { const p = db.profiles[id] || {}; return { author_key: p.is_public === false ? null : id, author_name: p.display_name || 'Conductor', author_avatar: p.avatar || {}, author_level: p.user_level || 1, author_rank: p.rank_name || null, author_jlpt: p.jlpt || null, author_staff: id === 'demo-1' || id === uid }; };
         const lk = (kind, id) => `${uid}|${kind}|${id}`;
         return {
           async feed(o) {
@@ -286,8 +297,15 @@ window.CLOUD = (() => {
             return { post: { ...c, ...author(db, c.author_id), is_mine: c.author_id === uid, liked: !!db.clikes[lk('p', c.id)] },
               comments: db.ccomments.filter((m) => m.post_id === c.id).map((m) => ({ ...m, author_id: undefined, ...author(db, m.author_id), is_op: m.author_id === c.author_id, is_mine: m.author_id === uid, liked: !!db.clikes[lk('c', m.id)] })) };
           },
-          async createPost(r) { await wait(); const db = read(), id = Math.max(0, ...db.cposts.map((x) => x.id)) + 1, t = iso(Date.now()); db.cposts.push({ id, author_id: uid, category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body, like_count: 0, comment_count: 0, pinned: false, locked: false, hidden: false, created_at: t, updated_at: t, last_activity_at: t }); write(db); return id; },
-          async updatePost(id, r) { const db = read(), c = db.cposts.find((x) => x.id === +id); Object.assign(c, { category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body, updated_at: iso(Date.now()) }); write(db); },
+          async uploadImage(blob) { return await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(blob); }); },
+          imageUrl: (path) => path,
+          async notifications() { const db = read(); const mine = new Set(db.cposts.filter((c) => c.author_id === uid).map((c) => c.id)); const seen = db.cseen && db.cseen[uid] ? new Date(db.cseen[uid]).getTime() : 0;
+            return db.ccomments.filter((m) => mine.has(m.post_id) && m.author_id !== uid).sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 30).map((m) => ({ comment_id: m.id, post_id: m.post_id, post_title: db.cposts.find((c) => c.id === m.post_id).title, excerpt: m.body.slice(0, 160), created_at: m.created_at, ...author(db, m.author_id), is_new: new Date(m.created_at).getTime() > seen })); },
+          async members(sort) { await wait(150); const db = read(); return Object.values(db.profiles).filter((p) => p.is_public && !p.hidden).map((p) => ({ member_key: p.id, display_name: p.display_name, avatar: p.avatar, jlpt: p.jlpt, user_level: p.user_level, rank_name: p.rank_name, streak: p.streak, kudos: p.kudos || Math.round((p.xp || 0) / 900), posts: db.cposts.filter((c) => c.author_id === p.id).length, bio: p.bio || null, joined: (p.created_at || '').slice(0, 10), staff: p.id === 'demo-1' || p.id === uid })).sort((a, b) => (sort === 'level' ? b.user_level - a.user_level : sort === 'new' ? (a.joined < b.joined ? 1 : -1) : b.kudos - a.kudos)); },
+          async member(key) { await wait(150); const db = read(), p = db.profiles[key]; if (!p) return null; return { member_key: p.id, display_name: p.display_name, avatar: p.avatar, jlpt: p.jlpt, user_level: p.user_level, rank_name: p.rank_name, streak: p.streak, best_streak: p.best_streak, kudos: p.kudos || Math.round((p.xp || 0) / 900), stamps: p.stamps, trophies: p.trophies, words_mastered: p.words_mastered, kanji_mastered: p.kanji_mastered, xp: p.xp, bio: p.bio || null, joined: (p.created_at || '').slice(0, 10), is_me: p.id === uid, staff: p.id === 'demo-1', posts: db.cposts.filter((c) => c.author_id === p.id).map((c) => ({ id: c.id, category: c.category, jlpt: c.jlpt, title: c.title, like_count: c.like_count, comment_count: c.comment_count, created_at: c.created_at })) }; },
+          async weeklyPrompt() { const db = read(); if (db.cposts.some((c) => c.category === 'prompt')) return null; const t = iso(Date.now() - 2 * 36e5), id = Math.max(0, ...db.cposts.map((x) => x.id)) + 1; db.cposts.push({ id, author_id: 'demo-1', category: 'prompt', jlpt: null, title: 'This week: What did you eat today?', body: 'Describe one meal in Japanese. Bonus points for a counter word. きょう、なにを たべましたか。', images: [], like_count: 5, comment_count: 0, pinned: true, locked: false, hidden: false, created_at: t, updated_at: t, last_activity_at: t }); write(db); return id; },
+          async createPost(r) { await wait(); const db = read(), id = Math.max(0, ...db.cposts.map((x) => x.id)) + 1, t = iso(Date.now()); db.cposts.push({ id, author_id: uid, category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body, images: r.images || [], like_count: 0, comment_count: 0, pinned: false, locked: false, hidden: false, created_at: t, updated_at: t, last_activity_at: t }); write(db); return id; },
+          async updatePost(id, r) { const db = read(), c = db.cposts.find((x) => x.id === +id); Object.assign(c, { category: r.category, jlpt: r.jlpt || null, title: r.title, body: r.body, images: r.images || [], updated_at: iso(Date.now()) }); write(db); },
           async deletePost(id) { const db = read(); db.cposts = db.cposts.filter((x) => x.id !== +id); db.ccomments = db.ccomments.filter((m) => m.post_id !== +id); write(db); },
           async addComment(r) {
             await wait();
@@ -519,6 +537,7 @@ window.CLOUD = (() => {
     },
     schedulePush, pushNow, pull,
     // Community calls. If the tables are not installed yet (supabase/community.sql not run) the error has .missing = true.
+    communityImage: (path) => (be && be.community && be.community.imageUrl ? be.community.imageUrl(path) : path),
     community: new Proxy({}, {
       get: (_, name) => async (...args) => {
         if (!be || !be.community || !user) throw new Error('Log in to use the community.');
