@@ -482,7 +482,7 @@
   const navItems = () => (X.navItems ? X.navItems() : [['home', 'Home', 'ホーム', ICON.home], ['collection', 'Collection', 'コレクション', ICON.book]]);
   function tabbar() {
     if (view.name === 'session') return '';
-    const cur = view.name === 'station' || view.name === 'read' || view.name === 'reading' || view.name === 'guide' || view.name === 'dict' || view.name === 'mix' ? 'home' : view.name === 'post' || view.name === 'members' ? 'community' : view.name;
+    const cur = view.name === 'station' || view.name === 'read' || view.name === 'reading' || view.name === 'guide' || view.name === 'dict' || view.name === 'mix' ? 'home' : view.name === 'post' || view.name === 'members' ? 'community' : view.name === 'class' ? 'classes' : view.name;
     return `<nav class="tabbar" aria-label="Main">${navItems().filter((n) => n[4] !== 'wide').map(([act, label, jp, icon]) => `<button data-act="${act}"${cur === act ? ' aria-current="page"' : ''}>${icon}<span>${label}</span></button>`).join('')}</nav>`;
   }
   function render(body, actions = {}, onMount) {

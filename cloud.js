@@ -122,6 +122,16 @@ window.CLOUD = (() => {
         async testRemove(tid) { need(await sb.rpc('class_test_remove', { p_id: tid })); },
         async testTake(tid) { return need(await sb.rpc('class_test_take', { p_id: tid })); },
         async testSubmit(tid, answers) { return need(await sb.rpc('class_test_submit', { p_id: tid, p_answers: answers })); },
+        async setRole(role) { need(await sb.rpc('set_role', { p_role: role })); },
+        async agenda() { return need(await sb.rpc('my_agenda')); },
+        async extras(id) { return need(await sb.rpc('class_extras', { p_class: id })); },
+        async meetingSet(id, mid, m) { return need(await sb.rpc('class_meeting_set', { p_class: id, p_id: mid || null, p_title: m.title, p_starts: m.starts_at, p_minutes: m.minutes, p_link: m.link, p_note: m.note || null })); },
+        async meetingRemove(mid) { need(await sb.rpc('class_meeting_remove', { p_id: mid })); },
+        async assignmentSet(id, aid, a) { return need(await sb.rpc('class_assignment_set', { p_class: id, p_id: aid || null, p_title: a.title, p_body: a.body || '', p_due: a.due || null })); },
+        async assignmentRemove(aid) { need(await sb.rpc('class_assignment_remove', { p_id: aid })); },
+        async submit(aid, body, images) { need(await sb.rpc('class_submit', { p_assignment: aid, p_body: body || '', p_images: images || [] })); },
+        async submissions(aid) { return need(await sb.rpc('class_submissions', { p_assignment: aid })); },
+        async review(aid, key, grade, feedback) { need(await sb.rpc('class_review', { p_assignment: aid, p_member: key, p_grade: grade || '', p_feedback: feedback || '' })); },
       },
       community: {
         async feed(o) { return need(await sb.rpc('community_feed', { p_category: o.category || null, p_sort: o.sort || 'hot', p_limit: o.limit || 30, p_offset: o.offset || 0, p_jlpt: o.jlpt || null })) || []; },
@@ -336,6 +346,14 @@ window.CLOUD = (() => {
               return c;
             };
             const all = (db) => { db.classes.forEach((c) => cls(db, c.id)); return db.classes; };
+            // sample lesson and assignment for the demo class, so a new demo account sees how they look
+            const more = (c) => {
+              if (!c) return c;
+              const demo = c.id === 'c-demo';
+              c.meetings = c.meetings || (demo ? [{ id: 9301, title: 'Saturday lesson: stations 01 and 02', starts_at: iso(Date.now() + 26 * 36e5), minutes: 60, link: 'https://meet.google.com/abc-defg-hij', note: 'Bring a notebook. We will practise self-introductions.' }] : []);
+              c.assignments = c.assignments || (demo ? [{ id: 9401, title: 'Write your self-introduction', body: 'Five sentences: your name, where you are from, your job or school, one hobby, and a closing greeting. Handwritten is welcome: add a photo.', due: dayStr(new Date(Date.now() + 3 * 864e5)), created_at: iso(Date.now() - 864e5), subs: { 'demo-4': { body: 'Hajimemashite. Ravi desu. Indo kara kimashita...', images: [], submitted_at: iso(Date.now() - 5 * 36e5), grade: null, feedback: null, reviewed_at: null } } }] : []);
+              return c;
+            };
             const wxp = (db, m) => Object.entries(db.days[m] || {}).filter(([d]) => d >= dayStr(new Date(Date.now() - 6 * 864e5))).reduce((a, [, v]) => a + (v.xp || 0), 0);
             return {
               async view(id) {
@@ -362,6 +380,31 @@ window.CLOUD = (() => {
               async testSave(id, tid, title, questions, due) { const db = init(read()), c = cls(db, id), clean = questions.map((q) => ({ q: q.q, answer: q.answer, wrong: (q.wrong || []).filter(Boolean).slice(0, 3) })), t = tid && c.tests.find((x) => x.id === +tid); if (t) Object.assign(t, { title, questions: clean, due: due || null }); else c.tests.push({ id: db.nextId++, title, questions: clean, due: due || null, created_at: iso(Date.now()), results: {} }); write(db); },
               async testRemove(tid) { const db = init(read()); for (const c of all(db)) c.tests = c.tests.filter((t) => t.id !== +tid); write(db); },
               async testTake(tid) { const db = init(read()), c = all(db).find((x) => x.tests.some((t) => t.id === +tid)); if (!c) return null; const t = c.tests.find((x) => x.id === +tid), role = c.teacher_id === uid ? 'teacher' : 'student'; return role === 'teacher' ? { id: t.id, title: t.title, due: t.due, role, questions: t.questions } : { id: t.id, title: t.title, due: t.due, role, questions: t.questions.map((q) => ({ q: q.q, options: q.wrong.length ? ML.shuffle([q.answer, ...q.wrong]) : null })) }; },
+              // ---- roles, Meet lessons, assignments (demo)
+              async setRole(role) { const db = read(); if (db.profiles[uid]) db.profiles[uid].role = role; write(db); },
+              async agenda() {
+                await wait(120);
+                const db = init(read()), now = Date.now(), cs = all(db).map(more).filter((c) => c.teacher_id === uid || c.members.includes(uid));
+                write(db);
+                return { role: (db.profiles[uid] || {}).role || 'learner',
+                  teaching: cs.filter((c) => c.teacher_id === uid).map((c) => ({ id: c.id, name: c.name, code: c.code, jlpt: c.jlpt, students: c.members.length, to_review: c.assignments.reduce((a, x) => a + Object.values(x.subs).filter((v) => !v.reviewed_at).length, 0), active_7d: Math.max(0, c.members.length - 1) })),
+                  meetings: cs.flatMap((c) => c.meetings.filter((m) => new Date(m.starts_at).getTime() + m.minutes * 6e4 > now).map((m) => ({ ...m, class_id: c.id, class_name: c.name, teaching: c.teacher_id === uid }))).sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at)),
+                  assignments: cs.flatMap((c) => c.assignments.map((a) => ({ id: a.id, class_id: c.id, class_name: c.name, title: a.title, due: a.due, teaching: c.teacher_id === uid, done: !!a.subs[uid], to_review: c.teacher_id === uid ? Object.values(a.subs).filter((v) => !v.reviewed_at).length : null }))) };
+              },
+              async extras(id) {
+                await wait(100);
+                const db = init(read()), c = more(cls(db, id)); if (!c) return null;
+                const T = c.teacher_id === uid; if (!T && !c.members.includes(uid)) return null;
+                write(db);
+                return { meetings: c.meetings, assignments: c.assignments.map((a) => ({ id: a.id, title: a.title, body: a.body, due: a.due, created_at: a.created_at, mine: T ? null : a.subs[uid] || null, submitted: T ? Object.keys(a.subs).length : null, to_review: T ? Object.values(a.subs).filter((v) => !v.reviewed_at).length : null })) };
+              },
+              async meetingSet(id, mid, m) { if (!/^https:\/\/meet\.google\.com\/[A-Za-z0-9?=&_.\/-]+$/.test(m.link || '')) throw new Error('Paste a Google Meet link. It looks like https://meet.google.com/abc-defg-hij'); const db = init(read()), c = more(cls(db, id)), old = mid && c.meetings.find((x) => x.id === +mid); if (old) Object.assign(old, m); else c.meetings.push({ id: db.nextId++, ...m }); write(db); },
+              async meetingRemove(mid) { const db = init(read()); for (const c of all(db).map(more)) c.meetings = c.meetings.filter((m) => m.id !== +mid); write(db); },
+              async assignmentSet(id, aid, a) { const db = init(read()), c = more(cls(db, id)), old = aid && c.assignments.find((x) => x.id === +aid); if (old) Object.assign(old, a); else c.assignments.push({ id: db.nextId++, ...a, created_at: iso(Date.now()), subs: {} }); write(db); },
+              async assignmentRemove(aid) { const db = init(read()); for (const c of all(db).map(more)) c.assignments = c.assignments.filter((a) => a.id !== +aid); write(db); },
+              async submit(aid, body, images) { const db = init(read()), a = all(db).map(more).flatMap((c) => c.assignments).find((x) => x.id === +aid); if (!String(body || '').trim() && !(images || []).length) throw new Error('Write something or add a picture first.'); a.subs[uid] = { body, images: images || [], submitted_at: iso(Date.now()), grade: (a.subs[uid] || {}).grade || null, feedback: (a.subs[uid] || {}).feedback || null, reviewed_at: null }; write(db); },
+              async submissions(aid) { await wait(100); const db = init(read()), c = all(db).map(more).find((x) => x.assignments.some((a) => a.id === +aid)), a = c.assignments.find((x) => x.id === +aid); return { id: a.id, title: a.title, body: a.body, due: a.due, students: c.members.map((m) => ({ key: m, name: (db.profiles[m] || {}).display_name || 'Conductor', avatar: (db.profiles[m] || {}).avatar || {}, submitted_at: null, ...(a.subs[m] || {}) })).sort((x, y) => (!x.submitted_at) - (!y.submitted_at)) }; },
+              async review(aid, key, grade, feedback) { const db = init(read()), a = all(db).map(more).flatMap((c) => c.assignments).find((x) => x.id === +aid); if (!a.subs[key]) throw new Error('That student has not handed anything in yet.'); Object.assign(a.subs[key], { grade: grade || null, feedback: feedback || null, reviewed_at: iso(Date.now()) }); write(db); },
               async testSubmit(tid, answers) { const db = init(read()), c = all(db).find((x) => x.tests.some((t) => t.id === +tid)), t = c.tests.find((x) => x.id === +tid); const review = t.questions.map((q, i) => ({ q: q.q, correct: q.answer, yours: answers[i] || '', ok: norm(q.answer) === norm(answers[i]) })); const score = review.filter((x) => x.ok).length; t.results[uid] = { score, total: review.length, attempts: ((t.results[uid] || {}).attempts || 0) + 1 }; write(db); return { score, total: review.length, review }; },
             };
           })(),

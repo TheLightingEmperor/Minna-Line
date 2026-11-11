@@ -370,4 +370,182 @@ begin
 end
 $grants$;
 
+
+-- ========================= roles, Google Meet lessons, written assignments =========================
+-- role: which side of the app a person uses. Anyone may be a teacher; it only changes the interface they land on.
+alter table public.profiles add column if not exists role text not null default 'learner';
+alter table public.profiles drop constraint if exists profiles_role_check;
+alter table public.profiles add constraint profiles_role_check check (role in ('learner', 'teacher'));
+create or replace function public.set_role(p_role text)
+returns void language sql security definer set search_path = public as $$
+  update public.profiles set role = case when p_role = 'teacher' then 'teacher' else 'learner' end where id = auth.uid();
+$$;
+
+create table if not exists public.class_meetings (
+  id         bigint generated always as identity primary key,
+  class_id   uuid not null references public.classes (id) on delete cascade,
+  title      text not null check (char_length(btrim(title)) between 2 and 120),
+  starts_at  timestamptz not null,
+  minutes    integer not null default 60 check (minutes between 10 and 480),
+  link       text not null check (char_length(link) <= 200 and link ~ '^https://meet\.google\.com/[A-Za-z0-9?=&_./-]+$'),
+  note       text check (char_length(note) <= 500),
+  created_at timestamptz not null default now()
+);
+create table if not exists public.class_assignments (
+  id         bigint generated always as identity primary key,
+  class_id   uuid not null references public.classes (id) on delete cascade,
+  title      text not null check (char_length(btrim(title)) between 2 and 120),
+  body       text check (char_length(body) <= 6000),
+  due        date,
+  created_at timestamptz not null default now()
+);
+create table if not exists public.class_submissions (
+  assignment_id bigint not null references public.class_assignments (id) on delete cascade,
+  user_id       uuid not null references auth.users (id) on delete cascade,
+  body          text check (char_length(body) <= 8000),
+  images        text[] not null default '{}' check (cardinality(images) <= 4),
+  submitted_at  timestamptz not null default now(),
+  grade         text check (char_length(grade) <= 40),
+  feedback      text check (char_length(feedback) <= 2000),
+  reviewed_at   timestamptz,
+  primary key (assignment_id, user_id)
+);
+create index if not exists class_meetings_class_idx on public.class_meetings (class_id, starts_at);
+create index if not exists class_assignments_class_idx on public.class_assignments (class_id, created_at);
+alter table public.class_meetings enable row level security;
+alter table public.class_assignments enable row level security;
+alter table public.class_submissions enable row level security;
+revoke all on public.class_meetings, public.class_assignments, public.class_submissions from anon, authenticated;
+
+-- lessons on Google Meet: the teacher pastes the Meet link, students get a Join button
+create or replace function public.class_meeting_set(p_class uuid, p_id bigint, p_title text, p_starts timestamptz, p_minutes integer, p_link text, p_note text default null)
+returns bigint language plpgsql security definer set search_path = public as $$
+declare mid bigint; lk text := btrim(coalesce(p_link, ''));
+begin
+  if public.class_role(p_class) is distinct from 'teacher' then raise exception 'That is not your class.'; end if;
+  if lk !~ '^https://meet\.google\.com/[A-Za-z0-9?=&_./-]+$' then raise exception 'Paste a Google Meet link. It looks like https://meet.google.com/abc-defg-hij'; end if;
+  if p_starts is null then raise exception 'Pick a date and time.'; end if;
+  if p_id is null then
+    if (select count(*) from public.class_meetings where class_id = p_class) >= 60 then raise exception 'A class can hold 60 lessons. Remove old ones first.'; end if;
+    insert into public.class_meetings (class_id, title, starts_at, minutes, link, note)
+      values (p_class, left(btrim(p_title), 120), p_starts, coalesce(p_minutes, 60), lk, nullif(left(btrim(coalesce(p_note, '')), 500), '')) returning id into mid;
+  else
+    update public.class_meetings set title = left(btrim(p_title), 120), starts_at = p_starts, minutes = coalesce(p_minutes, 60), link = lk, note = nullif(left(btrim(coalesce(p_note, '')), 500), '')
+      where id = p_id and class_id = p_class returning id into mid;
+    if mid is null then raise exception 'That lesson no longer exists.'; end if;
+  end if;
+  return mid;
+end $$;
+create or replace function public.class_meeting_remove(p_id bigint)
+returns void language sql security definer set search_path = public as $$
+  delete from public.class_meetings m using public.classes c where m.id = p_id and c.id = m.class_id and c.teacher_id = auth.uid();
+$$;
+
+-- written assignments: the teacher sets the task, each student hands in text and up to four pictures, the teacher reviews
+create or replace function public.class_assignment_set(p_class uuid, p_id bigint, p_title text, p_body text, p_due date default null)
+returns bigint language plpgsql security definer set search_path = public as $$
+declare aid bigint;
+begin
+  if public.class_role(p_class) is distinct from 'teacher' then raise exception 'That is not your class.'; end if;
+  if p_id is null then
+    if (select count(*) from public.class_assignments where class_id = p_class) >= 60 then raise exception 'A class can hold 60 assignments. Remove old ones first.'; end if;
+    insert into public.class_assignments (class_id, title, body, due) values (p_class, left(btrim(p_title), 120), left(coalesce(p_body, ''), 6000), p_due) returning id into aid;
+  else
+    update public.class_assignments set title = left(btrim(p_title), 120), body = left(coalesce(p_body, ''), 6000), due = p_due where id = p_id and class_id = p_class returning id into aid;
+    if aid is null then raise exception 'That assignment no longer exists.'; end if;
+  end if;
+  return aid;
+end $$;
+create or replace function public.class_assignment_remove(p_id bigint)
+returns void language sql security definer set search_path = public as $$
+  delete from public.class_assignments a using public.classes c where a.id = p_id and c.id = a.class_id and c.teacher_id = auth.uid();
+$$;
+create or replace function public.class_submit(p_assignment bigint, p_body text, p_images text[] default '{}')
+returns void language plpgsql security definer set search_path = public as $$
+declare uid uuid := auth.uid(); a public.class_assignments; imgs text[] := coalesce(p_images, '{}');
+begin
+  select * into a from public.class_assignments where id = p_assignment;
+  if a.id is null or public.class_role(a.class_id) is distinct from 'student' then raise exception 'This assignment is not open to you.'; end if;
+  if btrim(coalesce(p_body, '')) = '' and cardinality(imgs) = 0 then raise exception 'Write something or add a picture first.'; end if;
+  if cardinality(imgs) > 4 then raise exception 'Four pictures is the limit.'; end if;
+  if exists (select 1 from unnest(imgs) i where i not like uid::text || '/%' and i not like 'data:%') then raise exception 'Pictures must be your own uploads.'; end if;
+  insert into public.class_submissions (assignment_id, user_id, body, images) values (a.id, uid, left(coalesce(p_body, ''), 8000), imgs)
+    on conflict (assignment_id, user_id) do update set body = excluded.body, images = excluded.images, submitted_at = now(), reviewed_at = null;
+end $$;
+create or replace function public.class_submissions(p_assignment bigint)
+returns jsonb language plpgsql stable security definer set search_path = public as $$
+declare a public.class_assignments;
+begin
+  select * into a from public.class_assignments where id = p_assignment;
+  if a.id is null or public.class_role(a.class_id) is distinct from 'teacher' then return null; end if;
+  return jsonb_build_object('id', a.id, 'title', a.title, 'body', a.body, 'due', a.due, 'students', coalesce((
+    select jsonb_agg(jsonb_build_object('key', left(md5(p.id::text), 12), 'name', p.display_name, 'avatar', p.avatar,
+      'submitted_at', s.submitted_at, 'body', s.body, 'images', s.images, 'grade', s.grade, 'feedback', s.feedback, 'reviewed_at', s.reviewed_at)
+      order by (s.submitted_at is null), (s.reviewed_at is not null), s.submitted_at)
+    from public.class_members m join public.profiles p on p.id = m.user_id
+    left join public.class_submissions s on s.assignment_id = a.id and s.user_id = m.user_id
+    where m.class_id = a.class_id), '[]'::jsonb));
+end $$;
+create or replace function public.class_review(p_assignment bigint, p_member text, p_grade text, p_feedback text)
+returns void language plpgsql security definer set search_path = public as $$
+declare a public.class_assignments; sid uuid;
+begin
+  select * into a from public.class_assignments where id = p_assignment;
+  if a.id is null or public.class_role(a.class_id) is distinct from 'teacher' then raise exception 'That is not your class.'; end if;
+  sid := public.class_member_id(a.class_id, p_member);
+  update public.class_submissions set grade = nullif(left(btrim(coalesce(p_grade, '')), 40), ''), feedback = nullif(left(btrim(coalesce(p_feedback, '')), 2000), ''), reviewed_at = now()
+    where assignment_id = a.id and user_id = sid;
+  if not found then raise exception 'That student has not handed anything in yet.'; end if;
+end $$;
+
+-- lessons and assignments for one class page
+create or replace function public.class_extras(p_class uuid)
+returns jsonb language plpgsql stable security definer set search_path = public as $$
+declare r text := public.class_role(p_class); uid uuid := auth.uid();
+begin
+  if r is null then return null; end if;
+  return jsonb_build_object(
+    'meetings', coalesce((select jsonb_agg(jsonb_build_object('id', m.id, 'title', m.title, 'starts_at', m.starts_at, 'minutes', m.minutes, 'link', m.link, 'note', m.note) order by m.starts_at)
+      from public.class_meetings m where m.class_id = p_class and m.starts_at > now() - interval '14 days'), '[]'::jsonb),
+    'assignments', coalesce((select jsonb_agg(jsonb_build_object('id', a.id, 'title', a.title, 'body', a.body, 'due', a.due, 'created_at', a.created_at,
+        'mine', case when r = 'student' then (select jsonb_build_object('body', s.body, 'images', s.images, 'submitted_at', s.submitted_at, 'grade', s.grade, 'feedback', s.feedback, 'reviewed_at', s.reviewed_at) from public.class_submissions s where s.assignment_id = a.id and s.user_id = uid) end,
+        'submitted', case when r = 'teacher' then (select count(*) from public.class_submissions s where s.assignment_id = a.id) end,
+        'to_review', case when r = 'teacher' then (select count(*) from public.class_submissions s where s.assignment_id = a.id and s.reviewed_at is null) end) order by a.created_at desc)
+      from public.class_assignments a where a.class_id = p_class), '[]'::jsonb));
+end $$;
+
+-- what is coming up across every class the caller teaches or is in: the teacher's desk and the learner's home card
+create or replace function public.my_agenda()
+returns jsonb language sql stable security definer set search_path = public as $$
+  with mine as (
+    select c.id, c.name, c.code, c.jlpt, c.created_at, true as teaching from public.classes c where c.teacher_id = auth.uid()
+    union all
+    select c.id, c.name, null, c.jlpt, c.created_at, false from public.class_members m join public.classes c on c.id = m.class_id where m.user_id = auth.uid()
+  )
+  select case when auth.uid() is null then null else jsonb_build_object(
+    'role', (select role from public.profiles where id = auth.uid()),
+    'teaching', coalesce((select jsonb_agg(jsonb_build_object('id', x.id, 'name', x.name, 'code', x.code, 'jlpt', x.jlpt,
+        'students', (select count(*) from public.class_members m where m.class_id = x.id),
+        'to_review', (select count(*) from public.class_submissions s join public.class_assignments a on a.id = s.assignment_id where a.class_id = x.id and s.reviewed_at is null),
+        'active_7d', (select count(distinct d.user_id) from public.daily_activity d join public.class_members m on m.user_id = d.user_id where m.class_id = x.id and d.day >= (now() at time zone 'utc')::date - 6)) order by x.created_at)
+      from mine x where x.teaching), '[]'::jsonb),
+    'meetings', coalesce((select jsonb_agg(jsonb_build_object('id', m.id, 'class_id', x.id, 'class_name', x.name, 'title', m.title, 'starts_at', m.starts_at, 'minutes', m.minutes, 'link', m.link, 'note', m.note, 'teaching', x.teaching) order by m.starts_at)
+      from public.class_meetings m join mine x on x.id = m.class_id where m.starts_at + (m.minutes || ' minutes')::interval > now() and m.starts_at < now() + interval '30 days'), '[]'::jsonb),
+    'assignments', coalesce((select jsonb_agg(jsonb_build_object('id', a.id, 'class_id', x.id, 'class_name', x.name, 'title', a.title, 'due', a.due, 'teaching', x.teaching,
+        'done', exists (select 1 from public.class_submissions s where s.assignment_id = a.id and s.user_id = auth.uid()),
+        'to_review', case when x.teaching then (select count(*) from public.class_submissions s where s.assignment_id = a.id and s.reviewed_at is null) end) order by a.due nulls last, a.created_at desc)
+      from public.class_assignments a join mine x on x.id = a.class_id), '[]'::jsonb)) end;
+$$;
+
+do $grants2$
+declare f text;
+begin
+  foreach f in array array['set_role(text)', 'class_meeting_set(uuid, bigint, text, timestamptz, integer, text, text)', 'class_meeting_remove(bigint)', 'class_assignment_set(uuid, bigint, text, text, date)',
+    'class_assignment_remove(bigint)', 'class_submit(bigint, text, text[])', 'class_submissions(bigint)', 'class_review(bigint, text, text, text)', 'class_extras(uuid)', 'my_agenda()'] loop
+    execute format('revoke execute on function public.%s from public, anon', f);
+    execute format('grant execute on function public.%s to authenticated', f);
+  end loop;
+end
+$grants2$;
+
 notify pgrst, 'reload schema';

@@ -999,3 +999,33 @@ select.input { appearance: auto; }
 .tqa .input { padding: 8px 10px; font-size: 14px; background: var(--panel); }
 .tqa .input.ok { border-color: var(--good); border-width: 2.5px; }
 @media (max-width: 640px) { .tqa, .tqhead { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- learner / teacher split ---------- */
+.rolepick { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.rolebtn { display: grid; gap: 1px; text-align: left; background: var(--bg); border: 2px solid var(--edge); border-radius: 8px; padding: 10px 12px; }
+.rolebtn b { font-family: var(--f-pop); font-weight: 400; font-size: 16px; }
+.rolebtn small { color: var(--muted); font-size: 12px; line-height: 1.35; }
+.rolebtn[aria-pressed="true"] { background: var(--line); color: var(--on-accent); box-shadow: 3px 3px 0 var(--shade); }
+.rolebtn[aria-pressed="true"] small { color: inherit; opacity: .9; }
+.rolebtn[data-role="teacher"][aria-pressed="true"] { background: var(--n2); }
+/* teacher's desk, lessons, assignments */
+.dgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.dcard { gap: 10px; }
+.mrow.live { background: color-mix(in srgb, var(--good) 16%, var(--panel)); }
+.mrow .btn svg { width: 16px; height: 16px; }
+.hwside a.btn { text-decoration: none; color: inherit; }
+.hwside a.btn.primary { color: var(--on-accent); }
+a.linkbtn, a.chip { text-decoration: none; color: inherit; }
+a.linkbtn { text-decoration: underline; }
+.mgrid3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 10px; }
+@media (max-width: 560px) { .mgrid3 { grid-template-columns: minmax(0, 1fr); } }
+.rvcard { border: 2px solid var(--edge); border-radius: 8px; padding: 12px; display: grid; gap: 10px; background: var(--bg); }
+.rvcard.done { border-color: var(--good); }
+.rvform { display: grid; grid-template-columns: 200px minmax(0, 1fr) auto; gap: 8px; align-items: start; }
+.rvform .input { padding: 8px 10px; font-size: 14px; background: var(--panel); }
+@media (max-width: 640px) { .rvform { grid-template-columns: minmax(0, 1fr); } }
+.cimgs a { display: block; border: 2px solid var(--edge); border-radius: 8px; overflow: hidden; }
+.fbk { background-color: color-mix(in srgb, var(--good) 12%, var(--panel)); }
+.desk .kpis.four { margin-top: 4px; }
+
+[hidden] { display: none !important; }

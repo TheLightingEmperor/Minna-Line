@@ -85,13 +85,15 @@ window.CLASSES = (() => {
   }
 
   // ---------------------------------------------------------------- one class: the page teacher and students share
-  let hwLevel = null, board = null, cv = null;
+  let hwLevel = null, board = null, cv = null, cx = null, ctab = 'today';
   const fmt = (n) => Math.round(+n || 0).toLocaleString('en-US');
   const text = (t) => esc(t).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]])/g, '<a href="$1" target="_blank" rel="noopener nofollow ugc">$1</a>');
   function renderClass(v) {
     if (!CLOUD.user) return go({ name: 'me' });
     const id = v.id, again = () => load(id), run = async (fn, msg) => { try { await fn(); if (msg) toast(msg); again(); } catch (e) { toast(e.message); } };
     render(`<div class="station"><button class="back" data-act="classes">${ICON.back} Classes</button><div id="cboard" class="stack"><div class="card skeleton" style="height:260px"></div></div></div>`, {
+      ...(window.TEACH ? window.TEACH.actions(id, again, () => cx) : {}),
+      ctab: (t) => { ctab = t; paint(); },
       ccopy: (t) => { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('Copied')).catch(() => toast(t)); },
       hwlv: (l) => { hwLevel = l; paint(); },
       hwadd: () => run(() => K.setHomework(id, document.getElementById('hwst').value, document.getElementById('hwnote').value.trim(), document.getElementById('hwdue').value || null), 'Homework set'),
@@ -135,6 +137,7 @@ window.CLASSES = (() => {
       cv = await K.view(id);
       if (cv) cv._id = id;
       board = cv && cv.role === 'teacher' ? await K.roster(id) : null;
+      cx = cv ? await K.extras(id).catch(() => null) : null;
       if (cv && cv.role === 'student') await mine().catch(() => {});
       paint();
     } catch (e) { if (el && el.isConnected) el.innerHTML = e.missing ? missing() : `<div class="card"><b>That didn't load.</b><span class="muted">${esc(e.message)}</span></div>`; }
@@ -148,6 +151,9 @@ window.CLASSES = (() => {
     const lv = hwLevel || c.jlpt, link = `${location.origin}${location.pathname}?join=${c.code}`;
     const options = ML.STATIONS.filter((s) => s.level === lv).map((s) => `<option value="${esc(s.id)}">${esc(s.code)} · ${esc(s.name)}</option>`).join('');
     const doneCount = (h) => students.filter((s) => s.stamps && s.stamps[h.station_id]).length;
+    const XS = window.TEACH ? window.TEACH.sections(c, T, students, cx) : { meet: '', assign: '' };
+    const tab = ctab === 'students' && !T ? 'today' : ctab;
+    const waiting = cx ? (T ? cx.assignments.reduce((a, x) => a + (+x.to_review || 0), 0) : cx.assignments.filter((x) => !x.mine).length + hw.filter((h) => !S.stamps[h.station_id]).length + c.tests.filter((t) => !t.mine).length) : 0;
     const tops = c.feed.filter((p) => !p.parent_id).sort((a, b) => (b.pinned - a.pinned) || (new Date(b.created_at) - new Date(a.created_at)));
     const postHTML = (p, reply) => `<div class="npost ${p.pinned ? 'pinned' : ''}"><div class="cmeta">${SOCIAL.avatar(p.author_avatar, reply ? 26 : 32)}<span class="cwho"><b>${esc(p.author_name)}</b>${p.is_teacher ? '<span class="pill stamp">Teacher</span>' : ''}${p.pinned ? '<span class="pill coin">Pinned</span>' : ''}<small>${ago(p.created_at)}</small></span></div><div class="ctext">${text(p.body)}</div>
       <span class="ctools">${reply ? '' : `<button class="linkbtn" data-act="nreply" data-arg="${p.id}">Reply</button>`}${T && !reply ? `<button class="linkbtn" data-act="npin" data-arg="${p.id}:${p.pinned ? 0 : 1}">${p.pinned ? 'Unpin' : 'Pin'}</button>` : ''}${p.is_mine || T ? `<button class="linkbtn" data-act="ndel" data-arg="${p.id}">Delete</button>` : ''}</span>
@@ -177,8 +183,8 @@ window.CLASSES = (() => {
       <div class="row-between"><div><h1>${esc(c.name)}</h1><p class="muted" style="margin:4px 0 0">${T ? `${esc(c.jlpt)} · ${students.length} ${students.length === 1 ? 'student' : 'students'}` : `Teacher: ${esc(c.teacher || '')} · ${esc(c.jlpt)}`}</p></div><button class="linkbtn" data-act="${T ? 'cdelete' : 'cleave'}">${T ? 'Delete class' : 'Leave class'}</button></div>
       ${(c.nudges || []).map((n) => `<div class="tip nudge"><b>From your teacher:</b> ${esc(n.message)} <button class="chip" data-act="ndone" data-arg="${n.id}">Got it</button></div>`).join('')}
       ${T ? `<section class="card codecard"><div><div class="eyebrow">Class code</div><div class="ccode big">${esc(c.code)}</div></div><div class="stack" style="gap:8px"><div class="muted small">Students open Minna Line → Me → Classes → Join with a code. Or send them the link and it fills the code in for them.</div><div class="seg"><button class="chip" data-act="ccopy" data-arg="${esc(c.code)}">Copy code</button><button class="chip" data-act="ccopy" data-arg="${esc(link)}">Copy invite link</button></div></div></section>` : ''}
-      <div class="cgrid"><div class="stack">${goalsHTML}${hwHTML}${testsHTML}${feedHTML}</div><aside class="stack">${boardHTML}</aside></div>
-      ${tableHTML}`;
+      <div class="tabs" role="tablist">${[['today', 'Class'], ['work', `Work${waiting ? ` · ${waiting}` : ''}`], ...(T ? [['students', `Students · ${students.length}`]] : [])].map(([k, l]) => `<button role="tab" aria-selected="${tab === k}" data-act="ctab" data-arg="${k}">${l}</button>`).join('')}</div>
+      ${tab === 'work' ? `<div class="stack">${XS.assign}${hwHTML}${testsHTML}</div>` : tab === 'students' ? tableHTML : `<div class="cgrid"><div class="stack">${XS.meet}${feedHTML}</div><aside class="stack">${goalsHTML}${boardHTML}</aside></div>`}`;
   }
   // The teacher's private note on a student, and a short nudge the student sees at the top of the class page.
   function studentNote(id, key, done) {
@@ -281,5 +287,5 @@ window.CLASSES = (() => {
   CLOUD.on((what) => { if (what === 'ready') setTimeout(maybeJoin, 600); });
   Object.assign(UI.ROUTES, { classes: renderClasses, class: renderClass });
   Object.assign(UI.G, { classes: () => go({ name: 'classes' }) });
-  return { joinDialog };
+  return { joinDialog, createDialog, openTab: (id, tab) => { ctab = tab || 'today'; go({ name: 'class', id }); } };
 })();

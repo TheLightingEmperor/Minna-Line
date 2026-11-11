@@ -84,6 +84,17 @@ A teacher starts a class and gets a six-character code. Students join with the c
 
 Homework is a station. It counts as done when the student wins that station's stamp. A teacher sees only name, Mochi, level, activity and stamps for students who typed their code, never an email.
 
+### Teacher view, lessons and assignments
+
+The welcome screen asks whether someone is a **Learner** or a **Teacher**. Both get the whole learning hub. Teachers land on a **desk** that shows their classes, what is coming up and what needs reviewing; learners land on the route map. Anyone can switch from **Me**.
+
+Run the latest [`supabase/classes.sql`](supabase/classes.sql) again to switch on:
+
+- **Lessons on Google Meet.** The teacher presses "Create a new Meet link" (it opens Google Meet under their own Google account), pastes the link, and picks a date and time. Students get a Join button on the class page and the home page, plus an "Add to calendar" link. Only `meet.google.com` links are accepted.
+- **Assignments.** The teacher writes the task and a due date. Students hand in text and up to four pictures (a photo of handwriting works well). The teacher reviews each one with a grade and feedback, and the student sees it on the assignment.
+
+Creating the Meet room itself happens in Google Meet, not inside Minna Line. Making that one click would need a Google Cloud project with Calendar access and Google's app review; it can be added later.
+
 ## Public study pages (for search engines)
 
 Everything under `/learn/` is plain HTML that Google can read without logging in: one page per grammar point (460), an index per JLPT level, and one page per Guidebook sheet, plus `sitemap.xml` and `robots.txt`. They are generated from the app's own data:

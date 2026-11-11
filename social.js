@@ -79,7 +79,12 @@ window.SOCIAL = (() => {
   }
 
   // ---------------------------------------------------------------- welcome gate
-  let gateMode = 'signup';
+  let gateMode = 'signup', gateRole = 'learner';
+  try { if (localStorage.getItem('minna-line-role') === 'teacher') gateRole = 'teacher'; } catch (e) { /* ignore */ }
+  const ROLE_COPY = {
+    learner: { signup: 'しゅっぱつ！ Create my free account', login: 'ただいま！ Log in as a learner' },
+    teacher: { signup: 'Create my teacher account', login: 'Log in as a teacher' },
+  };
   const LEVEL_CHOICES = [['new', 'Brand new'], ['N5', 'N5'], ['N4', 'N4'], ['N3', 'N3'], ['N2', 'N2'], ['N1', 'N1']];
   function showGate(mode, info) {
     UI.view = { name: 'gate' };
@@ -131,7 +136,7 @@ window.SOCIAL = (() => {
         </div>
       </section>
       <section class="gate-side">
-        <form class="card gate-card" id="authform" novalidate>${tabs}${form}${CLOUD.demo ? '<p class="fine">Demo mode: accounts live only in this browser. Use any email and password.</p>' : ''}</form>
+        <form class="card gate-card" id="authform" novalidate>${m === 'signup' || m === 'login' ? `<div class="rolepick" role="group" aria-label="I am a"><button type="button" class="rolebtn" data-role="learner" aria-pressed="${gateRole === 'learner'}"><b>Learner</b><small>I'm here to study Japanese</small></button><button type="button" class="rolebtn" data-role="teacher" aria-pressed="${gateRole === 'teacher'}"><b>Teacher</b><small>I run a class or tutor students</small></button></div>` : ''}${tabs}${form}${CLOUD.demo ? '<p class="fine">Demo mode: accounts live only in this browser. Use any email and password.</p>' : ''}</form>
         <a class="linkbtn" href="learn/" style="text-align:center">Just browsing? Read the free grammar pages</a>
         <div class="card gate-board" id="gateboard" hidden></div>
       </section>
@@ -139,12 +144,23 @@ window.SOCIAL = (() => {
     UI.setKeys(null);
     UI.setActions({ gatemode: (x) => showGate(x) });
     const f = UI.root.querySelector('#authform');
+    const paintRole = () => {
+      f.querySelectorAll('[data-role]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.role === gateRole)));
+      const btn = f.querySelector('[type=submit]');
+      if (btn && ROLE_COPY[gateRole][gateMode]) btn.textContent = ROLE_COPY[gateRole][gateMode];
+      const pub = f.querySelector('.check'); if (pub) pub.hidden = gateRole === 'teacher';
+      const hero = UI.root.querySelector('.gate-copy h1'), sub = UI.root.querySelector('.gate-copy > p');
+      if (hero) hero.textContent = gateRole === 'teacher' ? 'Run your Japanese class from one desk.' : 'All of Japanese, from your first あ to JLPT N1.';
+      if (sub) sub.textContent = gateRole === 'teacher' ? 'Classes with join codes, lessons on Google Meet, homework that marks itself, written assignments, your own class tests, and one table of everyone\'s progress. Your students learn free.' : 'A study game where every lesson is a station. Collect stamps, battle yokai, and let Mochi the cat conductor keep your streak alive.';
+    };
     f.addEventListener('click', (e) => {
-      const c = e.target.closest('[data-lvl]');
+      const c = e.target.closest('[data-role]');
       if (!c) return;
-      f.elements.lvl.value = c.dataset.lvl;
-      f.querySelectorAll('[data-lvl]').forEach((b) => b.setAttribute('aria-pressed', String(b === c)));
+      gateRole = c.dataset.role;
+      try { localStorage.setItem('minna-line-role', gateRole); } catch (err) { /* ignore */ }
+      paintRole();
     });
+    paintRole();
     f.addEventListener('submit', onAuthSubmit);
     window.scrollTo(0, 0);
     CLOUD.leaderboard('week', 5).then((rows) => {
@@ -171,13 +187,18 @@ window.SOCIAL = (() => {
     try {
       if (gateMode === 'signup') {
         const fresh = !S.stats.answers;
-        const r = await CLOUD.signUp(email, pw, { display_name: el.dname.value.trim().slice(0, 24), is_public: el.pub.checked, start_level: 'unset', jlpt: 'N5' });
+        const r = await CLOUD.signUp(email, pw, { display_name: el.dname.value.trim().slice(0, 24), is_public: el.pub.checked, start_level: 'unset', jlpt: 'N5', role: gateRole });
         if (r.needsConfirm) return showGate('confirm', email);
+        const T = window.TEACH && gateRole === 'teacher';
+        if (window.TEACH) window.TEACH.setMode(gateRole, true);
         UI.start();
-        if (fresh) placement(true); else welcome();   // someone who already studied here as a guest keeps their place
+        if (T) { go({ name: 'desk' }); welcomeTeacher(); }
+        else if (fresh) placement(true); else welcome();   // someone who already studied here as a guest keeps their place
       } else if (gateMode === 'login') {
         await CLOUD.signIn(email, pw);
+        if (window.TEACH) window.TEACH.setMode(gateRole, true);
         UI.start();
+        if (window.TEACH && gateRole === 'teacher') go({ name: 'desk' });
         toast(`おかえり！ Welcome back, ${myName()}`);
       } else {
         await CLOUD.sendReset(email);
@@ -269,6 +290,13 @@ window.SOCIAL = (() => {
     });
   }
 
+  function welcomeTeacher() {
+    UI.petals(20);
+    modal(`<div class="center-stack">${myAvatar(104, 'cheer')}<h2>ようこそ、${esc(myName())}先生！</h2>
+      <p class="muted" style="margin:0">This is your desk. Start a class, share its code, and everything your students do shows up here.</p>
+      <div class="tip" style="text-align:left">Schedule lessons on Google Meet, set homework and assignments, write class tests. The learning hub is still yours too: use “Learn” in the menu.</div>
+      <button class="btn primary" data-x>Open my desk</button></div>`);
+  }
   function newPassword() {
     if (document.getElementById('newpw')) return;
     const m = modal(`<form id="newpw" class="stack-form"><h2>Set a new password</h2>
@@ -440,6 +468,7 @@ window.SOCIAL = (() => {
         <section class="card"><div class="eyebrow">App</div>
           ${CLOUD.isAdmin ? row('admin', 'Admin dashboard', 'Everyone’s progress, logins and feedback') : ''}
           ${u ? row('classes', 'Classes', 'Join your teacher’s class, or run your own') : ''}
+          ${u && window.TEACH ? row('switchmode', window.TEACH.isTeacher() ? 'Switch to learner view' : 'Switch to teacher view', window.TEACH.isTeacher() ? 'Put the learning hub first' : 'Put your desk, classes and review work first') : ''}
           ${row('stats', 'Your stats', 'Calendar, memory, accuracy, review forecast')}
           ${row('placement', 'Placement quiz', 'Find the right line again, or switch by hand')}
           ${row('collection', 'Collection', 'Stamps, stickers and trophies')}
@@ -641,7 +670,7 @@ window.SOCIAL = (() => {
     });
     let u = null;
     try { u = await CLOUD.init(); } catch (e) { /* start signed out */ }
-    if (u) { UI.start(); CLOUD.enter('resume'); if (CLOUD.recovering) newPassword(); }
+    if (u) { UI.start(); if (window.TEACH && window.TEACH.isTeacher() && !location.hash) go({ name: 'desk' }); CLOUD.enter('resume'); if (CLOUD.recovering) newPassword(); }
     else if (CLOUD.requireLogin) showGate();
     else UI.start();
   }

@@ -325,5 +325,5 @@ window.COMMUNITY = (() => {
   });
   // "Share this" from elsewhere in the app (a new stamp, a passed exam) opens the composer with a draft ready.
   const share = (draft) => { if (CLOUD.user) compose(null, { category: 'win', ...draft }); };
-  return { compose, share, CATS };
+  return { compose, share, shrink, CATS };
 })();
